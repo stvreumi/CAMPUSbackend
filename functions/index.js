@@ -9,9 +9,10 @@ admin.initializeApp();
 const express = require('express');
 const { express: voyagerMiddleware } = require('graphql-voyager/middleware');
 const apolloServer = require('./src');
+const uploadImageProcessing = require('./utils/uploadImageProcessing');
 
-//console.log('hello');
-//console.log(process.env);
+// console.log('hello');
+// console.log(process.env);
 
 const apolloServerApp = express();
 const apolloServerAdmin = apolloServer({ admin });
@@ -30,3 +31,8 @@ voyagerApp.use('/', voyagerMiddleware({ endpointUrl: '/graphql' }));
 
 exports.graphql = functions.https.onRequest(apolloServerApp);
 exports.voyager = functions.https.onRequest(voyagerApp);
+exports.uploadImageProcessing = functions.storage
+  .object()
+  .onFinalize(async object => {
+    await uploadImageProcessing(admin, object);
+  });

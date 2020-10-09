@@ -8,7 +8,12 @@ const Tag = `type Tag {
   accessibility: Float
   category: Category
   coordinates: Coordinate
-  tagDetail: TagDetail
+  createTime: String
+  lastUpdateTime: String
+  createUser: User
+  description: String
+  imageUrl: [String]
+  streetViewInfo: StreetView
   status: Status
   statusHistory: [Status]!
 }`;
@@ -19,16 +24,6 @@ const Category = `type Category {
   targetName: String
 }`;
 
-const TagDetail = `type TagDetail {
-  tagID: ID!
-  createTime: String
-  lastUpdateTime: String
-  createUser: User
-  description: String
-  imageUrl: [String]
-  streetViewInfo: StreetView
-}`;
-
 const Status = `type Status {
   statusName: String!
   createTime: String!
@@ -36,8 +31,9 @@ const Status = `type Status {
 }`;
 
 const User = `type User {
-  id: ID!
-  name: String
+  uid: ID!
+  displayName: String
+  "only available to user itself?need authorization mechanism"
   email: String
 }`;
 
@@ -50,8 +46,8 @@ const StreetView = `type StreetView {
   povHeading: Float!
   povPitch: Float!
   panoID: String!
-  latitude: Float!
-  longitude: Float!
+  cameraLatitude: Float!
+  cameraLongitude: Float!
 }`;
 
 const Mission = `type Mission {
@@ -113,14 +109,13 @@ const StreetViewInput = `input StreetViewInput {
   povHeading: Float!
   povPitch: Float!
   panoID: String!
-  latitude: Float!
-  longitude: Float!
+  cameraLatitude: Float!
+  cameraLongitude: Float!
 }`;
 
 module.exports = {
   Tag,
   Category,
-  TagDetail,
   Status,
   User,
   Coordinate,

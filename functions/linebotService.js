@@ -46,8 +46,7 @@ const bot = linebot({
   channelId: '1654797428',
   channelSecret: '59fadb2dcb6c66e338ad7273806d5a10', // for test: '59fadb2dcb6c66e338ad7273806d5a10'
   // for test: 'dIiLIe5t6UO+BZo5VzGX951whXwdEMtXASzl6x8dP0spZG4Q8M1mbPMq/jqfdGz13X7p3bVzYbWBnTYhJenl8gSAC63W3QB9H0YdnGmb6aqZkgn5G5F34BTZHsixn6bWi5YXG1S52oQ4x1raGU2XrAdB04t89/1O/w1cDnyilFU='
-  channelAccessToken:
-    '',
+  channelAccessToken: '',
 });
 
 // 當有人傳送訊息給Bot時

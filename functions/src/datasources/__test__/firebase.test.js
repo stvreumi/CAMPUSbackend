@@ -6,10 +6,10 @@ const FirebaseAPI = require('../firebase');
 const {
   mockFirebaseAdmin,
   fakeTagData,
-  fakeDetailFromTagData,
   fakeStatusData,
+  fakeUserInfo,
+  addFakeDataToFirestore,
   fakeIntent,
-  addFakeDatatoFirestore,
   clearFirestoreDatabase,
 } = require('./testUtils');
 
@@ -19,11 +19,9 @@ const testProjectId = 'smartcampus-test';
 
 describe('test data add operation', () => {
   let firebaseAPIinstance;
-  let firestore;
   beforeAll(() => {
     const admin = mockFirebaseAdmin(testProjectId);
     firebaseAPIinstance = new FirebaseAPI({ admin });
-    firestore = admin.firestore();
   });
   afterAll(async () => {
     await Promise.all(firebase.apps().map(app => app.delete()));
@@ -33,8 +31,12 @@ describe('test data add operation', () => {
   });
   test('test `addTagDataToFirestore`', async () => {
     const data = { ...fakeTagData };
+    const { uid } = fakeUserInfo;
 
-    const docData = await firebaseAPIinstance.addTagDataToFirestore({ data });
+    const docData = await firebaseAPIinstance.addTagDataToFirestore({
+      data,
+      uid,
+    });
 
     // console.log(data);
     expect(docData).toMatchObject({
@@ -47,12 +49,11 @@ describe('test data add operation', () => {
         statusName: fakeStatusData.statusName,
         createTime: expect.any(firebase.firestore.Timestamp),
       },
-      statusHistory: [
-        {
-          statusName: fakeStatusData.statusName,
-          createTime: expect.any(firebase.firestore.Timestamp),
-        },
-      ],
+      createTime: expect.any(firebase.firestore.Timestamp),
+      lastUpdateTime: expect.any(firebase.firestore.Timestamp),
+      createUserID: uid,
+      description: data.description,
+      streetViewInfo: data.streetViewInfo,
     });
   });
   test('test `addNewIntent`', async () => {
@@ -64,59 +65,27 @@ describe('test data add operation', () => {
       useranswer: data.useranswer,
     });
   });
-  test('test `setTagDetailToFirestore` with description', async () => {
-    const tagID = 'test-tag-id';
-    const data = { ...fakeDetailFromTagData };
+  test('test `setTagDetailToFirestore` with some empty fields', async () => {
+    const data = { ...fakeTagData };
+    const uid = 'test-uid';
 
-    await firebaseAPIinstance.setTagDetailToFirestore({
-      tagID,
-      data,
-    });
-
-    // get data from firestore
-    const detailDataSnap = await firestore
-      .collection('tagDetail')
-      .doc(tagID)
-      .get();
-
-    const detailData = detailDataSnap.data();
-
-    expect(detailData).toMatchObject({
-      createTime: expect.any(firebase.firestore.Timestamp),
-      lastUpdateTime: expect.any(firebase.firestore.Timestamp),
-      createUserID: expect.any(String),
-      description: data.description,
-      streetViewInfo: data.streetViewInfo,
-    });
-  });
-  test('test `setTagDetailToFirestore` with no description', async () => {
-    const tagID = 'test-tag-id-no-description';
-    const data = { ...fakeDetailFromTagData };
+    // delete some fileds
     delete data.description;
+    delete data.streetViewInfo;
 
-    await firebaseAPIinstance.setTagDetailToFirestore({
-      tagID,
+    const docData = await firebaseAPIinstance.addTagDataToFirestore({
       data,
+      uid,
     });
-
-    // get data from firestore
-    const detailDataSnap = await firestore
-      .collection('tagDetail')
-      .doc(tagID)
-      .get();
-
-    const detailData = detailDataSnap.data();
 
     // console.log(data);
-    expect(detailData).toMatchObject({
-      createTime: expect.any(firebase.firestore.Timestamp),
-      lastUpdateTime: expect.any(firebase.firestore.Timestamp),
+    expect(docData).toMatchObject({
       description: '',
-      streetViewInfo: data.streetViewInfo,
+      streetViewInfo: null,
     });
   });
   test('test `addNewTagData`', async () => {
-    const responseData = await addFakeDatatoFirestore(firebaseAPIinstance);
+    const responseData = await addFakeDataToFirestore(firebaseAPIinstance);
 
     expect(responseData.tag).toMatchObject({
       id: expect.any(String),
@@ -128,30 +97,12 @@ describe('test data add operation', () => {
         statusName: fakeStatusData.statusName,
         createTime: expect.any(firebase.firestore.Timestamp),
       },
-      statusHistory: [
-        {
-          statusName: fakeStatusData.statusName,
-          createTime: expect.any(firebase.firestore.Timestamp),
-        },
-      ],
     });
     expect(responseData.imageNumber).toEqual(responseData.imageNumber);
     expect(responseData.imageUploadUrl.length).toEqual(
       responseData.imageNumber
     );
     expect(responseData.imageUploadUrl).toContain('http://signed.url');
-
-    // check detail collection data
-    const detailDocData = (
-      await firestore.collection('tagDetail').doc(responseData.tag.id).get()
-    ).data();
-    // console.log(detailDoc);
-    expect(detailDocData).toMatchObject({
-      createTime: expect.any(firebase.firestore.Timestamp),
-      lastUpdateTime: expect.any(firebase.firestore.Timestamp),
-      description: fakeDetailFromTagData.description,
-      streetViewInfo: fakeDetailFromTagData.streetViewInfo,
-    });
   });
 }); // end describe
 
@@ -168,11 +119,34 @@ describe('test data read operation', () => {
     await clearFirestoreDatabase(testProjectId);
 
     // add data
-    await addFakeDatatoFirestore(firebaseAPIinstance);
+    await addFakeDataToFirestore(firebaseAPIinstance);
   });
 
   test('test `getTagList`', async () => {
     const tagDataList = await firebaseAPIinstance.getTagList();
+    // console.log(tagDataList);
+    expect(tagDataList).toEqual(expect.any(Array));
+
+    // if use `toEqual`, the f field must included in the test object
+    expect(tagDataList[0]).toMatchObject({
+      id: expect.any(String),
+      locationName: fakeTagData.locationName,
+      accessibility: fakeTagData.accessibility,
+      category: {
+        missionName: expect.any(String),
+        subTypeName: expect.any(String),
+        targetName: expect.any(String),
+      },
+      coordinates: expect.any(firebase.firestore.GeoPoint),
+      status: {
+        statusName: fakeStatusData.statusName,
+        createTime: expect.any(firebase.firestore.Timestamp),
+      },
+    });
+  });
+  test('test `getUserAddTagHistory`', async () => {
+    const { uid } = fakeUserInfo;
+    const tagDataList = await firebaseAPIinstance.getUserAddTagHistory({ uid });
     // console.log(tagDataList);
     expect(tagDataList).toEqual(expect.any(Array));
 

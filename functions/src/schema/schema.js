@@ -3,7 +3,6 @@ const { gql } = require('apollo-server');
 const {
   Tag,
   Category,
-  TagDetail,
   Status,
   User,
   Coordinate,
@@ -23,7 +22,7 @@ const { Intent, Question } = require('./chatbot_schema');
 const Query = `type Query {
   tagRenderList: [Tag]
   tag(id: ID!): Tag
-  tagDetail(id: ID!): TagDetail
+  userAddTagHistory(uid: ID!): [Tag]!
   missionList: [Mission]
   discoveryList: [Discovery]
   intentAnswer(intent: String!): String
@@ -42,7 +41,6 @@ const typeDefs = gql(
     Query,
     Tag,
     Category,
-    TagDetail,
     Status,
     User,
     Coordinate,

@@ -1,8 +1,7 @@
 const { merge } = require('lodash');
-const { combineResolvers } = require('graphql-resolvers');
+
 const {
   tagResolvers,
-  tagdetailResolvers,
   statusResolvers,
   userResolvers,
   missionResolver,
@@ -14,8 +13,10 @@ const queryResolvers = {
   Query: {
     tagRenderList: async (_, __, { dataSources }) =>
       dataSources.firebaseAPI.getTagList(),
-    tagDetail: async (_, { id }, { dataSources }) =>
-      dataSources.firebaseAPI.getTagDetail({ tagID: id }),
+    tag: async (_, { id }, { dataSources }) =>
+      dataSources.firebaseAPI.getTagData({ id }),
+    userAddTagHistory: async (_, { uid }, { dataSources }) =>
+      dataSources.firebaseAPI.getUserAddTagHistory({ uid }),
     missionList: async (_, __, { dataSources }) =>
       dataSources.firebaseAPI.getList('missionList'),
     discoveryList: async (_, __, { dataSources }) =>
@@ -27,13 +28,9 @@ const queryResolvers = {
 
 const mutationResolvers = {
   Mutation: {
-    addNewTagData: combineResolvers(
-      // isAuthenticated,
-      // isTagOwner,
-      async (_, { data }, { dataSources, me }) => {
-        return dataSources.firebaseAPI.addNewTagData({ data, me });
-      }
-    ),
+    addNewTagData: async (_, { data }, { dataSources, userInfo }) => {
+      return dataSources.firebaseAPI.addNewTagData({ data, userInfo });
+    },
     updateTagStatus: async (_, { tagId, statusName }, { dataSources }) => {
       return dataSources.firebaseAPI.updateTagStatus({ tagId, statusName });
     },
@@ -47,7 +44,6 @@ const resolvers = merge(
   queryResolvers,
   mutationResolvers,
   tagResolvers,
-  tagdetailResolvers,
   statusResolvers,
   userResolvers,
   missionResolver,

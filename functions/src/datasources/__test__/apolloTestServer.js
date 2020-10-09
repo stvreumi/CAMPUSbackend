@@ -1,16 +1,16 @@
-/** @module src/index */
 const { ApolloServer } = require('apollo-server-express');
 
-const typeDefs = require('./schema/schema');
-const resolvers = require('./resolvers/resolvers');
-const FirebaseAPI = require('./datasources/firebase');
+const typeDefs = require('../../schema/schema');
+const resolvers = require('../../resolvers/resolvers');
+const FirebaseAPI = require('../firebase');
+const { fakeUserInfo } = require('./testUtils');
 
 /**
  * Apollo server instance
  * @param {object} {admin} firebase admin SDK
  * @returns {ApolloServer} ApolloServer with config
  */
-function apolloServer({ admin }) {
+function apolloTestServer({ admin, logIn }) {
   const dataSources = () => ({
     firebaseAPI: new FirebaseAPI({ admin }),
   });
@@ -24,20 +24,22 @@ function apolloServer({ admin }) {
       console.log(error);
       return error;
     },
-    context: async ({ req }) => {
-      const userInfo = await dataSources().firebaseAPI.getUserInfoFromToken(
-        req
-      );
+    context: async () => {
+      if (logIn) {
+        return { userInfo: fakeUserInfo };
+      }
       return {
-        userInfo,
+        userInfo: {
+          logIn: false,
+          uid: 'anonymous',
+          displayName: 'anonymous',
+        },
       };
     },
-    introspection: true, // enables introspection of the schema
-    playground: true, // enables the actual playground
   });
 
   // server.applyMiddleware({ app, path: '/' });
   return server;
 }
 
-module.exports = apolloServer;
+module.exports = apolloTestServer;
