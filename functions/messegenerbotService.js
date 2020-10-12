@@ -1,24 +1,3 @@
-/**
- * Copyright 2017-present, Facebook, Inc. All rights reserved.
- *
- * This source code is licensed under the license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * Messenger Platform Quick Start Tutorial
- *
- * This is the completed code for the Messenger Platform quick start tutorial
- *
- * https://developers.facebook.com/docs/messenger-platform/getting-started/quick-start/
- *
- * To run this code, you must do the following:
- *
- * 1. Deploy this code to a server running Node.js
- * 2. Run `npm install`
- * 3. Update the VERIFY_TOKEN
- * 4. Add your PAGE_ACCESS_TOKEN to your environment vars
- *
- */
-
 // YOUR-APP-ID: The App ID GUID found on the www.luis.ai Application Settings page.
 const LUISappId = '211d2292-7bc4-49bd-b4fc-06a5c96445d1';
 
@@ -37,12 +16,12 @@ const LUISPriditionEndpoint = 'https://westus.api.cognitive.microsoft.com/';
 // const LUISversionId = '0.1';
 
 const admin = require('firebase-admin');
+const request = require('request');
 
 // if you dont know what it is, check 'https://wcc723.github.io/javascript/2017/12/15/javascript-use-strict/'
 // ('use strict');
-
-// const PAGE_ACCESS_TOKEN =
-//  'EAAFN87dRCNgBAATZALMk4B8Pw7ZCrdyXsPY3AjPMGcVVFPmGrUjJF8WoIXdhRRRelZBLT51UTHrLzxLPvoMdex5CpvrOVAduquIZCngXzEfMtzDgjUDIFZA0hZBFyAG73pQr8rqwV9WjhiqbtiwfdvBQ4byon1sInBADulnegcZBwZDZD';
+// PAGE_ACCESS_TOKEN = EAAFN87dRCNgBAATZALMk4B8Pw7ZCrdyXsPY3AjPMGcVVFPmGrUjJF8WoIXdhRRRelZBLT51UTHrLzxLPvoMdex5CpvrOVAduquIZCngXzEfMtzDgjUDIFZA0hZBFyAG73pQr8rqwV9WjhiqbtiwfdvBQ4byon1sInBADulnegcZBwZDZD
+const PAGE_ACCESS_TOKEN = '';
 const express = require('express');
 const bodyParser = require('body-parser');
 // const axios = require('axios');
@@ -71,6 +50,93 @@ admin.initializeApp({
   credential: admin.credential.applicationDefault(),
   storageBucket: 'gs://smartcampus-1b31f.appspot.com',
 });
+
+function callSendAPI(senderPsid, response) {
+  // Construct the message body
+  const requestBody = {
+    recipient: {
+      id: senderPsid,
+    },
+    message: response,
+  };
+
+  // Send the HTTP request to the Messenger Platform
+  const endpoint = `https://graph.facebook.com/v8.0/me/messages?access_token=${PAGE_ACCESS_TOKEN}`;
+  request(
+    {
+      uri: endpoint,
+      method: 'POST',
+      json: requestBody,
+    },
+    err => {
+      if (!err) {
+        console.log('message sent!');
+      } else {
+        console.error(`Unable to send message:${err}`);
+      }
+    }
+  );
+}
+
+function handleMessage(senderPsid, receivedMessage, answer) {
+  let response;
+
+  // Checks if the message contains text
+  if (receivedMessage.text) {
+    // Create the payload for a basic text message, which
+    // will be added to the body of our request to the Send API
+    response = {
+      text: answer,
+    };
+  } else if (receivedMessage.attachments) {
+    // Get the URL of the message attachment
+    /* let attachment_url = receivedMessage.attachments[0].payload.url;
+    response = {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "generic",
+          "elements": [{
+            "title": "Is this the right picture?",
+            "subtitle": "Tap a button to answer.",
+            "image_url": attachment_url,
+            "buttons": [
+              {
+                "type": "postback",
+                "title": "Yes!",
+                "payload": "yes",
+              },
+              {
+                "type": "postback",
+                "title": "No!",
+                "payload": "no",
+              }
+            ],
+          }]
+        }
+      }
+    } */
+  }
+
+  // Send the response message
+  callSendAPI(senderPsid, response);
+}
+
+function handlePostback(senderPsid, receivedPostback) {
+  console.log('ok');
+  let response;
+  // Get the payload for the postback
+  const { payload } = receivedPostback;
+
+  // Set the response based on the postback payload
+  if (payload === 'yes') {
+    response = { text: 'Thanks!' };
+  } else if (payload === 'no') {
+    response = { text: 'Oops, try sending another image.' };
+  }
+  // Send the message to acknowledge the postback
+  callSendAPI(senderPsid, response);
+}
 
 // Accepts POST requests at /messengerwebhook endpoint
 app.post('/messengerwebhook', (req, res) => {
@@ -123,9 +189,9 @@ app.post('/messengerwebhook', (req, res) => {
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhookEvent.message) {
-        // handleMessage(senderPsid, webhookEvent.message);
+        handleMessage(senderPsid, webhookEvent.message, answer);
       } else if (webhookEvent.postback) {
-        // handlePostback(senderPsid, webhookEvent.postback);
+        handlePostback(senderPsid, webhookEvent.postback, answer);
       }
     });
     // Return a '200 OK' response to all events
