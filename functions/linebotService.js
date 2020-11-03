@@ -1,45 +1,17 @@
-// 引用LUIS SDK
-// const msRest = require("@azure/ms-rest-js");
-// const LUISAuthoring = require("@azure/cognitiveservices-luis-authoring");
-// const LUISPrediction = require("@azure/cognitiveservices-luis-runtime");
-
 // 引用linebot SDK
 const linebot = require('linebot');
-
-// YOUR-APP-ID: The App ID GUID found on the www.luis.ai Application Settings page.
-const LUISappId = '8da0cc8e-6ca6-422b-957e-45d6184bcf1a';
-
-// YOUR-PREDICTION-KEY: Your LUIS authoring key, 32 character value. for test: 'e1a4a2cc5f1b40fbbb86eccedcca1c6f'
-const LUISPredictionKey = '';
-
-// YOUR-AUTHORING-KEY: Starter_Key, for testing '6da613deaa9042beae670f765936fda3'
-const LUISAuthoringKey = '';
-
-// YOUR-PREDICTION-ENDPOINT: Replace this with your authoring key endpoint
-const LUISPriditionEndpoint = 'https://japaneast.api.cognitive.microsoft.com/';
-
-// YOUR-API-ENDPOINT: Starter_Key
-const LUISEndpoint = 'https://westus.api.cognitive.microsoft.com/';
-
-const LUISversionId = '0.1';
 
 const admin = require('firebase-admin');
 const requestPromise = require('request-promise');
 const queryString = require('querystring');
 const FirebaseAPI = require('./src/datasources/firebase');
 
-// upload the question to LUIS
-const upload = require('./src/azuretools/_upload');
-
-/* add utterances parameters */
-const configAddUtterances = {
-  LUISSubscriptionKey: LUISAuthoringKey,
+// For LUIS configure
+const {
   LUISappId,
-  LUISversionId,
-  question: '',
-  intent: '',
-  uri: `${LUISEndpoint}luis/authoring/v3.0-preview/apps/${LUISappId}/versions/${LUISversionId}/examples`,
-};
+  LUISPredictionKey,
+  LUISPriditionEndpoint,
+} = require('./src/luis_config');
 
 // 用於辨識Line Channel的資訊
 const bot = linebot({
@@ -50,13 +22,14 @@ const bot = linebot({
 });
 
 // 當有人傳送訊息給Bot時
-bot.on('message', event => {
+bot.on('message', async event => {
   const firebaseAPIinstance = new FirebaseAPI({ admin });
 
-  // The utterance you want to use.
+  // 取得使用者所傳的文字訊息
   const utterance = event.message.text;
+  console.log(`Recieved message ${utterance} from Linebot`);
 
-  // Create query string
+  // 要傳給LUIS去判斷Intent的格式
   const queryParams = {
     'show-all-intents': true,
     verbose: true,
@@ -64,68 +37,34 @@ bot.on('message', event => {
     'subscription-key': LUISPredictionKey,
   };
 
-  // Create the URI for the REST call.
+  // 將上面的格式包在這個API裡頭（讓我們的程式知道LUIS在哪裡）
   const pridictionUri = `${LUISPriditionEndpoint}luis/prediction/v3.0/apps/${LUISappId}/slots/production/predict?${queryString.stringify(
     queryParams
   )}`;
 
-  // Analyze a string utterance.
-  const getPrediction = async () => {
-    // Send the REST call.
-    const response = await requestPromise(pridictionUri);
+  // 傳送一個Post過去上述API，response就是LUIS回傳給我們的資訊
+  const response = await requestPromise(pridictionUri);
+  // 會是LUIS判斷該使用者傳的文字的Intent的機率，你可以把註解解開來看看是什麼
+  // console.log(`Response from LUIS: ${respunse}`);
 
-    // Get the topIntent
-    const intent = JSON.parse(response).prediction.topIntent;
-    const answer = await firebaseAPIinstance.getAnswer(intent);
+  // 直接取得機率最高的Intent
+  const intent = JSON.parse(response).prediction.topIntent;
+  // Display the response from the REST call.
+  console.log(`top intent: ${intent}`);
 
-    // Display the response from the REST call.
-    console.log(`top intent: ${intent}`);
+  const answer = await firebaseAPIinstance.getAnswer(intent);
 
-    // 使用event.reply(要回傳的訊息)方法可將訊息回傳給使用者
-    event
-      .reply(answer)
-      .then(() => {
-        // 當訊息成功回傳後的處理
-        console.log(`Success reply the answer: ${answer}`);
-      })
-      .catch(error => {
-        // 當訊息回傳失敗後的處理
-        console.log(`error at reply message: ${error}`);
-      });
-
-    // Add the user_question to LUIS to train
-    console.log(`start add question to LUIS...`);
-    const questions = {};
-    questions[intent] = [utterance];
-    try {
-      configAddUtterances.intents = [intent];
-      configAddUtterances.questions = questions;
-      upload(configAddUtterances);
-      console.log(`succeed to add question to LUIS`);
-    } catch (err) {
-      console.log(`Add the user_question to LUIS error: ${err}`);
-    }
-
-    // Add the User_question to Firestore to analyze
-    await firebaseAPIinstance
-      .addNewQuestion({
-        userintent: intent,
-        userquestion: utterance,
-      })
-      .then(() => {
-        console.log(`add question succeed`);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  };
-
-  console.log(`user's question: ${utterance}`);
-
-  // Pass an utterance to the sample LUIS app
-  getPrediction()
-    .then(() => console.log('done'))
-    .catch(err => console.log(err));
+  // 使用event.reply(要回傳的訊息)方法可將訊息回傳給使用者
+  event
+    .reply(answer)
+    .then(() => {
+      // 當訊息成功回傳後的處理
+      console.log(`Success reply the answer: ${answer}`);
+    })
+    .catch(error => {
+      // 當訊息回傳失敗後的處理
+      console.log(`error at reply message: ${error}`);
+    });
 });
 
 admin.initializeApp({
@@ -135,5 +74,5 @@ admin.initializeApp({
 
 // Bot所監聽的webhook路徑與port
 bot.listen('/linewebhook', 3000, () => {
-  console.log('[BOT已準備就緒]');
+  console.log('[LINEBOT已準備就緒]');
 });

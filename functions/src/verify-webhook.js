@@ -12,4 +12,9 @@ const verifyWebhook = (req, res) => {
   }
 };
 
-module.exports = verifyWebhook;
+const PAGE_ACCESS_TOKEN = '';
+
+module.exports = {
+  verifyWebhook,
+  PAGE_ACCESS_TOKEN,
+};
