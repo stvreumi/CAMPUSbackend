@@ -358,6 +358,7 @@ class FirebaseAPI extends DataSource {
       accessibility,
       coordinates,
       category,
+      floor,
       description,
       streetViewInfo,
     } = data;
@@ -365,13 +366,13 @@ class FirebaseAPI extends DataSource {
       locationName,
       accessibility,
       category,
+      floor,
       coordinates: new this.admin.firestore.GeoPoint(
         parseFloat(coordinates.latitude),
         parseFloat(coordinates.longitude)
       ),
       // originally tagDetail
       lastUpdateTime: this.admin.firestore.FieldValue.serverTimestamp(),
-      createUserId: uid,
       description: description || '',
       streetViewInfo: streetViewInfo || null,
     };
@@ -380,6 +381,7 @@ class FirebaseAPI extends DataSource {
 
     if (action === 'add') {
       tagData.createTime = this.admin.firestore.FieldValue.serverTimestamp();
+      tagData.reateUserId = uid;
       const defaultStatus = {
         statusName: getDefaultStatus(category.missionName),
         createTime: this.admin.firestore.FieldValue.serverTimestamp(),
