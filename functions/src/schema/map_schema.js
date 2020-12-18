@@ -7,6 +7,7 @@ const Tag = `type Tag {
   locationName: String
   accessibility: Float
   category: Category
+  floor: Int
   coordinates: Coordinate
   createTime: String
   lastUpdateTime: String
