@@ -564,6 +564,33 @@ class FirebaseAPI extends DataSource {
   }
 
   /**
+   * Record if the user(judge by token) has read the guide.
+   * @param {object} param
+   * @param {object} param.userInfo upvote or cancel upvote
+   * @return {Boolean} Return the status of set hasReadGuide. `true` is success.
+   */
+  async setHasReadGuide({ userInfo }) {
+    const { logIn, uid } = userInfo;
+    checkUserLogIn(logIn);
+
+    const userHasReadGuideDocRef = this.firestore
+      .collection('hasReadGuide')
+      .doc(uid);
+
+    const doc = userHasReadGuideDocRef.get();
+
+    if (!doc.exists) {
+      userHasReadGuideDocRef.set({
+        hasReadGuide: true,
+      });
+
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
    * Add user's FAQ or some other question and answer
    * @param {String} param.userintent
    * @param {String} param.useranswer

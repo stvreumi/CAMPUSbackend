@@ -27,6 +27,8 @@ const Query = `type Query {
   userAddTagHistory(uid: ID!): [Tag]!
   missionList: [Mission]
   discoveryList: [Discovery]
+  "true if the use have read the guide, need to add token in the header"
+  hasReadGuide: Boolean!
   intentAnswer(intent: String!): String
 }`;
 
@@ -37,6 +39,8 @@ const Mutation = `type Mutation {
   updateTagStatus(tagId: ID!, statusName: String!, description: String): Status!
   addNewIntent(userIntent: String!, userAnswer: String!): String
   updateUpVoteStatus(tagId: ID!, action: updateUpVoteAction!): updateUpVoteResponse
+  "true the update is successful, need to add token in the header"
+  setHasReadGuide: Boolean!
 }`;
 
 const typeDefs = gql(
