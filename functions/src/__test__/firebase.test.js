@@ -55,7 +55,6 @@ describe('test data add/update operation', () => {
     expect(docData).toMatchObject({
       id: expect.any(String),
       locationName: data.locationName,
-      accessibility: data.accessibility,
       coordinates: data.coordinates,
       category: data.category,
       status: {
@@ -68,6 +67,7 @@ describe('test data add/update operation', () => {
       createUserId: uid,
       description: data.description,
       streetViewInfo: data.streetViewInfo,
+      floor: data.floor,
     });
   });
   test('test `addNewIntent`', async () => {
@@ -107,13 +107,13 @@ describe('test data add/update operation', () => {
     expect(responseData.tag).toMatchObject({
       id: expect.any(String),
       locationName: fakeTagData.locationName,
-      accessibility: fakeTagData.accessibility,
       category: fakeTagData.category,
       coordinates: expect.any(firebase.firestore.GeoPoint),
       status: {
         statusName: fakeStatusData.statusName,
         createTime: expect.any(firebase.firestore.Timestamp),
       },
+      floor: fakeTagData.floor,
     });
     expect(responseData.imageNumber).toEqual(responseData.imageNumber);
     expect(responseData.imageUploadUrl.length).toEqual(
@@ -213,7 +213,6 @@ describe('test data read operation', () => {
     expect(tagDataList[0]).toMatchObject({
       id: expect.any(String),
       locationName: fakeTagData.locationName,
-      accessibility: fakeTagData.accessibility,
       category: {
         missionName: expect.any(String),
         subTypeName: expect.any(String),
@@ -224,6 +223,7 @@ describe('test data read operation', () => {
         statusName: fakeStatusData.statusName,
         createTime: expect.any(firebase.firestore.Timestamp),
       },
+      floor: expect.any(Number),
     });
   });
   test('test `getUserAddTagHistory`', async () => {
@@ -236,7 +236,6 @@ describe('test data read operation', () => {
     expect(tagDataList[0]).toMatchObject({
       id: expect.any(String),
       locationName: fakeTagData.locationName,
-      accessibility: fakeTagData.accessibility,
       category: {
         missionName: expect.any(String),
         subTypeName: expect.any(String),
@@ -247,6 +246,7 @@ describe('test data read operation', () => {
         statusName: fakeStatusData.statusName,
         createTime: expect.any(firebase.firestore.Timestamp),
       },
+      floor: expect.any(Number),
     });
   });
 });

@@ -28,27 +28,23 @@ const queryResolvers = {
 
 const mutationResolvers = {
   Mutation: {
-    addNewTagData: async (_, { data }, { dataSources, userInfo }) => {
-      return dataSources.firebaseAPI.addNewTagData({ data, userInfo });
-    },
-    tagDataUpdate: async (_, { tagId, data }, { dataSources, userInfo }) => {
-      return dataSources.firebaseAPI.updateTagData({ tagId, data, userInfo });
-    },
+    addNewTagData: async (_, { data }, { dataSources, userInfo }) =>
+      dataSources.firebaseAPI.addNewTagData({ data, userInfo }),
+    updateTagData: async (_, { tagId, data }, { dataSources, userInfo }) =>
+      dataSources.firebaseAPI.updateTagData({ tagId, data, userInfo }),
     updateTagStatus: async (
       _,
       { tagId, statusName, description },
       { dataSources, userInfo }
-    ) => {
-      return dataSources.firebaseAPI.updateTagStatus({
+    ) =>
+      dataSources.firebaseAPI.updateTagStatus({
         tagId,
         statusName,
         description,
         userInfo,
-      });
-    },
-    addNewIntent: (_, { userIntent, userAnswer }, { dataSources }) => {
-      return dataSources.firebaseAPI.addNewIntent({ userIntent, userAnswer });
-    },
+      }),
+    addNewIntent: (_, { userIntent, userAnswer }, { dataSources }) =>
+      dataSources.firebaseAPI.addNewIntent({ userIntent, userAnswer }),
     updateUpVoteStatus: async (
       _,
       { tagId, action },

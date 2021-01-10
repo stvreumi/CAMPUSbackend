@@ -32,7 +32,7 @@ const Query = `type Query {
 const Mutation = `type Mutation {
   #tagImageUrlAdd(id: ID, imageUrl: [String]!): TagDetail!
   addNewTagData(data: TagDataInput!): AddNewTagResponse
-  tagDataUpdate(tagId: ID!, data: TagDataInput!): Tag!
+  updateTagData(tagId: ID!, data: TagDataInput!): Tag!
   updateTagStatus(tagId: ID!, statusName: String!, description: String): Status!
   addNewIntent(userIntent: String!, userAnswer: String!): String
   updateUpVoteStatus(tagId: ID!, action: updateUpVoteAction!): updateUpVoteResponse

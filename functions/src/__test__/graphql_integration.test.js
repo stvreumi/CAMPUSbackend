@@ -52,7 +52,6 @@ describe('test graphql query', () => {
         tagRenderList {
           id
           locationName
-          accessibility
           category {
             missionName
             subTypeName
@@ -74,6 +73,7 @@ describe('test graphql query', () => {
             numberOfUpVote
             hasUpVote
           }
+          floor
         }
       }
     `;
@@ -84,7 +84,6 @@ describe('test graphql query', () => {
     expect(tagRenderListResult[0]).toMatchObject({
       id: expect.any(String),
       locationName: fakeTagData.locationName,
-      accessibility: fakeTagData.accessibility,
       category: {
         missionName: expect.any(String),
         subTypeName: expect.any(String),
@@ -108,6 +107,7 @@ describe('test graphql query', () => {
           hasUpVote: null,
         },
       ],
+      floor: expect.any(Number),
     });
   });
 
@@ -124,6 +124,7 @@ describe('test graphql query', () => {
           }
           description
           imageUrl
+          floor
         }
       }
     `;
@@ -142,6 +143,7 @@ describe('test graphql query', () => {
       },
       description: expect.any(String),
       imageUrl: [expect.any(String)],
+      floor: expect.any(Number),
     });
     const tagInFirestore = (
       await firestore.collection('tagData').doc(fakeTagId).get()
@@ -252,7 +254,7 @@ describe('test graphql mutate', () => {
 
   test('test add tag data', async () => {
     const mutateTag = gql`
-      mutation tagUpdateTest($data: TagDataInput!) {
+      mutation tagAddTest($data: TagDataInput!) {
         addNewTagData(data: $data) {
           tag {
             id
@@ -262,6 +264,7 @@ describe('test graphql mutate', () => {
               subTypeName
               targetName
             }
+            floor
           }
           imageNumber
           imageUploadUrl
@@ -274,9 +277,7 @@ describe('test graphql mutate', () => {
         latitude: fakeTagData.coordinatesString.latitude,
         longitude: fakeTagData.coordinatesString.longitude,
       },
-      description: fakeTagData.description,
       imageNumber: 2,
-      streetViewInfo: fakeTagData.streetViewInfo,
     };
     delete data.status;
     delete data.coordinatesString;
@@ -293,6 +294,7 @@ describe('test graphql mutate', () => {
       tag: {
         id: expect.any(String),
         locationName: data.locationName,
+        floor: expect.any(Number),
       },
       imageNumber: data.imageNumber,
       imageUploadUrl: expect.any(Array),
@@ -315,7 +317,7 @@ describe('test graphql mutate', () => {
   test('test update tag data', async () => {
     const mutateTag = gql`
       mutation tagUpdateTest($tagId: ID!, $data: TagDataInput!) {
-        tagDataUpdate(tagId: $tagId, data: $data) {
+        updateTagData(tagId: $tagId, data: $data) {
           id
           locationName
           description
@@ -347,7 +349,7 @@ describe('test graphql mutate', () => {
       },
     });
 
-    const responseData = result.data.tagDataUpdate;
+    const responseData = result.data.updateTagData;
     expect(responseData).toMatchObject({
       id: expect.any(String),
       locationName: data.locationName,

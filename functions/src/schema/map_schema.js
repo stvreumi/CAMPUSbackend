@@ -91,11 +91,11 @@ const AddNewTagResponse = `type AddNewTagResponse {
 
 const TagDataInput = `input TagDataInput {
   locationName: String!
-  accessibility: Float
   category: CategoryInput!
   coordinates: CoordinateInput!
   description: String
   imageNumber: Int
+  floor: Int
   streetViewInfo: StreetViewInput
 }`;
 
