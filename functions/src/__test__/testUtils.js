@@ -20,7 +20,6 @@ const fakeStreetViewData = {
 // the fake data will input from front end
 const fakeTagData = {
   locationName: 'test',
-  accessibility: 5,
   category: { ...fakeCategory },
   coordinates: new firebase.firestore.GeoPoint(
     24.786671229129603,
@@ -33,6 +32,7 @@ const fakeTagData = {
   description: 'test-description',
   // [longitude, latitude]
   streetViewInfo: { ...fakeStreetViewData },
+  floor: 3,
 };
 
 const fakeStatusData = {

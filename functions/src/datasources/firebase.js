@@ -353,18 +353,17 @@ class FirebaseAPI extends DataSource {
    * @param {object} param.uid The uid of the user who initiate the action
    */
   async addorUpdateTagDataToFirestore(action, { tagId = '', data, uid }) {
+    // using default value if the property is not defined in the data parameter
     const {
       locationName,
-      accessibility,
       coordinates,
       category,
-      floor,
-      description,
-      streetViewInfo,
+      floor = null,
+      description = '',
+      streetViewInfo = null,
     } = data;
     const tagData = {
       locationName,
-      accessibility,
       category,
       floor,
       coordinates: new this.admin.firestore.GeoPoint(
@@ -373,15 +372,15 @@ class FirebaseAPI extends DataSource {
       ),
       // originally tagDetail
       lastUpdateTime: this.admin.firestore.FieldValue.serverTimestamp(),
-      description: description || '',
-      streetViewInfo: streetViewInfo || null,
+      description,
+      streetViewInfo,
     };
 
     const tagGeoRef = this.geofirestore.collection('tagData');
 
     if (action === 'add') {
       tagData.createTime = this.admin.firestore.FieldValue.serverTimestamp();
-      tagData.reateUserId = uid;
+      tagData.createUserId = uid;
       const defaultStatus = {
         statusName: getDefaultStatus(category.missionName),
         createTime: this.admin.firestore.FieldValue.serverTimestamp(),
