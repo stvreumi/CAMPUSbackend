@@ -23,6 +23,8 @@ const queryResolvers = {
       dataSources.firebaseAPI.getList('discoveryList'),
     intentAnswer: async (_, { intent }, { dataSources }) =>
       dataSources.firebaseAPI.getAnswer(intent),
+    hasReadGuide: async (_, __, { dataSources, userInfo }) =>
+      dataSources.firebaseAPI.getHasReadGuideStatus({ userInfo }),
   },
 };
 
@@ -51,6 +53,8 @@ const mutationResolvers = {
       { dataSources, userInfo }
     ) =>
       dataSources.firebaseAPI.updateNumberOfUpVote({ tagId, action, userInfo }),
+    setHasReadGuide: async (_, __, { dataSources, userInfo }) =>
+      dataSources.firebaseAPI.setHasReadGuide({ userInfo }),
   },
 };
 
