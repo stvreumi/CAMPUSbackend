@@ -345,6 +345,31 @@ class FirebaseAPI extends DataSource {
   }
 
   /**
+   * Get if the user(judge by token) has read the guide.
+   * @param {object} param
+   * @param {object} param.userInfo upvote or cancel upvote
+   * @return {Boolean} Return the status of hasReadGuide. `true` means that
+   *  the user has read the guide.
+   */
+  async getHasReadGuideStatus({ userInfo }) {
+    const { logIn, uid } = userInfo;
+    checkUserLogIn(logIn);
+
+    const userHasReadGuideDocRef = this.firestore
+      .collection('hasReadGuide')
+      .doc(uid);
+
+
+    const doc = await userHasReadGuideDocRef.get();
+
+    if (doc.exists) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
    * Add tag data to collection `tagData` in firestore
    * @param {String} action "add" or "update", the action of the tagData operation
    * @param {object} param
@@ -577,10 +602,10 @@ class FirebaseAPI extends DataSource {
       .collection('hasReadGuide')
       .doc(uid);
 
-    const doc = userHasReadGuideDocRef.get();
+    const doc = await userHasReadGuideDocRef.get();
 
     if (!doc.exists) {
-      userHasReadGuideDocRef.set({
+      await userHasReadGuideDocRef.set({
         hasReadGuide: true,
       });
 

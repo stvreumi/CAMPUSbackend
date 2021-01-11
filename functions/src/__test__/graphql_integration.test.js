@@ -524,4 +524,35 @@ describe('test graphql mutate', () => {
       hasUpVote: false,
     });
   });
+  test('test get and set hasReadGuide', async () => {
+    const queryHasReadGuide = async () => {
+      const queryHasReadGuideQL = gql`
+        query {
+          hasReadGuide
+        }
+      `;
+      // console.log(queryHasReadGuideResult);
+      return (await queryClient({ query: queryHasReadGuideQL })).data
+        .hasReadGuide;
+    };
+
+    expect(await queryHasReadGuide()).toBe(false);
+
+    const mutateSetHasReadGuide = gql`
+      mutation {
+        setHasReadGuide
+      }
+    `;
+
+    const mutateSetHasReadGuideResult = (
+      await mutateClient({ mutation: mutateSetHasReadGuide })
+    ).data.setHasReadGuide;
+    // console.log(mutateSetHasReadGuideResult);
+
+    // check if mutation successed
+    expect(mutateSetHasReadGuideResult).toBe(true);
+
+    // check if the setHasReadGuide success
+    expect(await queryHasReadGuide()).toBe(true);
+  });
 });
