@@ -89,10 +89,20 @@ const AddNewTagResponse = `type AddNewTagResponse {
   imageUploadUrl: [String]!
 }`;
 
-const TagDataInput = `input TagDataInput {
+const AddTagDataInput = `input addTagDataInput {
   locationName: String!
   category: CategoryInput!
   coordinates: CoordinateInput!
+  description: String
+  imageNumber: Int
+  floor: Int
+  streetViewInfo: StreetViewInput
+}`;
+
+const UpdateTagDataInput = `input updateTagDataInput {
+  locationName: String
+  category: CategoryInput
+  coordinates: CoordinateInput
   description: String
   imageNumber: Int
   floor: Int
@@ -133,7 +143,8 @@ module.exports = {
   updateUpVoteAction,
   updateUpVoteResponse,
   AddNewTagResponse,
-  TagDataInput,
+  AddTagDataInput,
+  UpdateTagDataInput,
   CoordinateInput,
   CategoryInput,
   StreetViewInput,

@@ -12,7 +12,8 @@ const {
   updateUpVoteAction,
   updateUpVoteResponse,
   AddNewTagResponse,
-  TagDataInput,
+  AddTagDataInput,
+  UpdateTagDataInput,
   CoordinateInput,
   CategoryInput,
   StreetViewInput,
@@ -31,8 +32,8 @@ const Query = `type Query {
 
 const Mutation = `type Mutation {
   #tagImageUrlAdd(id: ID, imageUrl: [String]!): TagDetail!
-  addNewTagData(data: TagDataInput!): AddNewTagResponse
-  updateTagData(tagId: ID!, data: TagDataInput!): Tag!
+  addNewTagData(data: addTagDataInput!): AddNewTagResponse
+  updateTagData(tagId: ID!, data: updateTagDataInput!): Tag!
   updateTagStatus(tagId: ID!, statusName: String!, description: String): Status!
   addNewIntent(userIntent: String!, userAnswer: String!): String
   updateUpVoteStatus(tagId: ID!, action: updateUpVoteAction!): updateUpVoteResponse
@@ -55,7 +56,8 @@ const typeDefs = gql(
     updateUpVoteAction,
     updateUpVoteResponse,
     AddNewTagResponse,
-    TagDataInput,
+    AddTagDataInput,
+    UpdateTagDataInput,
     CoordinateInput,
     CategoryInput,
     StreetViewInput,

@@ -254,7 +254,7 @@ describe('test graphql mutate', () => {
 
   test('test add tag data', async () => {
     const mutateTag = gql`
-      mutation tagAddTest($data: TagDataInput!) {
+      mutation tagAddTest($data: addTagDataInput!) {
         addNewTagData(data: $data) {
           tag {
             id
@@ -316,7 +316,7 @@ describe('test graphql mutate', () => {
 
   test('test update tag data', async () => {
     const mutateTag = gql`
-      mutation tagUpdateTest($tagId: ID!, $data: TagDataInput!) {
+      mutation tagUpdateTest($tagId: ID!, $data: updateTagDataInput!) {
         updateTagData(tagId: $tagId, data: $data) {
           id
           locationName
@@ -324,18 +324,12 @@ describe('test graphql mutate', () => {
         }
       }
     `;
+
+    // change field
     const latestDescription = 'latest changed update description';
     const data = {
-      ...fakeTagData,
-      coordinates: {
-        latitude: fakeTagData.coordinatesString.latitude,
-        longitude: fakeTagData.coordinatesString.longitude,
-      },
       description: latestDescription,
-      streetViewInfo: fakeTagData.streetViewInfo,
     };
-    delete data.status;
-    delete data.coordinatesString;
 
     // first add data to firestore
     const response = await addFakeDataToFirestore(firebaseAPIinstance);
@@ -352,7 +346,7 @@ describe('test graphql mutate', () => {
     const responseData = result.data.updateTagData;
     expect(responseData).toMatchObject({
       id: expect.any(String),
-      locationName: data.locationName,
+      locationName: fakeTagData.locationName,
       description: latestDescription,
     });
   });
