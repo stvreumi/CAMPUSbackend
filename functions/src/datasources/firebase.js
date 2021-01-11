@@ -366,10 +366,12 @@ class FirebaseAPI extends DataSource {
       locationName,
       category,
       floor,
-      coordinates: new this.admin.firestore.GeoPoint(
-        parseFloat(coordinates.latitude),
-        parseFloat(coordinates.longitude)
-      ),
+      coordinates: coordinates
+        ? new this.admin.firestore.GeoPoint(
+            parseFloat(coordinates.latitude),
+            parseFloat(coordinates.longitude)
+          )
+        : undefined,
       // originally tagDetail
       lastUpdateTime: this.admin.firestore.FieldValue.serverTimestamp(),
       description,
@@ -399,8 +401,13 @@ class FirebaseAPI extends DataSource {
     if (action === 'update') {
       const refOfUpdateTag = tagGeoRef.doc(tagId);
 
+      // filter out not change data (undefined)
+      const tagDataUpdate = Object.keys(tagData)
+        .filter(key => tagData[key] !== undefined)
+        .reduce((obj, key) => ({ ...obj, [key]: tagData[key] }));
+
       // update tagData to server
-      await refOfUpdateTag.update(tagData);
+      await refOfUpdateTag.update(tagDataUpdate);
 
       return getDataFromTagDocRef(refOfUpdateTag.native);
     }
