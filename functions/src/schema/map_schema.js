@@ -104,7 +104,6 @@ const UpdateTagDataInput = `input updateTagDataInput {
   category: CategoryInput
   coordinates: CoordinateInput
   description: String
-  imageNumber: Int
   floor: Int
   streetViewInfo: StreetViewInput
 }`;
