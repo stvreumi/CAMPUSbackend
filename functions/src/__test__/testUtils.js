@@ -1,5 +1,6 @@
 const firebase = require('@firebase/testing');
 const axios = require('axios').default;
+const { v4: uuidv4 } = require('uuid');
 
 const fakeDataId = 'test-fakedata-id';
 
@@ -33,6 +34,7 @@ const fakeTagData = {
   // [longitude, latitude]
   streetViewInfo: { ...fakeStreetViewData },
   floor: 3,
+  imageUploadNumber: 2,
 };
 
 const fakeStatusData = {
@@ -74,16 +76,19 @@ function mockFirebaseAdmin(projectId) {
 
   // mock storage
   const mockBuckeFile = jest.fn(_ => ({
-    getSignedUrl: jest.fn(__ => {
-      return ['http://signed.url'];
-    }),
+    getSignedUrl: jest.fn(__ => ['http://signed.url']),
+    delete: jest.fn(),
   }));
   const mockBucketGetFiles = jest.fn(options => {
     const { directory } = options;
     return [
       [
         {
-          metadata: { mediaLink: `http://${directory}.medialink` },
+          metadata: {
+            mediaLink: `https://storage.googleapis.com/download/storage/v1/b/smartcampus-1b31f.appspot.com/o/${
+              directory / uuidv4()
+            }/?generation=1607929899797089&alt=media"`,
+          },
         },
       ],
     ];
@@ -118,7 +123,6 @@ async function addFakeDataToFirestore(
   };
   const data = {
     ...fakeTagData,
-    imageNumber: 2,
   };
   if (testNumberOfUpVote) {
     data.category = { ...hasNumberOfUpVoteCategory };

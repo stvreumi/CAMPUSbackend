@@ -11,7 +11,7 @@ const {
   Discovery,
   updateUpVoteAction,
   updateUpVoteResponse,
-  AddNewTagResponse,
+  AddorUpdateTagResponse,
   AddTagDataInput,
   UpdateTagDataInput,
   CoordinateInput,
@@ -33,9 +33,8 @@ const Query = `type Query {
 }`;
 
 const Mutation = `type Mutation {
-  #tagImageUrlAdd(id: ID, imageUrl: [String]!): TagDetail!
-  addNewTagData(data: addTagDataInput!): AddNewTagResponse
-  updateTagData(tagId: ID!, data: updateTagDataInput!): Tag!
+  addNewTagData(data: addTagDataInput!): AddorUpdateTagResponse!
+  updateTagData(tagId: ID!, data: updateTagDataInput!): AddorUpdateTagResponse!
   updateTagStatus(tagId: ID!, statusName: String!, description: String): Status!
   addNewIntent(userIntent: String!, userAnswer: String!): String
   updateUpVoteStatus(tagId: ID!, action: updateUpVoteAction!): updateUpVoteResponse
@@ -59,7 +58,7 @@ const typeDefs = gql(
     Mutation,
     updateUpVoteAction,
     updateUpVoteResponse,
-    AddNewTagResponse,
+    AddorUpdateTagResponse,
     AddTagDataInput,
     UpdateTagDataInput,
     CoordinateInput,

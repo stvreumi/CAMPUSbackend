@@ -5,7 +5,7 @@ const { AuthenticationError } = require('apollo-server-express');
 const { GeoFirestore } = require('geofirestore');
 // firebaseUtil
 const {
-  getImageUploadUrls,
+  generateFileName,
   getDefaultStatus,
   getDataFromTagDocRef,
   getLatestStatus,
@@ -120,6 +120,32 @@ class FirebaseAPI extends DataSource {
     const [files] = await this.bucket.getFiles(options);
 
     return files.map(file => file.metadata.mediaLink);
+  }
+
+  /**
+   * Generate Singed URL to let front end upload images in a tag to firebase storage
+   * The file name on the storage will looks like: `tagID/(8 digits uuid)`
+   * reference from: https://github.com/googleapis/nodejs-storage/blob/master/samples/generateV4UploadSignedUrl.js
+   * @param {Int} imageUploadNumber
+   * @param {String} tagId
+   * @returns {Promise[]} an array contain singed urls with length `imageNumber`
+   */
+  getImageUploadUrls({ imageUploadNumber, tagId }) {
+    // These options will allow temporary uploading of the file with outgoing
+    // Content-Type: application/octet-stream header.
+    const options = {
+      version: 'v4',
+      action: 'write',
+      expires: Date.now() + 5 * 60 * 1000, // 5 minutes
+      contentType: 'application/octet-stream',
+    };
+
+    const fileNameArray = generateFileName(imageUploadNumber, tagId);
+
+    return fileNameArray.map(async name => {
+      const [url] = await this.bucket.file(name).getSignedUrl(options);
+      return url;
+    });
   }
 
   /** *** firestore *** */
@@ -359,7 +385,6 @@ class FirebaseAPI extends DataSource {
       .collection('hasReadGuide')
       .doc(uid);
 
-
     const doc = await userHasReadGuideDocRef.get();
 
     if (doc.exists) {
@@ -469,12 +494,12 @@ class FirebaseAPI extends DataSource {
     // retrieve id of new added tag document
     const { id: tagDataDocumentId } = tagDataDocumentData;
 
-    const { imageNumber } = data;
+    const { imageUploadNumber } = data;
     return {
       tag: tagDataDocumentData,
-      imageNumber,
-      imageUploadUrl: await Promise.all(
-        getImageUploadUrls(this.bucket, imageNumber, tagDataDocumentId)
+      imageUploadNumber,
+      imageUploadUrls: await Promise.all(
+        this.getImageUploadUrls({ imageUploadNumber, tagId: tagDataDocumentId })
       ),
     };
   } // function async addNewTagData
@@ -491,6 +516,16 @@ class FirebaseAPI extends DataSource {
     // check user status
     const { logIn, uid } = userInfo;
     checkUserLogIn(logIn);
+
+    // check if the user is the creater of the tag
+    const tagCreateUserId = (
+      await this.firestore.collection('tagData').doc(tagId).get()
+    ).data().createUserId;
+
+    if (tagCreateUserId !== uid) {
+      throw Error('This user can not update this tag');
+    }
+
     // add tagData to firestore
     const tagDataDocumentData = await this.addorUpdateTagDataToFirestore(
       'update',
@@ -501,7 +536,56 @@ class FirebaseAPI extends DataSource {
       }
     );
 
-    return tagDataDocumentData;
+    // image management function definition
+    const doImageDelete = async imageDeleteUrls => {
+      if (imageDeleteUrls) {
+        const locations = imageDeleteUrls.map(url => {
+          const re = /\/([\w]+)%2([\w\-]+.jpg)/i;
+          const reMatchResult = url.match(re);
+          const [_, tagIdInUrl, fileNameInUrl] = reMatchResult;
+          if (tagIdInUrl !== tagId) {
+            throw new Error('The image you want to delete is not in this tag');
+          }
+          return `${tagIdInUrl}/${fileNameInUrl}`;
+        });
+
+        // delete files
+        // usign Promise.allSettled to ensure all promises would be called
+        const responses = await Promise.allSettled(
+          locations.map(async fileLocation =>
+            this.bucket.file(fileLocation).delete()
+          )
+        );
+        const rejectedMessages = responses.filter(
+          ({ status }) => status === 'rejected'
+        );
+        if (rejectedMessages.length > 0) {
+          console.error(rejectedMessages);
+          throw new Error(
+            `${rejectedMessages.length} files didn't be deleted successfully`
+          );
+        }
+        return true;
+      }
+      return null;
+    };
+    const doGetImageUploadSignedUrl = async imageUploadNumber => {
+      if (imageUploadNumber > 0) {
+        return Promise.all(
+          this.getImageUploadUrls({ imageUploadNumber, tagId })
+        );
+      }
+      return [];
+    };
+
+    // image management
+    const { imageDeleteUrls, imageUploadNumber = 0 } = data;
+    return {
+      tag: tagDataDocumentData,
+      imageUploadNumber,
+      imageUploadUrls: await doGetImageUploadSignedUrl(imageUploadNumber),
+      imageDeleteStatus: await doImageDelete(imageDeleteUrls),
+    };
   } // function async updateTagData
 
   /**
