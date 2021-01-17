@@ -103,7 +103,7 @@ describe('test data add/update operation', () => {
   });
   test('test `addNewTagData`', async () => {
     const responseData = await addFakeDataToFirestore(firebaseAPIinstance);
-
+    // console.log(responseData);
     expect(responseData.tag).toMatchObject({
       id: expect.any(String),
       locationName: fakeTagData.locationName,
@@ -115,11 +115,12 @@ describe('test data add/update operation', () => {
       },
       floor: fakeTagData.floor,
     });
-    expect(responseData.imageNumber).toEqual(responseData.imageNumber);
-    expect(responseData.imageUploadUrl.length).toEqual(
-      responseData.imageNumber
+    expect(responseData.imageUploadNumber).toEqual(
+      fakeTagData.imageUploadNumber
     );
-    expect(responseData.imageUploadUrl).toContain('http://signed.url');
+    expect(responseData.imageUploadUrls.length).toEqual(
+      fakeTagData.imageUploadNumber
+    );
   });
   test('test `updateNumberOfUpVote`', async () => {
     // TODO: add status before testing

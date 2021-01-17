@@ -266,8 +266,8 @@ describe('test graphql mutate', () => {
             }
             floor
           }
-          imageNumber
-          imageUploadUrl
+          imageUploadNumber
+          imageUploadUrls
         }
       }
     `;
@@ -277,7 +277,6 @@ describe('test graphql mutate', () => {
         latitude: fakeTagData.coordinatesString.latitude,
         longitude: fakeTagData.coordinatesString.longitude,
       },
-      imageNumber: 2,
     };
     delete data.status;
     delete data.coordinatesString;
@@ -296,10 +295,10 @@ describe('test graphql mutate', () => {
         locationName: data.locationName,
         floor: expect.any(Number),
       },
-      imageNumber: data.imageNumber,
-      imageUploadUrl: expect.any(Array),
+      imageUploadNumber: data.imageUploadNumber,
+      imageUploadUrls: expect.any(Array),
     });
-    expect(responseData.imageUploadUrl.length).toEqual(data.imageNumber);
+    expect(responseData.imageUploadUrls.length).toEqual(data.imageUploadNumber);
 
     // check detail collection data
     const detailDocData = (
@@ -318,9 +317,14 @@ describe('test graphql mutate', () => {
     const mutateTag = gql`
       mutation tagUpdateTest($tagId: ID!, $data: updateTagDataInput!) {
         updateTagData(tagId: $tagId, data: $data) {
-          id
-          locationName
-          description
+          tag {
+            id
+            locationName
+            description
+          }
+          imageUploadNumber
+          imageUploadUrls
+          imageDeleteStatus
         }
       }
     `;
@@ -332,8 +336,8 @@ describe('test graphql mutate', () => {
     };
 
     // first add data to firestore
-    const response = await addFakeDataToFirestore(firebaseAPIinstance);
-    const fakeTagId = response.tag.id;
+    const addFakeDataResponse = await addFakeDataToFirestore(firebaseAPIinstance);
+    const fakeTagId = addFakeDataResponse.tag.id;
 
     const result = await mutateClient({
       mutation: mutateTag,
@@ -342,13 +346,16 @@ describe('test graphql mutate', () => {
         data,
       },
     });
-
-    const responseData = result.data.updateTagData;
-    expect(responseData).toMatchObject({
+    const tagUpdateTestResult = result.data.updateTagData;
+    // console.log(responseData);
+    expect(tagUpdateTestResult.tag).toMatchObject({
       id: expect.any(String),
-      locationName: fakeTagData.locationName,
+      locationName: fakeTagData.locationName, // remain unchanged
       description: latestDescription,
     });
+    expect(tagUpdateTestResult.imageUploadNumber).toBe(0);
+    expect(tagUpdateTestResult.imageUploadUrls.length).toBe(0);
+    expect(tagUpdateTestResult.imageDeleteStatus).toBe(null);
   });
 
   test('test update tag status', async () => {
@@ -554,5 +561,48 @@ describe('test graphql mutate', () => {
 
     // check if the setHasReadGuide success
     expect(await queryHasReadGuide()).toBe(true);
+  });
+  test('test update tag: upload new image and delete exist image', async () => {
+    const response = await addFakeDataToFirestore(firebaseAPIinstance);
+    const fakeTagId = response.tag.id;
+
+    const updateImageMutation = gql`
+      mutation upVoteTest($tagId: ID!, $data: updateTagDataInput!) {
+        updateTagData(tagId: $tagId, data: $data) {
+          tag {
+            id
+          }
+          imageUploadUrls
+          imageDeleteStatus
+        }
+      }
+    `;
+
+    // prepare update data
+    const imageDeleteUrls = [
+      `https://storage.googleapis.com/download/storage/v1/b/smartcampus-1b31f.appspot.com/o/${fakeTagId}%2F40109ead-0bc5-43a1-8e99-d118df339517.jpg?generation=1607929899797089&alt=media`,
+    ];
+    const imageUploadNumber = 2;
+
+    const updateImageMutationResult = (
+      await mutateClient({
+        mutation: updateImageMutation,
+        variables: {
+          tagId: fakeTagId,
+          data: {
+            imageDeleteUrls,
+            imageUploadNumber,
+          },
+        },
+      })
+    ).data.updateTagData;
+    // console.log(updateImageMutationResult);
+    expect(updateImageMutationResult).toMatchObject({
+      tag: { id: fakeTagId },
+      imageDeleteStatus: true,
+    });
+    expect(updateImageMutationResult.imageUploadUrls.length).toBe(
+      imageUploadNumber
+    );
   });
 });

@@ -83,10 +83,11 @@ const updateUpVoteResponse = `type updateUpVoteResponse {
   hasUpVote: Boolean
 }`;
 
-const AddNewTagResponse = `type AddNewTagResponse {
+const AddorUpdateTagResponse = `type AddorUpdateTagResponse {
   tag: Tag!
-  imageNumber: Int!
-  imageUploadUrl: [String]!
+  imageUploadNumber: Int!
+  imageUploadUrls: [String]!
+  imageDeleteStatus: Boolean
 }`;
 
 const AddTagDataInput = `input addTagDataInput {
@@ -94,7 +95,7 @@ const AddTagDataInput = `input addTagDataInput {
   category: CategoryInput!
   coordinates: CoordinateInput!
   description: String
-  imageNumber: Int
+  imageUploadNumber: Int
   floor: Int
   streetViewInfo: StreetViewInput
 }`;
@@ -104,9 +105,10 @@ const UpdateTagDataInput = `input updateTagDataInput {
   category: CategoryInput
   coordinates: CoordinateInput
   description: String
-  imageNumber: Int
   floor: Int
   streetViewInfo: StreetViewInput
+  imageDeleteUrls: [String!]
+  imageUploadNumber: Int
 }`;
 
 const CoordinateInput = `input CoordinateInput {
@@ -142,7 +144,7 @@ module.exports = {
   Discovery,
   updateUpVoteAction,
   updateUpVoteResponse,
-  AddNewTagResponse,
+  AddorUpdateTagResponse,
   AddTagDataInput,
   UpdateTagDataInput,
   CoordinateInput,
