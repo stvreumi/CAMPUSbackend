@@ -321,6 +321,9 @@ describe('test graphql mutate', () => {
             id
             locationName
             description
+            status {
+              statusName
+            }
           }
           imageUploadNumber
           imageUploadUrls
@@ -333,10 +336,15 @@ describe('test graphql mutate', () => {
     const latestDescription = 'latest changed update description';
     const data = {
       description: latestDescription,
+      category: {
+        missionName: '動態任務',
+      },
     };
 
     // first add data to firestore
-    const addFakeDataResponse = await addFakeDataToFirestore(firebaseAPIinstance);
+    const addFakeDataResponse = await addFakeDataToFirestore(
+      firebaseAPIinstance
+    );
     const fakeTagId = addFakeDataResponse.tag.id;
 
     const result = await mutateClient({
@@ -347,11 +355,14 @@ describe('test graphql mutate', () => {
       },
     });
     const tagUpdateTestResult = result.data.updateTagData;
-    // console.log(responseData);
+    // console.log(tagUpdateTestResult.tag);
     expect(tagUpdateTestResult.tag).toMatchObject({
       id: expect.any(String),
       locationName: fakeTagData.locationName, // remain unchanged
       description: latestDescription,
+      status: {
+        statusName: '人少',
+      },
     });
     expect(tagUpdateTestResult.imageUploadNumber).toBe(0);
     expect(tagUpdateTestResult.imageUploadUrls.length).toBe(0);
