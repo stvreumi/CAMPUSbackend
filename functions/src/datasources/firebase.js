@@ -428,23 +428,26 @@ class FirebaseAPI extends DataSource {
       streetViewInfo,
     };
 
+    const createDefualtStatusObj = missionName => ({
+      statusName: getDefaultStatus(missionName),
+      createTime: this.admin.firestore.FieldValue.serverTimestamp(),
+      createUserId: uid,
+      numberOfUpVote: missionName === '問題任務' ? 0 : null,
+    });
+
     const tagGeoRef = this.geofirestore.collection('tagData');
 
     if (action === 'add') {
       tagData.createTime = this.admin.firestore.FieldValue.serverTimestamp();
       tagData.createUserId = uid;
-      const defaultStatus = {
-        statusName: getDefaultStatus(category.missionName),
-        createTime: this.admin.firestore.FieldValue.serverTimestamp(),
-        createUserId: uid,
-        numberOfUpVote: category.missionName === '問題任務' ? 0 : null,
-      };
 
       // add tagData to server
       const refAfterTagAdd = await tagGeoRef.add(tagData);
 
       // add tag default status, need to use original CollectionReference
-      await refAfterTagAdd.collection('status').native.add(defaultStatus);
+      await refAfterTagAdd
+        .collection('status')
+        .native.add(createDefualtStatusObj(category.missionName));
 
       return getDataFromTagDocRef(refAfterTagAdd.native);
     }
@@ -454,7 +457,14 @@ class FirebaseAPI extends DataSource {
       // filter out not change data (undefined)
       const tagDataUpdate = Object.keys(tagData)
         .filter(key => tagData[key] !== undefined)
-        .reduce((obj, key) => ({ ...obj, [key]: tagData[key] }));
+        .reduce((obj, key) => ({ ...obj, [key]: tagData[key] }), {});
+
+      if (Object.prototype.hasOwnProperty.call(tagDataUpdate, 'category')) {
+        // add tag default status, need to use original CollectionReference
+        await refOfUpdateTag
+          .collection('status')
+          .native.add(createDefualtStatusObj(category.missionName));
+      }
 
       // update tagData to server
       await refOfUpdateTag.update(tagDataUpdate);
