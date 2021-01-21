@@ -550,7 +550,7 @@ class FirebaseAPI extends DataSource {
     const doImageDelete = async imageDeleteUrls => {
       if (imageDeleteUrls) {
         const locations = imageDeleteUrls.map(url => {
-          const re = /\/([\w]+)%2([\w\-]+.jpg)/i;
+          const re = /\/([\w]+)%2F([\w\-]+.jpg)/i;
           const reMatchResult = url.match(re);
           const [_, tagIdInUrl, fileNameInUrl] = reMatchResult;
           if (tagIdInUrl !== tagId) {
