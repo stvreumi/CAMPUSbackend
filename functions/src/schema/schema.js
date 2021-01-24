@@ -7,8 +7,6 @@ const {
   User,
   Coordinate,
   StreetView,
-  Mission,
-  Discovery,
   updateUpVoteAction,
   updateUpVoteResponse,
   AddorUpdateTagResponse,
@@ -25,8 +23,6 @@ const Query = `type Query {
   tagRenderList: [Tag]
   tag(id: ID!): Tag
   userAddTagHistory(uid: ID!): [Tag]!
-  missionList: [Mission]
-  discoveryList: [Discovery]
   "true if the use have read the guide, need to add token in the header"
   hasReadGuide: Boolean!
   intentAnswer(intent: String!): String
@@ -51,8 +47,6 @@ const typeDefs = gql(
     User,
     Coordinate,
     StreetView,
-    Mission,
-    Discovery,
     Intent,
     Question,
     Mutation,
