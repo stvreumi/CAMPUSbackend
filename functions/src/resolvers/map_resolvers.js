@@ -40,22 +40,6 @@ const userResolvers = {
   },
 };
 
-const missionResolver = {
-  Mission: {
-    discoveries: async (mission, _, { dataSources }) =>
-      dataSources.firebaseAPI.getDiscoveriesOfAMission({
-        missionID: mission.id,
-      }),
-  },
-};
-
-const discoveryResolvers = {
-  Discovery: {
-    mission: async (discovery, _, { dataSources }) =>
-      dataSources.firebaseAPI.getMissionById({ id: discovery.missionID }),
-  },
-};
-
 const coordinateResolvers = {
   Coordinate: {
     latitude: async (coordinates, _, __) => coordinates.latitude.toString(),
@@ -67,7 +51,5 @@ module.exports = {
   tagResolvers,
   statusResolvers,
   userResolvers,
-  missionResolver,
-  discoveryResolvers,
   coordinateResolvers,
 };

@@ -4,8 +4,6 @@ const {
   tagResolvers,
   statusResolvers,
   userResolvers,
-  missionResolver,
-  discoveryResolvers,
   coordinateResolvers,
 } = require('./map_resolvers');
 
@@ -17,10 +15,6 @@ const queryResolvers = {
       dataSources.firebaseAPI.getTagData({ id }),
     userAddTagHistory: async (_, { uid }, { dataSources }) =>
       dataSources.firebaseAPI.getUserAddTagHistory({ uid }),
-    missionList: async (_, __, { dataSources }) =>
-      dataSources.firebaseAPI.getList('missionList'),
-    discoveryList: async (_, __, { dataSources }) =>
-      dataSources.firebaseAPI.getList('discoveryList'),
     intentAnswer: async (_, { intent }, { dataSources }) =>
       dataSources.firebaseAPI.getAnswer(intent),
     hasReadGuide: async (_, __, { dataSources, userInfo }) =>
@@ -64,8 +58,6 @@ const resolvers = merge(
   tagResolvers,
   statusResolvers,
   userResolvers,
-  missionResolver,
-  discoveryResolvers,
   coordinateResolvers
 );
 

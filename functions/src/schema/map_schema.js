@@ -59,18 +59,6 @@ const StreetView = `type StreetView {
   cameraLongitude: Float!
 }`;
 
-const Mission = `type Mission {
-  id: ID!
-  name: String
-  discoveries: [Discovery]
-}`;
-
-const Discovery = `type Discovery {
-  id: ID!
-  mission: Mission
-  name: String
-}`;
-
 // mutation
 const updateUpVoteAction = `enum updateUpVoteAction {
   UPVOTE
@@ -140,8 +128,6 @@ module.exports = {
   User,
   Coordinate,
   StreetView,
-  Mission,
-  Discovery,
   updateUpVoteAction,
   updateUpVoteResponse,
   AddorUpdateTagResponse,
