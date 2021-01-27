@@ -65,7 +65,6 @@ describe('test data add/update operation', () => {
       createTime: expect.any(firebase.firestore.Timestamp),
       lastUpdateTime: expect.any(firebase.firestore.Timestamp),
       createUserId: uid,
-      description: data.description,
       streetViewInfo: data.streetViewInfo,
       floor: data.floor,
     });
@@ -97,7 +96,6 @@ describe('test data add/update operation', () => {
 
     // console.log(data);
     expect(docData).toMatchObject({
-      description: '',
       streetViewInfo: null,
     });
   });
