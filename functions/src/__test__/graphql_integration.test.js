@@ -122,7 +122,6 @@ describe('test graphql query', () => {
             uid
             displayName
           }
-          description
           imageUrl
           floor
         }
@@ -141,7 +140,6 @@ describe('test graphql query', () => {
         uid: fakeUserInfo.uid,
         displayName: fakeUserInfo.displayName,
       },
-      description: expect.any(String),
       imageUrl: [expect.any(String)],
       floor: expect.any(Number),
     });
@@ -204,7 +202,6 @@ describe('test graphql query', () => {
           createUser {
             uid
           }
-          description
           imageUrl
         }
       }
@@ -220,7 +217,6 @@ describe('test graphql query', () => {
       createUser: {
         uid: fakeUserInfo.uid,
       },
-      description: expect.any(String),
       imageUrl: [expect.any(String)],
     });
   });
@@ -300,7 +296,7 @@ describe('test graphql mutate', () => {
     });
     expect(responseData.imageUploadUrls.length).toEqual(data.imageUploadNumber);
 
-    // check detail collection data
+    // check detail collection data directly from firestore
     const detailDocData = (
       await firestore.collection('tagData').doc(responseData.tag.id).get()
     ).data();
@@ -308,7 +304,6 @@ describe('test graphql mutate', () => {
     expect(detailDocData).toMatchObject({
       createTime: expect.any(firebase.firestore.Timestamp),
       lastUpdateTime: expect.any(firebase.firestore.Timestamp),
-      description: fakeTagData.description,
       streetViewInfo: fakeTagData.streetViewInfo,
     });
   });
@@ -320,7 +315,6 @@ describe('test graphql mutate', () => {
           tag {
             id
             locationName
-            description
             status {
               statusName
             }
@@ -333,9 +327,7 @@ describe('test graphql mutate', () => {
     `;
 
     // change field
-    const latestDescription = 'latest changed update description';
     const data = {
-      description: latestDescription,
       category: {
         missionName: '動態任務',
       },
@@ -359,7 +351,6 @@ describe('test graphql mutate', () => {
     expect(tagUpdateTestResult.tag).toMatchObject({
       id: expect.any(String),
       locationName: fakeTagData.locationName, // remain unchanged
-      description: latestDescription,
       status: {
         statusName: '人少',
       },

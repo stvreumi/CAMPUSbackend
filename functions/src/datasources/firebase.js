@@ -6,7 +6,6 @@ const { GeoFirestore } = require('geofirestore');
 // firebaseUtil
 const {
   generateFileName,
-  getDefaultStatus,
   getDataFromTagDocRef,
   getLatestStatus,
   getIntentFromDocRef,
@@ -317,27 +316,21 @@ class FirebaseAPI extends DataSource {
   }
 
   /**
-   * Add tag data to collection `tagData` in firestore
-   * @param {String} action "add" or "update", the action of the tagData operation
-   * @param {object} param
-   * @param {object} param.tagData contain the necessary filed should
-   *  be added to tagData document
-   * @param {object} param.uid The uid of the user who initiate the action
+   * Generate tag data object which stroe in the firestore from original raw data
+   * @param {object} data
    */
-  async addorUpdateTagDataToFirestore(action, { tagId = '', data, uid }) {
-    // using default value if the property is not defined in the data parameter
+  async generateTagDataToStoreInFirestore(action, data, uid) {
+    // get data which would be non-null
     const {
       locationName,
       coordinates,
       category,
       floor = null,
-      description = '',
       streetViewInfo = null,
     } = data;
     const tagData = {
       locationName,
       category,
-      floor,
       coordinates: coordinates
         ? new this.admin.firestore.GeoPoint(
             parseFloat(coordinates.latitude),
@@ -346,50 +339,113 @@ class FirebaseAPI extends DataSource {
         : undefined,
       // originally tagDetail
       lastUpdateTime: this.admin.firestore.FieldValue.serverTimestamp(),
-      description,
+      floor,
       streetViewInfo,
     };
+    if (action === 'add') {
+      // get data which would be nullable
+      return {
+        ...tagData,
+        createTime: this.admin.firestore.FieldValue.serverTimestamp(),
+        createUserId: uid,
+      };
+    }
+    if (action === 'update') {
+      // filter out not change data (undefined)
+      return Object.keys(tagData)
+        .filter(key => tagData[key] !== undefined && tagData[key] !== null)
+        .reduce((obj, key) => ({ ...obj, [key]: tagData[key] }), {});
+    }
 
-    const createDefualtStatusObj = missionName => ({
-      statusName: getDefaultStatus(missionName),
+    throw Error('Undefined action of tagData operation.');
+  }
+
+  /**
+   *
+   * @param {*} tagDocRef
+   * @param {string} missionName
+   * @param {string} description
+   * @param {string} uid
+   */
+  async insertDefualtStatusObjToTagDoc(
+    tagDocRef,
+    missionName,
+    description = '',
+    uid
+  ) {
+    const getDefaultStatus = () => {
+      switch (missionName) {
+        case '設施任務':
+          return '存在';
+        case '問題任務':
+          return '待處理';
+        case '動態任務':
+          return '人少';
+        default:
+          return '';
+      }
+    };
+    const defaultStatusData = {
+      statusName: getDefaultStatus(),
+      description,
       createTime: this.admin.firestore.FieldValue.serverTimestamp(),
       createUserId: uid,
       numberOfUpVote: missionName === '問題任務' ? 0 : null,
-    });
+    };
+    // add tag default status, need to use original CollectionReference
+    await tagDocRef.collection('status').native.add(defaultStatusData);
+  }
+
+  /**
+   * Add tag data to collection `tagData` in firestore
+   * @param {String} action "add" or "update", the action of the tagData operation
+   * @param {object} param
+   * @param {object} param.tagData contain the necessary filed should
+   *  be added to tagData document
+   * @param {object} param.uid The uid of the user who initiate the action
+   */
+  async addorUpdateTagDataToFirestore(action, { tagId = '', data, uid }) {
+    const { description } = data;
+    const tagData = await this.generateTagDataToStoreInFirestore(
+      action,
+      data,
+      uid
+    );
 
     const tagGeoRef = this.geofirestore.collection('tagData');
 
     if (action === 'add') {
-      tagData.createTime = this.admin.firestore.FieldValue.serverTimestamp();
-      tagData.createUserId = uid;
-
+      const { missionName } = tagData.category;
       // add tagData to server
       const refAfterTagAdd = await tagGeoRef.add(tagData);
 
       // add tag default status, need to use original CollectionReference
-      await refAfterTagAdd
-        .collection('status')
-        .native.add(createDefualtStatusObj(category.missionName));
+      await this.insertDefualtStatusObjToTagDoc(
+        refAfterTagAdd,
+        missionName,
+        description,
+        uid
+      );
 
       return getDataFromTagDocRef(refAfterTagAdd.native);
     }
     if (action === 'update') {
       const refOfUpdateTag = tagGeoRef.doc(tagId);
 
-      // filter out not change data (undefined)
-      const tagDataUpdate = Object.keys(tagData)
-        .filter(key => tagData[key] !== undefined)
-        .reduce((obj, key) => ({ ...obj, [key]: tagData[key] }), {});
-
-      if (Object.prototype.hasOwnProperty.call(tagDataUpdate, 'category')) {
+      // the category has changed, need to push new status data to status history
+      if (Object.prototype.hasOwnProperty.call(tagData, 'category')) {
+        const { missionName } = tagData.category;
         // add tag default status, need to use original CollectionReference
-        await refOfUpdateTag
-          .collection('status')
-          .native.add(createDefualtStatusObj(category.missionName));
+        await this.insertDefualtStatusObjToTagDoc(
+          refOfUpdateTag,
+          missionName,
+          '(修改任務內容)',
+          uid
+        );
       }
 
       // update tagData to server
-      await refOfUpdateTag.update(tagDataUpdate);
+      await refOfUpdateTag.update(tagData);
 
       return getDataFromTagDocRef(refOfUpdateTag.native);
     }

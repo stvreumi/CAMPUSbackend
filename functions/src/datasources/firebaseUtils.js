@@ -7,19 +7,6 @@ function generateFileName(imageNumber, tagID) {
   );
 }
 
-function getDefaultStatus(missionName) {
-  switch (missionName) {
-    case '設施任務':
-      return '存在';
-    case '問題任務':
-      return '待處理';
-    case '動態任務':
-      return '人少';
-    default:
-      return '';
-  }
-}
-
 /**
  * Get latest status of current tag document `status` collection
  * @param {DocumentReference} docRef The document we want to get the latest
@@ -91,7 +78,6 @@ function checkUserLogIn(logIn) {
 }
 
 exports.generateFileName = generateFileName;
-exports.getDefaultStatus = getDefaultStatus;
 exports.getLatestStatus = getLatestStatus;
 exports.getDataFromTagDocRef = getDataFromTagDocRef;
 exports.getIntentFromDocRef = getIntentFromDocRef;

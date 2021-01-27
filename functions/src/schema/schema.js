@@ -29,6 +29,9 @@ const Query = `type Query {
 }`;
 
 const Mutation = `type Mutation {
+  """
+  The description in the input will store in the status data
+  """
   addNewTagData(data: addTagDataInput!): AddorUpdateTagResponse!
   updateTagData(tagId: ID!, data: updateTagDataInput!): AddorUpdateTagResponse!
   updateTagStatus(tagId: ID!, statusName: String!, description: String): Status!
