@@ -6,7 +6,6 @@ const FirebaseAPI = require('../datasources/firebase');
 const {
   mockFirebaseAdmin,
   fakeTagData,
-  fakeStatusData,
   fakeUserInfo,
   addFakeDataToFirestore,
   fakeIntent,
@@ -57,11 +56,6 @@ describe('test data add/update operation', () => {
       locationName: data.locationName,
       coordinates: data.coordinates,
       category: data.category,
-      status: {
-        statusName: fakeStatusData.statusName,
-        createTime: expect.any(firebase.firestore.Timestamp),
-        createUserId: uid,
-      },
       createTime: expect.any(firebase.firestore.Timestamp),
       lastUpdateTime: expect.any(firebase.firestore.Timestamp),
       createUserId: uid,
@@ -107,10 +101,6 @@ describe('test data add/update operation', () => {
       locationName: fakeTagData.locationName,
       category: fakeTagData.category,
       coordinates: expect.any(firebase.firestore.GeoPoint),
-      status: {
-        statusName: fakeStatusData.statusName,
-        createTime: expect.any(firebase.firestore.Timestamp),
-      },
       floor: fakeTagData.floor,
     });
     expect(responseData.imageUploadNumber).toEqual(
@@ -218,10 +208,6 @@ describe('test data read operation', () => {
         targetName: expect.any(String),
       },
       coordinates: expect.any(firebase.firestore.GeoPoint),
-      status: {
-        statusName: fakeStatusData.statusName,
-        createTime: expect.any(firebase.firestore.Timestamp),
-      },
       floor: expect.any(Number),
     });
   });
@@ -241,10 +227,6 @@ describe('test data read operation', () => {
         targetName: expect.any(String),
       },
       coordinates: expect.any(firebase.firestore.GeoPoint),
-      status: {
-        statusName: fakeStatusData.statusName,
-        createTime: expect.any(firebase.firestore.Timestamp),
-      },
       floor: expect.any(Number),
     });
   });

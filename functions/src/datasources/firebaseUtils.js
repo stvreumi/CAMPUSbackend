@@ -38,10 +38,8 @@ async function getLatestStatus(docRef) {
  * @param {DocumentReference} docRef The document we want to get the data
  */
 async function getDataFromTagDocRef(docRef) {
-  const { statusDocRef: _, ...status } = await getLatestStatus(docRef);
   const data = {
     id: docRef.id,
-    status,
     // move to resolver
     // statusHistory: await getStatusHistory(docRef),
     ...(await docRef.get()).data(),
