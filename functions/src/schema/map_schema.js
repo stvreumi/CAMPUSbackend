@@ -12,7 +12,6 @@ const Tag = `type Tag {
   createTime: String
   lastUpdateTime: String
   createUser: User
-  description: String
   imageUrl: [String]
   streetViewInfo: StreetView
   status: Status
