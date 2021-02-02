@@ -14,6 +14,17 @@ const {
 
 const { upVoteActionName, cancelUpVoteActionName } = require('./constants');
 
+// used for type annotation
+/**
+ * @typedef {import('../types').DecodedUserInfoFromAuthHeader} DecodedUserInfoFromAuthHeader
+ * @typedef {import('../types').Status} Status
+ * @typedef {import('../types').AddTagDataInput} AddTagDataInput
+ * @typedef {import('../types').RawTagFromFirestore} RawTagFromFirestore
+ * @typedef {import('../types').AddorUpdateTagResponse} AddorUpdateTagResponse
+ * @typedef {import('../types').UpdateTagDataInput} UpdateTagDataInput
+ */
+
+//@ts-check
 /** Handle action with firebase
  *  @todo Rewrite this class name
  *  @todo refactor
@@ -22,12 +33,11 @@ class FirebaseAPI extends DataSource {
   /**
    * Use admin to construct necessary entity of communication
    * @param {object} param
-   * @param {object} param.admin firebase admin config
+   * @param {import("firebase-admin").app.App} param.admin firebase admin config
    */
   constructor({ admin }) {
     super();
 
-    // Create a GeoFirestore reference
     this.admin = admin;
     this.firestore = admin.firestore();
     this.geofirestore = new GeoFirestore(this.firestore);
@@ -55,10 +65,8 @@ class FirebaseAPI extends DataSource {
 
   /**
    * Verify token from reqeust header and return user object
-   * @async
-   * @param {object} - request
-   * @returns {DecodedIdToken} - have `uid` properity which specify
-   *  the uid of the user.
+   * @param {import("express").Request} req request object from express
+   * @returns {DecodedUserInfoFromAuthHeader}
    */
   async getUserInfoFromToken(req) {
     const { authorization } = req.headers;
@@ -91,16 +99,31 @@ class FirebaseAPI extends DataSource {
 
   /**
    * Get user's name from uid
-   * @param {uid} the uid of the user
+   * @param {object} param
+   * @param {string} param.uid the uid of the user
    * @returns {string} user's name of the uid
    */
   async getUserName({ uid }) {
     try {
-      const { displayName, email } = await this.auth.getUser(uid);
-      return { displayName, email };
+      const { displayName } = await this.auth.getUser(uid);
+      return displayName;
     } catch (error) {
-      console.log('Error fetching user data:', error);
-      return null;
+      throw new Error(`Error fetching user data: ${error}`);
+    }
+  }
+
+  /**
+   * Get user's email from uid
+   * @param {object} param
+   * @param {string} param.uid the uid of the user
+   * @returns {string} user's email of the uid
+   */
+  async getUserEmail({ uid }) {
+    try {
+      const { email } = await this.auth.getUser(uid);
+      return email;
+    } catch (error) {
+      throw new Error(`Error fetching user data: ${error}`);
     }
   }
 
@@ -125,9 +148,10 @@ class FirebaseAPI extends DataSource {
    * Generate Singed URL to let front end upload images in a tag to firebase storage
    * The file name on the storage will looks like: `tagID/(8 digits uuid)`
    * reference from: https://github.com/googleapis/nodejs-storage/blob/master/samples/generateV4UploadSignedUrl.js
-   * @param {Int} imageUploadNumber
-   * @param {String} tagId
-   * @returns {Promise[]} an array contain singed urls with length `imageNumber`
+   * @param {object} param
+   * @param {number} param.imageUploadNumber
+   * @param {string} param.tagId
+   * @returns {string[]} an array contain singed urls with length `imageNumber`
    */
   getImageUploadUrls({ imageUploadNumber, tagId }) {
     // These options will allow temporary uploading of the file with outgoing
@@ -150,31 +174,11 @@ class FirebaseAPI extends DataSource {
   /** *** firestore *** */
 
   /**
-   * Get all objects from specific collection.
-   * @async
-   * @param {string} collectionName Collection name of firestore.
-   * @returns {object[]} Array of document data in the collection `collectionName`
-   */
-  async getList(collectionName) {
-    const list = [];
-    const querySnapshot = await this.firestore.collection(collectionName).get();
-    querySnapshot.forEach(doc => {
-      const data = doc.data();
-      list.push({
-        id: doc.id,
-        ...data,
-      });
-    });
-    return list;
-  }
-
-  /**
    * Return data list from collection `tagData`
    * (Geofirestore `d` field is removed from verson 4)
-   * @async
-   * @returns {object} Data with id
+   * @returns {RawTagFromFirestore[]} Data array with id
    */
-  async getTagList() {
+  async getAllTags() {
     const list = [];
     const querySnapshot = await this.firestore.collection('tagData').get();
     querySnapshot.forEach(doc => {
@@ -184,11 +188,10 @@ class FirebaseAPI extends DataSource {
   }
 
   /**
-   * Return data list from collection `tagData` of the specific user
-   * @async
+   * Return tag data list from collection `tagData` created by the specific user
    * @param {object} param
    * @param {string} param.uid User id of the specific user.
-   * @returns {object} Data with id
+   * @returns {RawTagFromFirestore[]} Data with id
    */
   async getUserAddTagHistory({ uid }) {
     const list = [];
@@ -207,8 +210,8 @@ class FirebaseAPI extends DataSource {
    * get tag detail from collection `tag_detail`
    * @async
    * @param {object} param
-   * @param {string} param.tagId tagId of the document with detailed info.
-   * @returns {object|null} Object of document data in collection `tagDetail`
+   * @param {string} param.id tagId of the document with detailed info.
+   * @returns {RawTagFromFirestore|null}
    */
   async getTagData({ id }) {
     const doc = await this.firestore.collection('tagData').doc(id).get();
@@ -224,8 +227,10 @@ class FirebaseAPI extends DataSource {
   /**
    * TODO: add paginate function
    * Get status history of current tag document `status` collection
-   * @param {DocumentReference} docRef The document we want to get the latest
+   * @param {object} param
+   * @param {string} param.tagId The tadId of the document we want to get the latest
    *   status
+   * @returns {Status[]} The status data list from new to old
    */
   async getStatusHistory({ tagId }) {
     const docRef = await this.firestore.collection('tagData').doc(tagId);
@@ -233,11 +238,11 @@ class FirebaseAPI extends DataSource {
       .collection('status')
       .orderBy('createTime', 'desc')
       .get();
-    const statusRes = [];
+    const statusResList = [];
     statusDocSnap.forEach(doc => {
-      statusRes.push(doc.data());
+      statusResList.push(doc.data());
     });
-    return statusRes;
+    return statusResList;
   }
 
   /**
@@ -259,9 +264,11 @@ class FirebaseAPI extends DataSource {
   /**
    * Get user's latest upvote status to specific tag.
    * @param {object} param
-   * @param {String} param.tagId the id of the tag document we want to update
+   * @param {string} param.tagId the id of the tag document we want to update
    *  status
-   * @return {Integer} the latest status data
+   * @param {DecodedUserInfoFromAuthHeader} param.userInfo used
+   *  to check user login status
+   * @return {Status} the latest status data
    */
   async getLatestStatusData({ tagId, userInfo }) {
     const { uid } = userInfo;
@@ -294,8 +301,8 @@ class FirebaseAPI extends DataSource {
   /**
    * Get if the user(judge by token) has read the guide.
    * @param {object} param
-   * @param {object} param.userInfo upvote or cancel upvote
-   * @return {Boolean} Return the status of hasReadGuide. `true` means that
+   * @param {DecodedUserInfoFromAuthHeader} param.userInfo upvote or cancel upvote
+   * @return {boolean} Return the status of hasReadGuide. `true` means that
    *  the user has read the guide.
    */
   async getHasReadGuideStatus({ userInfo }) {
@@ -317,7 +324,9 @@ class FirebaseAPI extends DataSource {
 
   /**
    * Generate tag data object which stroe in the firestore from original raw data
-   * @param {object} data
+   * @param {string} action
+   * @param {AddTagDataInput} data
+   * @param {string} uid
    */
   async generateTagDataToStoreInFirestore(action, data, uid) {
     // get data which would be non-null
@@ -362,10 +371,11 @@ class FirebaseAPI extends DataSource {
 
   /**
    *
-   * @param {*} tagDocRef
+   * @param {firebase.firestore.DocumentReference} tagDocRef
    * @param {string} missionName
    * @param {string} description
    * @param {string} uid
+   * @returns {void}
    */
   async insertDefualtStatusObjToTagDoc(
     tagDocRef,
@@ -398,11 +408,14 @@ class FirebaseAPI extends DataSource {
 
   /**
    * Add tag data to collection `tagData` in firestore
-   * @param {String} action "add" or "update", the action of the tagData operation
-   * @param {object} param
-   * @param {object} param.tagData contain the necessary filed should
+   * @async
+   * @param {string} action "add" or "update", the action of the tagData operation
+   * @param {object} params
+   * @param {string} params.tagId
+   * @param {AddTagDataInput | UpdateTagDataInput} params.data contain the necessary filed should
    *  be added to tagData document
-   * @param {object} param.uid The uid of the user who initiate the action
+   * @param {string} params.uid The uid of the user who initiate the action
+   * @returns {Promise<RawTagFromFirestore>}
    */
   async addorUpdateTagDataToFirestore(action, { tagId = '', data, uid }) {
     const { description } = data;
@@ -460,10 +473,10 @@ class FirebaseAPI extends DataSource {
   /**
    * Add tag data.
    * @param {object} param
-   * @param {AddNewTagDataInputObject} param.data `AddNewTagDataInput` data
-   * @param {DecodedIdToken} param.me have `uid` properity which specify
+   * @param {AddTagDataInput} param.data `AddNewTagDataInput` data
+   * @param {DecodedUserInfoFromAuthHeader} param.userInfo have `uid` properity which specify
    *  the uid of the user.
-   * @return {AddNewTagResponse} Contain the upload tag information, and image
+   * @return {Promise<AddorUpdateTagResponse>} Contain the upload tag information, and image
    *  related information
    */
   async addNewTagData({ data, userInfo }) {
@@ -494,11 +507,12 @@ class FirebaseAPI extends DataSource {
 
   /**
    * Update tag data.
-   * @param {object} param
-   * @param {AddNewTagDataInputObject} param.data `AddNewTagDataInput` data
-   * @param {DecodedIdToken} param.me Have `uid` properity which specify
-   *  the uid of the user.
-   * @return {Tag} Updated tag data
+   * @param {object} params
+   * @param {string} params.tagId
+   * @param {UpdateTagDataInput} params.data `AddNewTagDataInput` data
+   * @param {DecodedUserInfoFromAuthHeader} params.userInfo Have `uid` properity
+   *  which specify the uid of the user.
+   * @return {Promise<AddorUpdateTagResponse>} Updated tag data
    */
   async updateTagData({ tagId, data, userInfo }) {
     // check user status
@@ -557,6 +571,9 @@ class FirebaseAPI extends DataSource {
       }
       return null;
     };
+    /**
+     * @param {number} imageUploadNumber
+     */
     const doGetImageUploadSignedUrl = async imageUploadNumber => {
       if (imageUploadNumber > 0) {
         return Promise.all(
@@ -578,11 +595,13 @@ class FirebaseAPI extends DataSource {
 
   /**
    * Insert latest status to the history
-   * @param {object} param
-   * @param {String} param.tagId the id of the tag document we want to update
+   * @param {object} params
+   * @param {string} params.tagId the id of the tag document we want to update
    *  status
-   * @param {String} param.statusName the latest status name we want to update
-   * @return {object} the latest status data
+   * @param {string} params.statusName the latest status name we want to update
+   * @param {string} params.description
+   * @param {DecodedUserInfoFromAuthHeader} params.userInfo
+   * @return {Status} the latest status data
    */
   async updateTagStatus({ tagId, statusName, description, userInfo }) {
     const { logIn, uid } = userInfo;
@@ -606,11 +625,12 @@ class FirebaseAPI extends DataSource {
   /**
    * Update user's upvote status to specific tag. Update the numberOfUpVote and
    * record the user has upvoted.
-   * @param {object} param
-   * @param {String} param.tagId the id of the tag document we want to update
+   * @param {object} params
+   * @param {string} params.tagId the id of the tag document we want to update
    *  status
-   * @param {String} param.action upvote or cancel upvote
-   * @return {object} the latest status data
+   * @param {string} params.action upvote or cancel upvote
+   * @param {DecodedUserInfoFromAuthHeader} params.userInfo
+   * @return {Status} the latest status data
    */
   async updateNumberOfUpVote({ tagId, action, userInfo }) {
     const { logIn, uid } = userInfo;
@@ -662,9 +682,9 @@ class FirebaseAPI extends DataSource {
 
   /**
    * Record if the user(judge by token) has read the guide.
-   * @param {object} param
-   * @param {object} param.userInfo upvote or cancel upvote
-   * @return {Boolean} Return the status of set hasReadGuide. `true` is success.
+   * @param {object} params
+   * @param {DecodedUserInfoFromAuthHeader} params.userInfo upvote or cancel upvote
+   * @return {boolean} Return the status of set hasReadGuide. `true` is success.
    */
   async setHasReadGuide({ userInfo }) {
     const { logIn, uid } = userInfo;

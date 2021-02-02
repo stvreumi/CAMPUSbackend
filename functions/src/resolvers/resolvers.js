@@ -10,7 +10,7 @@ const {
 const queryResolvers = {
   Query: {
     tagRenderList: async (_, __, { dataSources }) =>
-      dataSources.firebaseAPI.getTagList(),
+      dataSources.firebaseAPI.getAllTags(),
     tag: async (_, { id }, { dataSources }) =>
       dataSources.firebaseAPI.getTagData({ id }),
     userAddTagHistory: async (_, { uid }, { dataSources }) =>

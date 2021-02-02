@@ -35,13 +35,11 @@ async function getLatestStatus(docRef) {
 
 /**
  * Extract data from tag document reference
- * @param {DocumentReference} docRef The document we want to get the data
+ * @param {import('firebase-admin').firestore.DocumentReference} docRef The document we want to get the data
  */
 async function getDataFromTagDocRef(docRef) {
   const data = {
     id: docRef.id,
-    // move to resolver
-    // statusHistory: await getStatusHistory(docRef),
     ...(await docRef.get()).data(),
   };
   return data;

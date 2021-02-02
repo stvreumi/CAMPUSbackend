@@ -19,8 +19,11 @@ const Tag = `type Tag {
 }`;
 
 const Category = `type Category {
+  "設施任務/問題任務/動態任務"
   missionName: String!
+  "**類型"
   subTypeName: String
+  "具體**"
   targetName: String
 }`;
 
