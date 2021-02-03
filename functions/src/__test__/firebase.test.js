@@ -193,8 +193,8 @@ describe('test data read operation', () => {
     await addFakeDataToFirestore(firebaseAPIinstance);
   });
 
-  test('test `getTagList`', async () => {
-    const tagDataList = await firebaseAPIinstance.getTagList();
+  test('test `getAllTags`', async () => {
+    const tagDataList = await firebaseAPIinstance.getAllTags();
     // console.log(tagDataList);
     expect(tagDataList).toEqual(expect.any(Array));
 
