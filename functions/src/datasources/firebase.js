@@ -42,6 +42,9 @@ class FirebaseAPI extends DataSource {
     this.firestore = admin.firestore();
     this.geofirestore = new GeoFirestore(this.firestore);
 
+    // frequently used firestore collection reference
+    this.tagDataCollectionRef = this.firestore.collection('tagData');
+
     // for authentication
     this.auth = admin.auth();
 
@@ -180,7 +183,7 @@ class FirebaseAPI extends DataSource {
    */
   async getAllTags() {
     const list = [];
-    const querySnapshot = await this.firestore.collection('tagData').get();
+    const querySnapshot = await this.tagDataCollectionRef.get();
     querySnapshot.forEach(doc => {
       list.push(getDataFromTagDocRef(doc.ref));
     });
@@ -214,7 +217,7 @@ class FirebaseAPI extends DataSource {
    * @returns {RawTagFromFirestore|null}
    */
   async getTagData({ id }) {
-    const doc = await this.firestore.collection('tagData').doc(id).get();
+    const doc = await this.tagDataCollectionRef.doc(id).get();
     if (!doc.exists) {
       return null;
     }
@@ -233,7 +236,7 @@ class FirebaseAPI extends DataSource {
    * @returns {Status[]} The status data list from new to old
    */
   async getStatusHistory({ tagId }) {
-    const docRef = await this.firestore.collection('tagData').doc(tagId);
+    const docRef = await this.tagDataCollectionRef.doc(tagId);
     const statusDocSnap = await docRef
       .collection('status')
       .orderBy('createTime', 'desc')
@@ -272,7 +275,7 @@ class FirebaseAPI extends DataSource {
    */
   async getLatestStatusData({ tagId, userInfo }) {
     const { uid } = userInfo;
-    const tagDocRef = this.firestore.collection('tagData').doc(tagId);
+    const tagDocRef = this.tagDataCollectionRef.doc(tagId);
 
     const { statusDocRef, ...latestStatusData } = await getLatestStatus(
       tagDocRef
@@ -521,7 +524,7 @@ class FirebaseAPI extends DataSource {
 
     // check if the user is the creater of the tag
     const tagCreateUserId = (
-      await this.firestore.collection('tagData').doc(tagId).get()
+      await this.tagDataCollectionRef.doc(tagId).get()
     ).data().createUserId;
 
     if (tagCreateUserId !== uid) {
@@ -635,7 +638,7 @@ class FirebaseAPI extends DataSource {
   async updateNumberOfUpVote({ tagId, action, userInfo }) {
     const { logIn, uid } = userInfo;
     checkUserLogIn(logIn);
-    const tagDocRef = this.firestore.collection('tagData').doc(tagId);
+    const tagDocRef = this.tagDataCollectionRef.doc(tagId);
 
     const { statusDocRef: tagStatusDocRef } = await getLatestStatus(tagDocRef);
     // if there is no status or the numberOfUpVote is null, raise error
@@ -686,7 +689,7 @@ class FirebaseAPI extends DataSource {
    * @param {DecodedUserInfoFromAuthHeader} params.userInfo upvote or cancel upvote
    * @return {boolean} Return the status of set hasReadGuide. `true` is success.
    */
-  async setHasReadGuide({ userInfo }) {
+ㄇ  async setHasReadGuide({ userInfo }) {
     const { logIn, uid } = userInfo;
     checkUserLogIn(logIn);
 
