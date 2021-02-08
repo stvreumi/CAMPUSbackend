@@ -15,8 +15,6 @@ const queryResolvers = {
       dataSources.firebaseAPI.getTagData({ id }),
     userAddTagHistory: async (_, { uid }, { dataSources }) =>
       dataSources.firebaseAPI.getUserAddTagHistory({ uid }),
-    intentAnswer: async (_, { intent }, { dataSources }) =>
-      dataSources.firebaseAPI.getAnswer(intent),
     hasReadGuide: async (_, __, { dataSources, userInfo }) =>
       dataSources.firebaseAPI.getHasReadGuideStatus({ userInfo }),
   },
@@ -39,8 +37,6 @@ const mutationResolvers = {
         description,
         userInfo,
       }),
-    addNewIntent: (_, { userIntent, userAnswer }, { dataSources }) =>
-      dataSources.firebaseAPI.addNewIntent({ userIntent, userAnswer }),
     updateUpVoteStatus: async (
       _,
       { tagId, action },
