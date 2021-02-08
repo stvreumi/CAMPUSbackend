@@ -69,7 +69,7 @@ class FirebaseAPI extends DataSource {
   /**
    * Verify token from reqeust header and return user object
    * @param {import("express").Request} req request object from express
-   * @returns {DecodedUserInfoFromAuthHeader}
+   * @returns {Promise<DecodedUserInfoFromAuthHeader>}
    */
   async getUserInfoFromToken(req) {
     const { authorization } = req.headers;
@@ -104,7 +104,7 @@ class FirebaseAPI extends DataSource {
    * Get user's name from uid
    * @param {object} param
    * @param {string} param.uid the uid of the user
-   * @returns {string} user's name of the uid
+   * @returns {Promise<string>} user's name of the uid
    */
   async getUserName({ uid }) {
     try {
@@ -119,7 +119,7 @@ class FirebaseAPI extends DataSource {
    * Get user's email from uid
    * @param {object} param
    * @param {string} param.uid the uid of the user
-   * @returns {string} user's email of the uid
+   * @returns {Promise<string>} user's email of the uid
    */
   async getUserEmail({ uid }) {
     try {
@@ -136,7 +136,7 @@ class FirebaseAPI extends DataSource {
    * Get image urls of specific tag
    * @param {object} param
    * @param {string} param.tagId the ID of the tag
-   * @returns {string[]} the image links of the current tag
+   * @returns {Promise<string>[]} the image links of the current tag
    */
   async getImageUrls({ tagId }) {
     const options = {
@@ -154,7 +154,7 @@ class FirebaseAPI extends DataSource {
    * @param {object} param
    * @param {number} param.imageUploadNumber
    * @param {string} param.tagId
-   * @returns {string[]} an array contain singed urls with length `imageNumber`
+   * @returns {Promise<string>[]} an array contain singed urls with length `imageNumber`
    */
   getImageUploadUrls({ imageUploadNumber, tagId }) {
     // These options will allow temporary uploading of the file with outgoing
@@ -179,7 +179,7 @@ class FirebaseAPI extends DataSource {
   /**
    * Return data list from collection `tagData`
    * (Geofirestore `d` field is removed from verson 4)
-   * @returns {RawTagFromFirestore[]} Data array with id
+   * @returns {Promise<RawTagFromFirestore>[]} Data array with id
    */
   async getAllTags() {
     const list = [];
@@ -194,7 +194,7 @@ class FirebaseAPI extends DataSource {
    * Return tag data list from collection `tagData` created by the specific user
    * @param {object} param
    * @param {string} param.uid User id of the specific user.
-   * @returns {RawTagFromFirestore[]} Data with id
+   * @returns {Promise<RawTagFromFirestore>[]} Data with id
    */
   async getUserAddTagHistory({ uid }) {
     const list = [];
@@ -214,7 +214,7 @@ class FirebaseAPI extends DataSource {
    * @async
    * @param {object} param
    * @param {string} param.id tagId of the document with detailed info.
-   * @returns {RawTagFromFirestore|null}
+   * @returns {Promise<RawTagFromFirestore>|null}
    */
   async getTagData({ id }) {
     const doc = await this.tagDataCollectionRef.doc(id).get();
@@ -233,7 +233,7 @@ class FirebaseAPI extends DataSource {
    * @param {object} param
    * @param {string} param.tagId The tadId of the document we want to get the latest
    *   status
-   * @returns {Status[]} The status data list from new to old
+   * @returns {Promise<Status>[]} The status data list from new to old
    */
   async getStatusHistory({ tagId }) {
     const docRef = await this.tagDataCollectionRef.doc(tagId);
@@ -271,7 +271,7 @@ class FirebaseAPI extends DataSource {
    *  status
    * @param {DecodedUserInfoFromAuthHeader} param.userInfo used
    *  to check user login status
-   * @return {Status} the latest status data
+   * @return {Promise<Status>} the latest status data
    */
   async getLatestStatusData({ tagId, userInfo }) {
     const { uid } = userInfo;
@@ -305,7 +305,7 @@ class FirebaseAPI extends DataSource {
    * Get if the user(judge by token) has read the guide.
    * @param {object} param
    * @param {DecodedUserInfoFromAuthHeader} param.userInfo upvote or cancel upvote
-   * @return {boolean} Return the status of hasReadGuide. `true` means that
+   * @return {Promise<boolean>} Return the status of hasReadGuide. `true` means that
    *  the user has read the guide.
    */
   async getHasReadGuideStatus({ userInfo }) {
@@ -329,7 +329,7 @@ class FirebaseAPI extends DataSource {
    * Generate tag data object which stroe in the firestore from original raw data
    * @param {string} action
    * @param {AddTagDataInput} data
-   * @param {string} uid
+   * @param {Promise<string>} uid
    */
   async generateTagDataToStoreInFirestore(action, data, uid) {
     // get data which would be non-null
@@ -378,7 +378,7 @@ class FirebaseAPI extends DataSource {
    * @param {string} missionName
    * @param {string} description
    * @param {string} uid
-   * @returns {void}
+   * @returns {Promise<void>}
    */
   async insertDefualtStatusObjToTagDoc(
     tagDocRef,
@@ -604,7 +604,7 @@ class FirebaseAPI extends DataSource {
    * @param {string} params.statusName the latest status name we want to update
    * @param {string} params.description
    * @param {DecodedUserInfoFromAuthHeader} params.userInfo
-   * @return {Status} the latest status data
+   * @return {Promise<Status>} the latest status data
    */
   async updateTagStatus({ tagId, statusName, description, userInfo }) {
     const { logIn, uid } = userInfo;
@@ -633,7 +633,7 @@ class FirebaseAPI extends DataSource {
    *  status
    * @param {string} params.action upvote or cancel upvote
    * @param {DecodedUserInfoFromAuthHeader} params.userInfo
-   * @return {Status} the latest status data
+   * @return {Promise<Status>} the latest status data
    */
   async updateNumberOfUpVote({ tagId, action, userInfo }) {
     const { logIn, uid } = userInfo;
@@ -687,7 +687,7 @@ class FirebaseAPI extends DataSource {
    * Record if the user(judge by token) has read the guide.
    * @param {object} params
    * @param {DecodedUserInfoFromAuthHeader} params.userInfo upvote or cancel upvote
-   * @return {boolean} Return the status of set hasReadGuide. `true` is success.
+   * @return {Promise<boolean>} Return the status of set hasReadGuide. `true` is success.
    */
   async setHasReadGuide({ userInfo }) {
     const { logIn, uid } = userInfo;
