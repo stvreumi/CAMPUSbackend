@@ -6,7 +6,7 @@ const { GeoFirestore } = require('geofirestore');
 // firebaseUtil
 const {
   generateFileName,
-  getDataFromTagDocRef,
+  getTagDataFromTagDocSnap,
   getLatestStatus,
   getIntentFromDocRef,
   checkUserLogIn,
@@ -185,7 +185,7 @@ class FirebaseAPI extends DataSource {
     const list = [];
     const querySnapshot = await this.tagDataCollectionRef.get();
     querySnapshot.forEach(doc => {
-      list.push(getDataFromTagDocRef(doc.ref));
+      list.push(getTagDataFromTagDocSnap(doc));
     });
     return Promise.all(list);
   }
@@ -204,7 +204,7 @@ class FirebaseAPI extends DataSource {
       .orderBy('createTime', 'desc')
       .get();
     querySnapshot.forEach(doc => {
-      list.push(getDataFromTagDocRef(doc.ref));
+      list.push(getTagDataFromTagDocSnap(doc));
     });
     return Promise.all(list);
   }
@@ -443,7 +443,7 @@ class FirebaseAPI extends DataSource {
         uid
       );
 
-      return getDataFromTagDocRef(refAfterTagAdd.native);
+      return getTagDataFromTagDocSnap(await refAfterTagAdd.native.get());
     }
     if (action === 'update') {
       const refOfUpdateTag = tagGeoRef.doc(tagId);
@@ -463,7 +463,7 @@ class FirebaseAPI extends DataSource {
       // update tagData to server
       await refOfUpdateTag.update(tagData);
 
-      return getDataFromTagDocRef(refOfUpdateTag.native);
+      return getTagDataFromTagDocSnap(await refOfUpdateTag.native.get());
     }
 
     throw Error('Undefined action of tagData operation.');
@@ -689,7 +689,7 @@ class FirebaseAPI extends DataSource {
    * @param {DecodedUserInfoFromAuthHeader} params.userInfo upvote or cancel upvote
    * @return {boolean} Return the status of set hasReadGuide. `true` is success.
    */
-ㄇ  async setHasReadGuide({ userInfo }) {
+  async setHasReadGuide({ userInfo }) {
     const { logIn, uid } = userInfo;
     checkUserLogIn(logIn);
 

@@ -35,12 +35,12 @@ async function getLatestStatus(docRef) {
 
 /**
  * Extract data from tag document reference
- * @param {import('firebase-admin').firestore.DocumentReference} docRef The document we want to get the data
+ * @param {import('firebase-admin').firestore.DocumentSnapshot} docRef The document we want to get the data
  */
-async function getDataFromTagDocRef(docRef) {
+async function getTagDataFromTagDocSnap(docSnap) {
   const data = {
-    id: docRef.id,
-    ...(await docRef.get()).data(),
+    id: docSnap.id,
+    ...docSnap.data(),
   };
   return data;
 }
@@ -75,6 +75,6 @@ function checkUserLogIn(logIn) {
 
 exports.generateFileName = generateFileName;
 exports.getLatestStatus = getLatestStatus;
-exports.getDataFromTagDocRef = getDataFromTagDocRef;
+exports.getTagDataFromTagDocSnap = getTagDataFromTagDocSnap;
 exports.getIntentFromDocRef = getIntentFromDocRef;
 exports.checkUserLogIn = checkUserLogIn;
