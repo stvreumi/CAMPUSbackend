@@ -46,23 +46,6 @@ async function getTagDataFromTagDocSnap(docSnap) {
 }
 
 /**
- * Get User's intent and its answer
- */
-async function getIntentFromDocRef(docRef) {
-  let data;
-  await docRef.get().then(function (doc) {
-    if (doc.exists) {
-      data = {
-        userintent: doc.data().userintent,
-        useranswer: doc.data().useranswer,
-      };
-      // console.log(data);
-    }
-  });
-  return data;
-}
-
-/**
  * Check if user is log in. If not, raise ForbiddenError
  * @param {Boolean} logIn logIn status
  */
@@ -76,5 +59,4 @@ function checkUserLogIn(logIn) {
 exports.generateFileName = generateFileName;
 exports.getLatestStatus = getLatestStatus;
 exports.getTagDataFromTagDocSnap = getTagDataFromTagDocSnap;
-exports.getIntentFromDocRef = getIntentFromDocRef;
 exports.checkUserLogIn = checkUserLogIn;
