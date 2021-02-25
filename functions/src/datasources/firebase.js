@@ -209,24 +209,6 @@ class FirebaseAPI extends DataSource {
   }
 
   /**
-   * get tag detail from collection `tag_detail`
-   * @async
-   * @param {object} param
-   * @param {string} param.id tagId of the document with detailed info.
-   * @returns {Promise<RawTagFromFirestore>|null}
-   */
-  async getTagData({ id }) {
-    const doc = await this.tagDataCollectionRef.doc(id).get();
-    if (!doc.exists) {
-      return null;
-    }
-    return {
-      id: doc.id,
-      ...doc.data(),
-    };
-  }
-
-  /**
    * TODO: add paginate function
    * Get status history of current tag document `status` collection
    * @param {object} param
@@ -633,7 +615,7 @@ class FirebaseAPI extends DataSource {
       .collection('UpVoteUser')
       .doc(uid);
 
-    return this.firestore.runTransaction(async t => {
+    const transactionResult = await this.firestore.runTransaction(async t => {
       const tagStatusUpVoteUserSnap = await t.get(tagStatusUpVoteUserRef);
       const { numberOfUpVote } = (await tagStatusDocRef.get()).data();
       if (numberOfUpVote == null) {
@@ -664,6 +646,14 @@ class FirebaseAPI extends DataSource {
 
       throw Error('Error happened when udpate numberOfUpVote');
     });
+
+    const { numberOfUpVote } = transactionResult;
+
+    // TODO : add threshold condition to archive tag, need to know
+    // the task is 問題任務 and the status of this tag
+
+    // create new function called:
+    // checkIfNeedArchived(tagId, numberOfUpVote)
   }
 
   /**
