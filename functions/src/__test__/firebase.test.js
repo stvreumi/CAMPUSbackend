@@ -8,7 +8,6 @@ const {
   fakeTagData,
   fakeUserInfo,
   addFakeDataToFirestore,
-  fakeIntent,
   clearFirestoreDatabase,
 } = require('./testUtils');
 
@@ -61,15 +60,6 @@ describe('test data add/update operation', () => {
       createUserId: uid,
       streetViewInfo: data.streetViewInfo,
       floor: data.floor,
-    });
-  });
-  test('test `addNewIntent`', async () => {
-    const data = { ...fakeIntent };
-
-    const docData = await firebaseAPIinstance.addNewIntent({ data });
-    expect(docData).toMatchObject({
-      userintent: data.userintent,
-      useranswer: data.useranswer,
     });
   });
   test('test `setTagDetailToFirestore` with some empty fields', async () => {
@@ -193,8 +183,8 @@ describe('test data read operation', () => {
     await addFakeDataToFirestore(firebaseAPIinstance);
   });
 
-  test('test `getTagList`', async () => {
-    const tagDataList = await firebaseAPIinstance.getTagList();
+  test('test `getAllTags`', async () => {
+    const tagDataList = await firebaseAPIinstance.getAllTags();
     // console.log(tagDataList);
     expect(tagDataList).toEqual(expect.any(Array));
 

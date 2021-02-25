@@ -35,32 +35,13 @@ async function getLatestStatus(docRef) {
 
 /**
  * Extract data from tag document reference
- * @param {DocumentReference} docRef The document we want to get the data
+ * @param {import('firebase-admin').firestore.DocumentSnapshot} docRef The document we want to get the data
  */
-async function getDataFromTagDocRef(docRef) {
+async function getTagDataFromTagDocSnap(docSnap) {
   const data = {
-    id: docRef.id,
-    // move to resolver
-    // statusHistory: await getStatusHistory(docRef),
-    ...(await docRef.get()).data(),
+    id: docSnap.id,
+    ...docSnap.data(),
   };
-  return data;
-}
-
-/**
- * Get User's intent and its answer
- */
-async function getIntentFromDocRef(docRef) {
-  let data;
-  await docRef.get().then(function (doc) {
-    if (doc.exists) {
-      data = {
-        userintent: doc.data().userintent,
-        useranswer: doc.data().useranswer,
-      };
-      // console.log(data);
-    }
-  });
   return data;
 }
 
@@ -77,6 +58,5 @@ function checkUserLogIn(logIn) {
 
 exports.generateFileName = generateFileName;
 exports.getLatestStatus = getLatestStatus;
-exports.getDataFromTagDocRef = getDataFromTagDocRef;
-exports.getIntentFromDocRef = getIntentFromDocRef;
+exports.getTagDataFromTagDocSnap = getTagDataFromTagDocSnap;
 exports.checkUserLogIn = checkUserLogIn;

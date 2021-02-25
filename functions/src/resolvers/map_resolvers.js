@@ -1,3 +1,4 @@
+//@ts-check
 const tagResolvers = {
   Tag: {
     createTime: async (tag, _, __) => tag.createTime.toDate().toString(),
@@ -27,16 +28,12 @@ const statusResolvers = {
 const userResolvers = {
   User: {
     uid: async ({ uid }, _, __) => uid,
-    displayName: async ({ uid }, _, { dataSources }) => {
-      const { displayName } = await dataSources.firebaseAPI.getUserName({
+    displayName: async ({ uid }, _, { dataSources }) =>
+      dataSources.firebaseAPI.getUserName({
         uid,
-      });
-      return displayName;
-    },
-    email: async ({ uid }, _, { dataSources }) => {
-      const { email } = await dataSources.firebaseAPI.getUserName({ uid });
-      return email;
-    },
+      }),
+    email: async ({ uid }, _, { dataSources }) =>
+      dataSources.firebaseAPI.getUserEmail({ uid }),
   },
 };
 
