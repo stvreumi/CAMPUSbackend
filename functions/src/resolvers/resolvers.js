@@ -11,8 +11,8 @@ const queryResolvers = {
   Query: {
     tagRenderList: async (_, __, { dataSources }) =>
       dataSources.firebaseAPI.getAllTags(),
-    tag: async (_, { id }, { dataSources }) =>
-      dataSources.firebaseAPI.getTagData({ id }),
+    tag: async (_, { tagId }, { dataSources }) =>
+      dataSources.firebaseAPI.getTagData({ tagId }),
     userAddTagHistory: async (_, { uid }, { dataSources }) =>
       dataSources.firebaseAPI.getUserAddTagHistory({ uid }),
     hasReadGuide: async (_, __, { dataSources, userInfo }) =>

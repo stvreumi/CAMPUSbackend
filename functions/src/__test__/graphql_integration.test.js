@@ -114,7 +114,7 @@ describe('test graphql query', () => {
   test('test query tag', async () => {
     const queryTag = gql`
       query testQueyTag($id: ID!) {
-        tag(id: $id) {
+        tag(tagId: $id) {
           id
           createTime
           lastUpdateTime
@@ -157,7 +157,7 @@ describe('test graphql query', () => {
     const tagId = response.tag.id;
     const queryTag = gql`
       query testQueyTag($id: ID!) {
-        tag(id: $id) {
+        tag(tagId: $id) {
           status {
             statusName
             createTime
@@ -457,7 +457,7 @@ describe('test graphql mutate', () => {
     // test if query can get the upvote number
     const queryStatusTag = gql`
       query testQueyTag($id: ID!) {
-        tag(id: $id) {
+        tag(tagId: $id) {
           status {
             statusName
             createTime
@@ -509,7 +509,7 @@ describe('test graphql mutate', () => {
     // test if query can get the upvote number
     const queryCancelStatusTag = gql`
       query testQueyTag($id: ID!) {
-        tag(id: $id) {
+        tag(tagId: $id) {
           status {
             statusName
             createTime
