@@ -28,6 +28,10 @@ export interface Status {
   hasUpVote?: Boolean;
 }
 
+export interface StatusWithDocumentReference extends Status {
+  statusDocRef: firestore.DocumentReference;
+}
+
 export interface Tag {
   id: string;
   locationName: string;

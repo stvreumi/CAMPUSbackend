@@ -36,7 +36,7 @@ const fakeTagData = {
   floor: 3,
   imageUploadNumber: 2,
 };
-
+ 
 const fakeStatusData = {
   statusName: '存在',
   createTime: firebase.firestore.FieldValue.serverTimestamp(),
@@ -105,7 +105,7 @@ function mockFirebaseAdmin(projectId) {
  * Add fakeData to firestore
  * @param {FirebaseAPI} firestore Firestore instance to add fake data
  * @param {Boolean} testNumberOfUpVote true if we want to add fake data to test
- *   numberOfUpVote
+ *   numberOfUpVote, which is 問題任務
  * @return {AddNewTagResponse} Contain the upload tag information, and image
  */
 async function addFakeDataToFirestore(
