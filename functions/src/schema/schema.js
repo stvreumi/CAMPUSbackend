@@ -18,7 +18,7 @@ const {
 } = require('./map_schema');
 
 const Query = `type Query {
-  tagRenderList: [Tag]
+  unarchivedTagList: [Tag]
   tag(tagId: ID!): Tag
   userAddTagHistory(uid: ID!): [Tag]!
   "true if the use have read the guide, need to add token in the header"

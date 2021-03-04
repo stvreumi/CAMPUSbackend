@@ -44,6 +44,18 @@ class FirebaseAPI extends DataSource {
     // frequently used firestore collection reference
     this.tagDataCollectionRef = this.firestore.collection('tagData');
 
+    this.archivedThresholdOfNumberOfUpVote = 10;
+    this.unregisterArchivedThreshold = this.firestore
+      .collection('setting')
+      .doc('tag')
+      .onSnapshot(docSnapshot => {
+        if (docSnapshot.exists) {
+          this.archivedThresholdOfNumberOfUpVote = docSnapshot.get(
+            'archivedThreshold'
+          );
+        }
+      });
+
     // for authentication
     this.auth = admin.auth();
 
@@ -180,9 +192,11 @@ class FirebaseAPI extends DataSource {
    * (Geofirestore `d` field is removed from verson 4)
    * @returns {Promise<RawTagFromFirestore>[]} Data array with id
    */
-  async getAllTags() {
+  async getAllUnarchivedTags() {
     const list = [];
-    const querySnapshot = await this.tagDataCollectionRef.get();
+    const querySnapshot = await this.tagDataCollectionRef
+      .where('archived', '==', false)
+      .get();
     querySnapshot.forEach(doc => {
       list.push(getTagDataFromTagDocSnap(doc));
     });
@@ -343,6 +357,7 @@ class FirebaseAPI extends DataSource {
         ...tagData,
         createTime: this.admin.firestore.FieldValue.serverTimestamp(),
         createUserId: uid,
+        archived: false,
       };
     }
     if (action === 'update') {
@@ -665,14 +680,24 @@ class FirebaseAPI extends DataSource {
       throw Error('Error happened when udpate numberOfUpVote');
     });
 
+    const { numberOfUpVote } = transactionResult;
+
+    await this.checkIfNeedArchived(tagId, numberOfUpVote);
+
     return transactionResult;
-    // const { numberOfUpVote } = transactionResult;
+  }
 
-    // TODO : add threshold condition to archive tag, need to know
-    // the task is 問題任務 and the status of this tag
+  async checkIfNeedArchived(tagId, numberOfUpVote) {
+    const { category } = await this.getTagData({ tagId });
+    const { missionName } = category;
 
-    // create new function called:
-    // checkIfNeedArchived(tagId, numberOfUpVote)
+    if (
+      missionName === '問題任務' &&
+      numberOfUpVote > this.archivedThresholdOfNumberOfUpVote
+    ) {
+      // archived tag
+      await this.tagDataCollectionRef.doc(tagId).update({ archived: true });
+    }
   }
 
   /**

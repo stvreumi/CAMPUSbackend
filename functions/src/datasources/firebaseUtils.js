@@ -8,10 +8,14 @@ function generateFileName(imageNumber, tagID) {
 }
 
 /**
+ * @typedef {import('../types').StatusWithDocumentReference} StatusWithDocumentReference
+ */
+
+/**
  * Get latest status of current tag document `status` collection
- * @param {DocumentReference} docRef The document we want to get the latest
- *   status
- * @param {data} Boolean if true, return data, else return DocumentSnapshot
+ * @param {import("firebase-admin").firestore.DocumentReference} docRef
+ *  The document we want to get the latest status
+ * @returns {Promise<StatusWithDocumentReference>}
  */
 async function getLatestStatus(docRef) {
   const statusDocSnap = await docRef
@@ -23,6 +27,8 @@ async function getLatestStatus(docRef) {
     throw Error('No status document!');
   }
   const statusRes = [];
+
+  // just to retrieve value, only loop once
   statusDocSnap.forEach(doc => {
     statusRes.push({
       statusDocRef: doc.ref,
