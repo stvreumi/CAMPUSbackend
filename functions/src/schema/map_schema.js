@@ -16,6 +16,7 @@ const Tag = `type Tag {
   streetViewInfo: StreetView
   status: Status
   statusHistory: [Status]!
+  archived: Boolean
 }`;
 
 const Category = `type Category {

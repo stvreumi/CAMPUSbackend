@@ -7,6 +7,7 @@ const gql = require('graphql-tag');
 
 const apolloServer = require('./apolloTestServer');
 const FirebaseAPI = require('../datasources/firebase');
+const { getLatestStatus } = require('../datasources/firebaseUtils');
 const {
   fakeTagData,
   mockFirebaseAdmin,
@@ -17,11 +18,39 @@ const {
 
 const testProjectId = 'smartcampus-1b31f-graphql-test';
 
+function generateGraphQLHelper(type, testClient) {
+  if (type === 'query') {
+    return async (queryString, queryFieldName, variables = {}) => {
+      const queryResult = await testClient({
+        query: queryString,
+        variables,
+      });
+      return {
+        queryResponse: queryResult,
+        queryResult: queryResult.data[queryFieldName],
+      };
+    };
+  }
+  if (type === 'mutation') {
+    return async (mutateString, mutateFieldName, variables = {}) => {
+      const mutateResult = await testClient({
+        mutation: mutateString,
+        variables,
+      });
+      return {
+        mutationResponse: mutateResult,
+        mutationResult: mutateResult.data[mutateFieldName],
+      };
+    };
+  }
+  return undefined;
+}
+
 describe('test graphql query', () => {
-  let queryClient;
   let firebaseAPIinstance;
   let firestore;
   let fakeTagId;
+  let graphQLQueryHelper;
   beforeAll(async () => {
     // set up firebase admin
     const admin = mockFirebaseAdmin(testProjectId);
@@ -30,10 +59,12 @@ describe('test graphql query', () => {
     // set up apollo server and test client
     const server = apolloServer({ admin, logIn: true });
     const { query } = createTestClient(server);
-    queryClient = query;
 
     // set up firestore instance
     firestore = admin.firestore();
+
+    // query helper
+    graphQLQueryHelper = generateGraphQLHelper('query', query);
   });
   afterAll(async () => {
     await Promise.all(firebase.apps().map(app => app.delete()));
@@ -46,10 +77,10 @@ describe('test graphql query', () => {
     fakeTagId = response.tag.id;
   });
 
-  test('test query tagRenderList, but is not 問題任務', async () => {
-    const queryTagRenderList = gql`
+  test('test query unarchivedTagList, but is not 問題任務', async () => {
+    const queryUnarchivedTagList = gql`
       query {
-        tagRenderList {
+        unarchivedTagList {
           id
           locationName
           category {
@@ -74,14 +105,17 @@ describe('test graphql query', () => {
             hasUpVote
           }
           floor
+          archived
         }
       }
     `;
-    const result = await queryClient({ query: queryTagRenderList });
-    const tagRenderListResult = result.data.tagRenderList;
-    expect(tagRenderListResult).toEqual(expect.any(Array));
+    const { queryResult } = await graphQLQueryHelper(
+      queryUnarchivedTagList,
+      'unarchivedTagList'
+    );
+    expect(queryResult).toEqual(expect.any(Array));
     // console.log(tagRenderListResult);
-    expect(tagRenderListResult[0]).toMatchObject({
+    expect(queryResult[0]).toMatchObject({
       id: expect.any(String),
       locationName: fakeTagData.locationName,
       category: {
@@ -108,6 +142,7 @@ describe('test graphql query', () => {
         },
       ],
       floor: expect.any(Number),
+      archived: false,
     });
   });
 
@@ -127,12 +162,10 @@ describe('test graphql query', () => {
         }
       }
     `;
-    const result = await queryClient({
-      query: queryTag,
-      variables: { id: fakeTagId },
+    const { queryResult } = await graphQLQueryHelper(queryTag, 'tag', {
+      id: fakeTagId,
     });
-    const tagResult = result.data.tag;
-    expect(tagResult).toMatchObject({
+    expect(queryResult).toMatchObject({
       id: fakeTagId,
       createTime: expect.any(String),
       lastUpdateTime: expect.any(String),
@@ -173,20 +206,17 @@ describe('test graphql query', () => {
         }
       }
     `;
-    const result = await queryClient({
-      query: queryTag,
-      variables: { id: tagId },
+    const { queryResult } = await graphQLQueryHelper(queryTag, 'tag', {
+      id: tagId,
     });
-    // NEXT
-    const tagResult = result.data.tag;
 
-    expect(tagResult.status).toMatchObject({
+    expect(queryResult.status).toMatchObject({
       statusName: expect.any(String),
       createTime: expect.any(String),
       numberOfUpVote: expect.any(Number),
       hasUpVote: expect.any(Boolean),
     });
-    expect(tagResult.statusHistory[0]).toMatchObject({
+    expect(queryResult.statusHistory[0]).toMatchObject({
       statusName: expect.any(String),
       createTime: expect.any(String),
       numberOfUpVote: expect.any(Number),
@@ -206,13 +236,15 @@ describe('test graphql query', () => {
         }
       }
     `;
-    const result = await queryClient({
-      query: queryUserAddTagHistory,
-      variables: { uid },
-    });
-    const tagResult = result.data.userAddTagHistory;
-    expect(tagResult).toEqual(expect.any(Array));
-    expect(tagResult[0]).toMatchObject({
+
+    const { queryResult } = await graphQLQueryHelper(
+      queryUserAddTagHistory,
+      'userAddTagHistory',
+      { uid }
+    );
+
+    expect(queryResult).toEqual(expect.any(Array));
+    expect(queryResult[0]).toMatchObject({
       id: fakeTagId,
       createUser: {
         uid: fakeUserInfo.uid,
@@ -223,8 +255,8 @@ describe('test graphql query', () => {
 });
 
 describe('test graphql mutate', () => {
-  let mutateClient;
-  let queryClient;
+  let graphQLQueryHelper;
+  let graphQLMutationHelper;
   let firestore;
   let firebaseAPIinstance;
   beforeAll(() => {
@@ -235,8 +267,8 @@ describe('test graphql mutate', () => {
     // set up apollo server and test client
     const server = apolloServer({ admin, logIn: true });
     const { mutate, query } = createTestClient(server);
-    mutateClient = mutate;
-    queryClient = query;
+    graphQLQueryHelper = generateGraphQLHelper('query', query);
+    graphQLMutationHelper = generateGraphQLHelper('mutation', mutate);
 
     // set up fake data to firestore
     firestore = admin.firestore();
@@ -276,16 +308,15 @@ describe('test graphql mutate', () => {
     };
     delete data.status;
     delete data.coordinatesString;
-    const result = await mutateClient({
-      mutation: mutateTag,
-      variables: {
-        data,
-      },
-    });
-    // console.log(result.data);
 
-    const responseData = result.data.addNewTagData;
-    expect(responseData).toMatchObject({
+    const { mutationResult } = await graphQLMutationHelper(
+      mutateTag,
+      'addNewTagData',
+      {
+        data,
+      }
+    );
+    expect(mutationResult).toMatchObject({
       tag: {
         id: expect.any(String),
         locationName: data.locationName,
@@ -294,11 +325,13 @@ describe('test graphql mutate', () => {
       imageUploadNumber: data.imageUploadNumber,
       imageUploadUrls: expect.any(Array),
     });
-    expect(responseData.imageUploadUrls.length).toEqual(data.imageUploadNumber);
+    expect(mutationResult.imageUploadUrls.length).toEqual(
+      data.imageUploadNumber
+    );
 
     // check detail collection data directly from firestore
     const detailDocData = (
-      await firestore.collection('tagData').doc(responseData.tag.id).get()
+      await firestore.collection('tagData').doc(mutationResult.tag.id).get()
     ).data();
     // console.log(detailDoc);
     expect(detailDocData).toMatchObject({
@@ -339,25 +372,26 @@ describe('test graphql mutate', () => {
     );
     const fakeTagId = addFakeDataResponse.tag.id;
 
-    const result = await mutateClient({
-      mutation: mutateTag,
-      variables: {
+    const { mutationResult } = await graphQLMutationHelper(
+      mutateTag,
+      'updateTagData',
+      {
         tagId: fakeTagId,
         data,
-      },
-    });
-    const tagUpdateTestResult = result.data.updateTagData;
+      }
+    );
+
     // console.log(tagUpdateTestResult.tag);
-    expect(tagUpdateTestResult.tag).toMatchObject({
+    expect(mutationResult.tag).toMatchObject({
       id: expect.any(String),
       locationName: fakeTagData.locationName, // remain unchanged
       status: {
         statusName: '人少',
       },
     });
-    expect(tagUpdateTestResult.imageUploadNumber).toBe(0);
-    expect(tagUpdateTestResult.imageUploadUrls.length).toBe(0);
-    expect(tagUpdateTestResult.imageDeleteStatus).toBe(null);
+    expect(mutationResult.imageUploadNumber).toBe(0);
+    expect(mutationResult.imageUploadUrls.length).toBe(0);
+    expect(mutationResult.imageDeleteStatus).toBe(null);
   });
 
   test('test update tag status', async () => {
@@ -383,29 +417,28 @@ describe('test graphql mutate', () => {
         }
       }
     `;
-    const result = await mutateClient({
-      mutation: mutateTag,
-      variables: {
+
+    const { mutationResult } = await graphQLMutationHelper(
+      mutateTag,
+      'updateTagStatus',
+      {
         tagId: fakeTagId,
         statusName: testStatusName,
         description: 'test update status',
-      },
-    });
-    // console.log(result.data);
-
-    const responseData = result.data.updateTagStatus;
+      }
+    );
 
     // console.log(responseData);
-    expect(responseData).toMatchObject({
+    expect(mutationResult).toMatchObject({
       statusName: testStatusName,
       createTime: expect.any(String),
       description: 'test update status',
     });
 
     // test if the status update mutation would work
-    const queryTagRenderList = gql`
+    const queryUnarchivedTagList = gql`
       query {
-        tagRenderList {
+        unarchivedTagList {
           id
           status {
             statusName
@@ -418,13 +451,15 @@ describe('test graphql mutate', () => {
         }
       }
     `;
-    const queryStatusResult = await queryClient({ query: queryTagRenderList });
-    const tagRenderListResult = queryStatusResult.data.tagRenderList;
+    const { queryResult } = await graphQLQueryHelper(
+      queryUnarchivedTagList,
+      'unarchivedTagList'
+    );
 
     // console.log(tagRenderListResult[0].statusHistory);
 
-    expect(tagRenderListResult[0].statusHistory).toHaveLength(2);
-    expect(tagRenderListResult[0].status.statusName).toEqual(testStatusName);
+    expect(queryResult[0].statusHistory).toHaveLength(2);
+    expect(queryResult[0].status.statusName).toEqual(testStatusName);
   });
   test('test `updateUpVoteStatus` and upvote related query', async () => {
     const response = await addFakeDataToFirestore(firebaseAPIinstance, true);
@@ -439,16 +474,17 @@ describe('test graphql mutate', () => {
         }
       }
     `;
-    const result = await mutateClient({
-      mutation: mutateTag,
-      variables: {
+
+    const { mutationResult } = await graphQLMutationHelper(
+      mutateTag,
+      'updateUpVoteStatus',
+      {
         tagId: response.tag.id,
         action: 'UPVOTE',
-      },
-    });
+      }
+    );
 
-    const mutateResponse = result.data.updateUpVoteStatus;
-    expect(mutateResponse).toMatchObject({
+    expect(mutationResult).toMatchObject({
       tagId: response.tag.id,
       numberOfUpVote: 1,
       hasUpVote: true,
@@ -467,14 +503,12 @@ describe('test graphql mutate', () => {
         }
       }
     `;
-    const queryResult = await queryClient({
-      query: queryStatusTag,
-      variables: {
-        id: response.tag.id,
-      },
+
+    const { queryResult } = await graphQLQueryHelper(queryStatusTag, 'tag', {
+      id: response.tag.id,
     });
     // console.log(queryResult.data.tag);
-    expect(queryResult.data.tag.status).toMatchObject({
+    expect(queryResult.status).toMatchObject({
       statusName: '待處理',
       createTime: expect.any(String),
       numberOfUpVote: 1,
@@ -491,16 +525,14 @@ describe('test graphql mutate', () => {
         }
       }
     `;
-    const cancelResult = await mutateClient({
-      mutation: cancelMutateTag,
-      variables: {
-        tagId: response.tag.id,
-        action: 'CANCEL_UPVOTE',
-      },
-    });
 
-    const cancelMutateResponse = cancelResult.data.updateUpVoteStatus;
-    expect(cancelMutateResponse).toMatchObject({
+    const {
+      mutationResult: cancelMutationResult,
+    } = await graphQLMutationHelper(cancelMutateTag, 'updateUpVoteStatus', {
+      tagId: response.tag.id,
+      action: 'CANCEL_UPVOTE',
+    });
+    expect(cancelMutationResult).toMatchObject({
       tagId: response.tag.id,
       numberOfUpVote: 0,
       hasUpVote: false,
@@ -519,14 +551,14 @@ describe('test graphql mutate', () => {
         }
       }
     `;
-    const queryCancelResult = await queryClient({
-      query: queryCancelStatusTag,
-      variables: {
+    const { queryResult: cancelQueryResult } = await graphQLQueryHelper(
+      queryCancelStatusTag,
+      'tag',
+      {
         id: response.tag.id,
-      },
-    });
-    // console.log(queryCancelResult.data.tag);
-    expect(queryCancelResult.data.tag.status).toMatchObject({
+      }
+    );
+    expect(cancelQueryResult.status).toMatchObject({
       statusName: '待處理',
       createTime: expect.any(String),
       numberOfUpVote: 0,
@@ -540,9 +572,12 @@ describe('test graphql mutate', () => {
           hasReadGuide
         }
       `;
-      // console.log(queryHasReadGuideResult);
-      return (await queryClient({ query: queryHasReadGuideQL })).data
-        .hasReadGuide;
+
+      const { queryResult } = await graphQLQueryHelper(
+        queryHasReadGuideQL,
+        'hasReadGuide'
+      );
+      return queryResult;
     };
 
     expect(await queryHasReadGuide()).toBe(false);
@@ -553,13 +588,14 @@ describe('test graphql mutate', () => {
       }
     `;
 
-    const mutateSetHasReadGuideResult = (
-      await mutateClient({ mutation: mutateSetHasReadGuide })
-    ).data.setHasReadGuide;
+    const { mutationResult } = await graphQLMutationHelper(
+      mutateSetHasReadGuide,
+      'setHasReadGuide'
+    );
     // console.log(mutateSetHasReadGuideResult);
 
     // check if mutation successed
-    expect(mutateSetHasReadGuideResult).toBe(true);
+    expect(mutationResult).toBe(true);
 
     // check if the setHasReadGuide success
     expect(await queryHasReadGuide()).toBe(true);
@@ -586,25 +622,80 @@ describe('test graphql mutate', () => {
     ];
     const imageUploadNumber = 2;
 
-    const updateImageMutationResult = (
-      await mutateClient({
-        mutation: updateImageMutation,
-        variables: {
-          tagId: fakeTagId,
-          data: {
-            imageDeleteUrls,
-            imageUploadNumber,
-          },
+    const { mutationResult } = await graphQLMutationHelper(
+      updateImageMutation,
+      'updateTagData',
+      {
+        tagId: fakeTagId,
+        data: {
+          imageDeleteUrls,
+          imageUploadNumber,
         },
-      })
-    ).data.updateTagData;
+      }
+    );
     // console.log(updateImageMutationResult);
-    expect(updateImageMutationResult).toMatchObject({
+    expect(mutationResult).toMatchObject({
       tag: { id: fakeTagId },
       imageDeleteStatus: true,
     });
-    expect(updateImageMutationResult.imageUploadUrls.length).toBe(
-      imageUploadNumber
+    expect(mutationResult.imageUploadUrls.length).toBe(imageUploadNumber);
+  });
+  test('test archived mechanism', async () => {
+    // first add threshold into firestore
+    firestore.collection('setting').doc('tag').set({ archivedThreshold: 3 });
+
+    // add 問題任務 tag
+    const response = await addFakeDataToFirestore(firebaseAPIinstance, true);
+    const tagId = response.tag.id;
+
+    // set numberOfUpVote to 3
+    const initialNumberOfUpVote = 3;
+    const { statusDocRef } = await getLatestStatus(
+      firestore.collection('tagData').doc(tagId)
     );
+    await statusDocRef.update({ numberOfUpVote: initialNumberOfUpVote });
+
+    // check if the thershold has been updated
+    expect(firebaseAPIinstance.archivedThresholdOfNumberOfUpVote).toBe(
+      initialNumberOfUpVote
+    );
+
+    // upvote
+    const upvoteTag = gql`
+      mutation upVoteTest($tagId: ID!, $action: updateUpVoteAction!) {
+        updateUpVoteStatus(tagId: $tagId, action: $action) {
+          numberOfUpVote
+        }
+      }
+    `;
+
+    const { mutationResult } = await graphQLMutationHelper(
+      upvoteTag,
+      'updateUpVoteStatus',
+      {
+        tagId,
+        action: 'UPVOTE',
+      }
+    );
+
+    expect(mutationResult).toMatchObject({
+      numberOfUpVote: initialNumberOfUpVote + 1,
+    });
+
+    // test if the tag has been archived
+    const archivedTag = gql`
+      query archivedTag($tagId: ID!) {
+        tag(tagId: $tagId) {
+          archived
+        }
+      }
+    `;
+    const { queryResult } = await graphQLQueryHelper(archivedTag, 'tag', {
+      tagId,
+    });
+
+    expect(queryResult).toMatchObject({
+      archived: true,
+    });
   });
 });
