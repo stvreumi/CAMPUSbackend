@@ -151,7 +151,7 @@ class FirebaseAPI extends DataSource {
    */
   async getImageUrls({ tagId }) {
     const options = {
-      directory: tagId,
+      prefix: tagId,
     };
     const [files] = await this.bucket.getFiles(options);
 
