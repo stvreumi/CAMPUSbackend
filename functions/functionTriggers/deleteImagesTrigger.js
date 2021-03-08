@@ -25,7 +25,7 @@ async function deleteImagesTrigger(admin, snap) {
     console.error(rejectedMessages);
     return;
   }
-  console.log(`{tagId} images delete successfully.`);
+  console.log(`${tagId} images delete successfully.`);
 }
 
 module.exports = deleteImagesTrigger;
