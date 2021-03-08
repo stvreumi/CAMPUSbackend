@@ -22,6 +22,7 @@ async function deleteImagesTrigger(admin, snap) {
     ({ status }) => status === 'rejected'
   );
   if (rejectedMessages.length > 0) {
+    console.log(`${tagId} images delete failed.`);
     console.error(rejectedMessages);
     return;
   }
