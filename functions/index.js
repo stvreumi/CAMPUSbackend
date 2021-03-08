@@ -9,7 +9,8 @@ admin.initializeApp();
 const express = require('express');
 const { express: voyagerMiddleware } = require('graphql-voyager/middleware');
 const apolloServer = require('./src');
-const uploadImageProcessing = require('./utils/uploadImageProcessing');
+const uploadImageProcessing = require('./functionTriggers/uploadImageProcessing');
+const deleteImagesTrigger = require('./functionTriggers/deleteImagesTrigger');
 
 // console.log('hello');
 // console.log(process.env);
@@ -35,4 +36,9 @@ exports.uploadImageProcessing = functions.storage
   .object()
   .onFinalize(async object => {
     await uploadImageProcessing(admin, object);
+  });
+exports.deleteImagesTrigger = functions.firestore
+  .document('tagData/{tagId}')
+  .onDelete(async (snap, _) => {
+    await deleteImagesTrigger(admin, snap);
   });

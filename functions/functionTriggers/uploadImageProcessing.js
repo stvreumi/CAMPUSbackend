@@ -5,9 +5,14 @@ const sharp = require('sharp');
 const { v4: uuidv4 } = require('uuid');
 
 /**
+ * @typedef {import('firebase-functions').storage.ObjectMetadata} ObjectMetadata
+ * @typedef {import('firebase-admin')} firebaseAdmin
+ * /
+
+/**
  * Convert upload images to jpeg and change its name
- * @param {FirebaseAdmin} admin admin instance to communicate with firebase services
- * @param {Object} object the file information of the upload file
+ * @param {firebaseAdmin} admin admin instance to communicate with firebase services
+ * @param {ObjectMetadata} object the file information of the upload file
  */
 async function uploadImageProcessing(admin, object) {
   // get data from upload file
