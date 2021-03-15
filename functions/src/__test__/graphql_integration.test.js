@@ -252,6 +252,33 @@ describe('test graphql query', () => {
       imageUrl: [expect.any(String)],
     });
   });
+  test('test archived threshold number query', async () => {
+    // TODO: don't konw how to test this, since the realtime update need to take
+    // some time after we update the field value in the firestore, so the result
+    // of the graphql doesn't change.
+    // first add threshold into firestore
+    const testThreshold = 3;
+    await firestore
+      .collection('setting')
+      .doc('tag')
+      .set({ archivedThreshold: testThreshold });
+
+    const data = await firestore.collection('setting').doc('tag').get();
+    console.log(data.data);
+
+    const archivedThreshold = gql`
+      query archivedThreshold {
+        archivedThreshold
+      }
+    `;
+
+    const { queryResult } = await graphQLQueryHelper(
+      archivedThreshold,
+      'archivedThreshold'
+    );
+
+    expect(queryResult).toBe(testThreshold);
+  });
 });
 
 describe('test graphql mutate', () => {
@@ -641,24 +668,22 @@ describe('test graphql mutate', () => {
     expect(mutationResult.imageUploadUrls.length).toBe(imageUploadNumber);
   });
   test('test archived mechanism', async () => {
+    const testThreshold = 3;
     // first add threshold into firestore
-    firestore.collection('setting').doc('tag').set({ archivedThreshold: 3 });
+    await firestore
+      .collection('setting')
+      .doc('tag')
+      .set({ archivedThreshold: testThreshold });
 
     // add 問題任務 tag
     const response = await addFakeDataToFirestore(firebaseAPIinstance, true);
     const tagId = response.tag.id;
 
     // set numberOfUpVote to 3
-    const initialNumberOfUpVote = 3;
     const { statusDocRef } = await getLatestStatus(
       firestore.collection('tagData').doc(tagId)
     );
-    await statusDocRef.update({ numberOfUpVote: initialNumberOfUpVote });
-
-    // check if the thershold has been updated
-    expect(firebaseAPIinstance.archivedThresholdOfNumberOfUpVote).toBe(
-      initialNumberOfUpVote
-    );
+    await statusDocRef.update({ numberOfUpVote: testThreshold });
 
     // upvote
     const upvoteTag = gql`
@@ -679,7 +704,7 @@ describe('test graphql mutate', () => {
     );
 
     expect(mutationResult).toMatchObject({
-      numberOfUpVote: initialNumberOfUpVote + 1,
+      numberOfUpVote: testThreshold + 1,
     });
 
     // test if the tag has been archived

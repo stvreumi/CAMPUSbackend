@@ -44,18 +44,6 @@ class FirebaseAPI extends DataSource {
     // frequently used firestore collection reference
     this.tagDataCollectionRef = this.firestore.collection('tagData');
 
-    this.archivedThresholdOfNumberOfUpVote = 10;
-    this.unregisterArchivedThreshold = this.firestore
-      .collection('setting')
-      .doc('tag')
-      .onSnapshot(docSnapshot => {
-        if (docSnapshot.exists) {
-          this.archivedThresholdOfNumberOfUpVote = docSnapshot.get(
-            'archivedThreshold'
-          );
-        }
-      });
-
     // for authentication
     this.auth = admin.auth();
 
@@ -186,6 +174,19 @@ class FirebaseAPI extends DataSource {
   }
 
   /** *** firestore *** */
+  /**
+   * Get archived threshold of number of upVote in 問題任務
+   * @returns {Promise<number>}
+   */
+  async getArchivedThresholdOfNumberOfUpVote() {
+    const docSnap = await this.firestore.collection('setting').doc('tag').get();
+    if (docSnap.exists) {
+      const { archivedThreshold } = docSnap.data();
+      return archivedThreshold;
+    }
+
+    return 10; // default value
+  }
 
   /**
    * Return data list from collection `tagData`
@@ -693,7 +694,7 @@ class FirebaseAPI extends DataSource {
 
     if (
       missionName === '問題任務' &&
-      numberOfUpVote > this.archivedThresholdOfNumberOfUpVote
+      numberOfUpVote > (await this.getArchivedThresholdOfNumberOfUpVote())
     ) {
       // archived tag
       await this.tagDataCollectionRef.doc(tagId).update({ archived: true });
