@@ -23,6 +23,8 @@ const Query = `type Query {
   userAddTagHistory(uid: ID!): [Tag]!
   "true if the use have read the guide, need to add token in the header"
   hasReadGuide: Boolean!
+  "問題任務 archived threshold"
+  archivedThreshold: Int!
 }`;
 
 const Mutation = `type Mutation {

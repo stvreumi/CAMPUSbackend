@@ -7,16 +7,45 @@ const {
   coordinateResolvers,
 } = require('./map_resolvers');
 
+/** @typedef {import('../types').ResolverArgsInfo} ResolverArgsInfo */
+
 const queryResolvers = {
   Query: {
+    /**
+     * @param {*} _
+     * @param {*} __
+     * @param {ResolverArgsInfo} info
+     */
     unarchivedTagList: async (_, __, { dataSources }) =>
       dataSources.firebaseAPI.getAllUnarchivedTags(),
+    /**
+     * @param {*} _
+     * @param {{tagId: string}} params
+     * @param {ResolverArgsInfo} info
+     */
     tag: async (_, { tagId }, { dataSources }) =>
       dataSources.firebaseAPI.getTagData({ tagId }),
+    /**
+     * @param {*} _
+     * @param {{uid: string}} params
+     * @param {ResolverArgsInfo} info
+     */
     userAddTagHistory: async (_, { uid }, { dataSources }) =>
       dataSources.firebaseAPI.getUserAddTagHistory({ uid }),
+    /**
+     * @param {*} _
+     * @param {*} __
+     * @param {ResolverArgsInfo} info
+     */
     hasReadGuide: async (_, __, { dataSources, userInfo }) =>
       dataSources.firebaseAPI.getHasReadGuideStatus({ userInfo }),
+    /**
+     * @param {*} _
+     * @param {*} __
+     * @param {ResolverArgsInfo} info
+     */
+    archivedThreshold: async (_, __, { dataSources }) =>
+      dataSources.firebaseAPI.getArchivedThresholdOfNumberOfUpVote(),
   },
 };
 
