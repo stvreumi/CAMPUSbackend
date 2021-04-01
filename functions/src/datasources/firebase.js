@@ -92,6 +92,8 @@ class FirebaseAPI extends DataSource {
         throw new AuthenticationError(e);
       }
     }
+
+    // If there is no token in the request header, it is an anonymous user.
     return {
       logIn: false,
       uid: 'anonymous',
@@ -147,9 +149,12 @@ class FirebaseAPI extends DataSource {
   }
 
   /**
-   * Generate Singed URL to let front end upload images in a tag to firebase storage
+   * Generate Signed URL to let front end upload images in a tag to firebase storage
    * The file name on the storage will looks like: `tagID/(8 digits uuid)`
    * reference from: https://github.com/googleapis/nodejs-storage/blob/master/samples/generateV4UploadSignedUrl.js
+   *
+   * The Signed URL is a temporary URL used for uploading image from user. The uploaded image
+   * would have a new name and another permenent URL for downloading.
    * @param {object} param
    * @param {number} param.imageUploadNumber
    * @param {string} param.tagId
