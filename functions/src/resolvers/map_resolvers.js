@@ -5,9 +5,7 @@ const tagResolvers = {
     lastUpdateTime: async (tag, _, __) =>
       tag.lastUpdateTime.toDate().toString(),
     createUser: async (tag, _, __) => ({
-      // TODO: `tag.createUserId` is old field name
-      // remove it if we clean the database
-      uid: tag.createUserId || tag.createUserID,
+      uid: tag.createUserId,
     }),
     imageUrl: async (tag, _, { dataSources }) =>
       dataSources.firebaseAPI.getImageUrls({ tagId: tag.id }),
