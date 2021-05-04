@@ -32,7 +32,7 @@ class FirebaseAPI extends DataSource {
   /**
    * Use admin to construct necessary entity of communication
    * @param {object} param
-   * @param {import("firebase-admin").app.App} param.admin firebase admin config
+   * @param {import("firebase-admin")} param.admin firebase admin config
    */
   constructor({ admin }) {
     super();
@@ -364,6 +364,7 @@ class FirebaseAPI extends DataSource {
         createTime: this.admin.firestore.FieldValue.serverTimestamp(),
         createUserId: uid,
         archived: false,
+        viewCount: 0,
       };
     }
     if (action === 'update') {
@@ -378,7 +379,7 @@ class FirebaseAPI extends DataSource {
 
   /**
    *
-   * @param {firebase.firestore.DocumentReference} tagDocRef
+   * @param {firestore.DocumentReference} tagDocRef
    * @param {string} missionName
    * @param {string} description
    * @param {string} uid
@@ -693,6 +694,12 @@ class FirebaseAPI extends DataSource {
     return transactionResult;
   }
 
+  /**
+   * Archive tag if its numberOfUpVote exceed threshold
+   * @param {String} tagId
+   * @param {Number} numberOfUpVote
+   * @return {firebase.default.firestore.DocumentReference}
+   */
   async checkIfNeedArchived(tagId, numberOfUpVote) {
     const { category } = await this.getTagData({ tagId });
     const { missionName } = category;
@@ -703,6 +710,34 @@ class FirebaseAPI extends DataSource {
     ) {
       // archived tag
       await this.tagDataCollectionRef.doc(tagId).update({ archived: true });
+    }
+  }
+
+  /**
+   * Increment the tag view count when a valid user clicks and see the tag.
+   * @param {String} tagId the tag we want to increment viewCount.
+   * @param {DecodedUserInfoFromAuthHeader} userInfo check if the user is valid.
+   * @returns {boolean} Indicate suceess or not and return to the graphql
+   *  mutation operation
+   */
+  async incrementTagViewCount(tagId, userInfo) {
+    try {
+      // check if it is a valid user.
+      const { logIn } = userInfo;
+      checkUserLogIn(logIn);
+
+      const tagDocRef = this.tagDataCollectionRef.doc(tagId);
+
+      // if the increment action speed is slow, try use "distributed counter"
+      // https://firebase.google.com/docs/firestore/solutions/counters
+      await tagDocRef.update(
+        // use this sentinel values to set viewCount without transaction.
+        { viewCount: this.admin.firestore.FieldValue.increment(1) }
+      );
+      return true;
+    } catch (e) {
+      console.log(e);
+      throw e;
     }
   }
 

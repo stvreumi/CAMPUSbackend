@@ -74,6 +74,13 @@ const mutationResolvers = {
       dataSources.firebaseAPI.updateNumberOfUpVote({ tagId, action, userInfo }),
     setHasReadGuide: async (_, __, { dataSources, userInfo }) =>
       dataSources.firebaseAPI.setHasReadGuide({ userInfo }),
+    /**
+     * @param {*} _
+     * @param {{tagId: string}} string
+     * @param {ResolverArgsInfo} info
+     */
+    incrementViewCount: async (_, { tagId }, { dataSources, userInfo }) =>
+      dataSources.firebaseAPI.incrementTagViewCount(tagId, userInfo),
   },
 };
 
