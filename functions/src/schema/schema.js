@@ -37,6 +37,8 @@ const Mutation = `type Mutation {
   updateUpVoteStatus(tagId: ID!, action: updateUpVoteAction!): updateUpVoteResponse
   "true the update is successful, need to add token in the header"
   setHasReadGuide: Boolean!
+  "true if the increment operation success"
+  incrementViewCount(tagId: ID!): Boolean!
 }`;
 
 const typeDefs = gql(

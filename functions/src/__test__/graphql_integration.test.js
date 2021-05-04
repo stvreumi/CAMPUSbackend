@@ -148,7 +148,7 @@ describe('test graphql query', () => {
 
   test('test query tag', async () => {
     const queryTag = gql`
-      query testQueyTag($id: ID!) {
+      query testQueryTag($id: ID!) {
         tag(tagId: $id) {
           id
           createTime
@@ -159,6 +159,7 @@ describe('test graphql query', () => {
           }
           imageUrl
           floor
+          viewCount
         }
       }
     `;
@@ -175,6 +176,7 @@ describe('test graphql query', () => {
       },
       imageUrl: [expect.any(String)],
       floor: expect.any(Number),
+      viewCount: 0,
     });
     const tagInFirestore = (
       await firestore.collection('tagData').doc(fakeTagId).get()
@@ -189,7 +191,7 @@ describe('test graphql query', () => {
     const response = await addFakeDataToFirestore(firebaseAPIinstance, true);
     const tagId = response.tag.id;
     const queryTag = gql`
-      query testQueyTag($id: ID!) {
+      query testQueryTag($id: ID!) {
         tag(tagId: $id) {
           status {
             statusName
@@ -226,7 +228,7 @@ describe('test graphql query', () => {
   test('test query userAddTagHistory', async () => {
     const { uid } = fakeUserInfo;
     const queryUserAddTagHistory = gql`
-      query testQueyUserAddTagHistory($uid: ID!) {
+      query testQueryUserAddTagHistory($uid: ID!) {
         userAddTagHistory(uid: $uid) {
           id
           createUser {
@@ -262,9 +264,6 @@ describe('test graphql query', () => {
       .collection('setting')
       .doc('tag')
       .set({ archivedThreshold: testThreshold });
-
-    const data = await firestore.collection('setting').doc('tag').get();
-    console.log(data.data);
 
     const archivedThreshold = gql`
       query archivedThreshold {
@@ -519,7 +518,7 @@ describe('test graphql mutate', () => {
 
     // test if query can get the upvote number
     const queryStatusTag = gql`
-      query testQueyTag($id: ID!) {
+      query testQueryTag($id: ID!) {
         tag(tagId: $id) {
           status {
             statusName
@@ -567,7 +566,7 @@ describe('test graphql mutate', () => {
 
     // test if query can get the upvote number
     const queryCancelStatusTag = gql`
-      query testQueyTag($id: ID!) {
+      query testQueryTag($id: ID!) {
         tag(tagId: $id) {
           status {
             statusName
@@ -722,5 +721,39 @@ describe('test graphql mutate', () => {
     expect(queryResult).toMatchObject({
       archived: true,
     });
+  });
+  test('test incrementViewCount', async () => {
+    const response = await addFakeDataToFirestore(firebaseAPIinstance);
+    const fakeTagId = response.tag.id;
+
+    const incrementViewCountMutation = gql`
+      mutation incrementViewCountTest($tagId: ID!) {
+        incrementViewCount(tagId: $tagId)
+      }
+    `;
+
+    const { mutationResult } = await graphQLMutationHelper(
+      incrementViewCountMutation,
+      'incrementViewCount',
+      {
+        tagId: fakeTagId,
+      }
+    );
+
+    expect(mutationResult).toBeTruthy();
+
+    const queryViewCount = gql`
+      query testQueryViewCount($id: ID!) {
+        tag(tagId: $id) {
+          viewCount
+        }
+      }
+    `;
+
+    const { queryResult } = await graphQLQueryHelper(queryViewCount, 'tag', {
+      id: fakeTagId,
+    });
+
+    expect(queryResult).toMatchObject({ viewCount: 1 });
   });
 });

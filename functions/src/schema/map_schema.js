@@ -17,6 +17,7 @@ const Tag = `type Tag {
   status: Status
   statusHistory: [Status]!
   archived: Boolean
+  viewCount: Int!
 }`;
 
 const Category = `type Category {

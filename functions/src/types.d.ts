@@ -68,6 +68,7 @@ export interface AddorUpdateTagResponse {
   imageUploadUrls: string[];
   imageDeleteStatus: boolean;
 }
+
 export interface AddTagDataInput {
   locationName: string;
   category: Category;
@@ -77,6 +78,7 @@ export interface AddTagDataInput {
   floor?: number;
   streetViewInfo?: StreetView;
 }
+
 export interface UpdateTagDataInput {
   locationName?: string
   category?: Category
