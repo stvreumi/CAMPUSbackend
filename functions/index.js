@@ -33,17 +33,15 @@ voyagerApp.use('/', voyagerMiddleware({ endpointUrl: '/graphql' }));
 
 /** firebase function endpoints */
 
-const graphql = functions.https.onRequest(apolloServerApp);
-const voyager = functions.https.onRequest(voyagerApp);
-const uploadImageProcessing = functions.storage
+exports.graphql = functions.https.onRequest(apolloServerApp);
+exports.voyager = functions.https.onRequest(voyagerApp);
+exports.uploadImageProcessing = functions.storage
   .object()
   .onFinalize(async object => {
     await uploadImageProcessingImplementation(admin, object);
   });
-const deleteImagesTrigger = functions.firestore
+exports.deleteImagesTrigger = functions.firestore
   .document('tagData/{tagId}')
   .onDelete(async (snap, _) => {
     await deleteImagesTriggerImplementation(admin, snap);
   });
-
-exports = { graphql, voyager, uploadImageProcessing, deleteImagesTrigger };
