@@ -1,13 +1,14 @@
 /**
  * @jest-environment node
  */
-const firebase = require('@firebase/testing');
+const firebase = require('@firebase/rules-unit-testing');
 const { createTestClient } = require('apollo-server-testing');
 const gql = require('graphql-tag');
 
 const apolloServer = require('./apolloTestServer');
-const FirebaseAPI = require('../datasources/firebase');
+const { dataSourcesGenerator } = require('../apolloServerGenerator');
 const { getLatestStatus } = require('../datasources/firebaseUtils');
+
 const {
   fakeTagData,
   mockFirebaseAdmin,
@@ -16,7 +17,13 @@ const {
   clearFirestoreDatabase,
 } = require('./testUtils');
 
+/**
+ * @typedef {import('../types').DataSources} DataSources
+ */
+
 const testProjectId = 'smartcampus-1b31f-graphql-test';
+
+const timestampStringRegex = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}\+08:00/;
 
 function generateGraphQLHelper(type, testClient) {
   if (type === 'query') {
@@ -47,14 +54,15 @@ function generateGraphQLHelper(type, testClient) {
 }
 
 describe('test graphql query', () => {
-  let firebaseAPIinstance;
+  /** @type {() => DataSources} */
+  let dataSources;
   let firestore;
   let fakeTagId;
   let graphQLQueryHelper;
   beforeAll(async () => {
     // set up firebase admin
     const admin = mockFirebaseAdmin(testProjectId);
-    firebaseAPIinstance = new FirebaseAPI({ admin });
+    dataSources = dataSourcesGenerator(admin);
 
     // set up apollo server and test client
     const server = apolloServer({ admin, logIn: true });
@@ -73,7 +81,7 @@ describe('test graphql query', () => {
     await clearFirestoreDatabase(testProjectId);
 
     // add data
-    const response = await addFakeDataToFirestore(firebaseAPIinstance);
+    const response = await addFakeDataToFirestore(dataSources);
     fakeTagId = response.tag.id;
   });
 
@@ -129,14 +137,14 @@ describe('test graphql query', () => {
       },
       status: {
         statusName: expect.any(String),
-        createTime: expect.any(String),
+        createTime: expect.stringMatching(timestampStringRegex),
         numberOfUpVote: null,
         hasUpVote: null,
       },
       statusHistory: [
         {
           statusName: expect.any(String),
-          createTime: expect.any(String),
+          createTime: expect.stringMatching(timestampStringRegex),
           numberOfUpVote: null,
           hasUpVote: null,
         },
@@ -166,10 +174,11 @@ describe('test graphql query', () => {
     const { queryResult } = await graphQLQueryHelper(queryTag, 'tag', {
       id: fakeTagId,
     });
+    console.log(queryResult.createTime);
     expect(queryResult).toMatchObject({
       id: fakeTagId,
-      createTime: expect.any(String),
-      lastUpdateTime: expect.any(String),
+      createTime: expect.stringMatching(timestampStringRegex),
+      lastUpdateTime: expect.stringMatching(timestampStringRegex),
       createUser: {
         uid: fakeUserInfo.uid,
         displayName: fakeUserInfo.displayName,
@@ -178,17 +187,9 @@ describe('test graphql query', () => {
       floor: expect.any(Number),
       viewCount: 0,
     });
-    const tagInFirestore = (
-      await firestore.collection('tagData').doc(fakeTagId).get()
-    ).data();
-    // console.log(dataInFirestore);
-    expect(tagInFirestore).toMatchObject({
-      createTime: expect.any(firebase.firestore.Timestamp),
-      lastUpdateTime: expect.any(firebase.firestore.Timestamp),
-    });
   });
   test('test query tag with 問題任務, which has information about numberOfUpVote and hasUpVote', async () => {
-    const response = await addFakeDataToFirestore(firebaseAPIinstance, true);
+    const response = await addFakeDataToFirestore(dataSources, true);
     const tagId = response.tag.id;
     const queryTag = gql`
       query testQueryTag($id: ID!) {
@@ -214,13 +215,13 @@ describe('test graphql query', () => {
 
     expect(queryResult.status).toMatchObject({
       statusName: expect.any(String),
-      createTime: expect.any(String),
+      createTime: expect.stringMatching(timestampStringRegex),
       numberOfUpVote: expect.any(Number),
       hasUpVote: expect.any(Boolean),
     });
     expect(queryResult.statusHistory[0]).toMatchObject({
       statusName: expect.any(String),
-      createTime: expect.any(String),
+      createTime: expect.stringMatching(timestampStringRegex),
       numberOfUpVote: expect.any(Number),
       hasUpVote: null,
     });
@@ -284,11 +285,11 @@ describe('test graphql mutate', () => {
   let graphQLQueryHelper;
   let graphQLMutationHelper;
   let firestore;
-  let firebaseAPIinstance;
+  let dataSources;
   beforeAll(() => {
     // set up firebase admin
     const admin = mockFirebaseAdmin(testProjectId);
-    firebaseAPIinstance = new FirebaseAPI({ admin });
+    dataSources = dataSourcesGenerator(admin);
 
     // set up apollo server and test client
     const server = apolloServer({ admin, logIn: true });
@@ -328,8 +329,8 @@ describe('test graphql mutate', () => {
     const data = {
       ...fakeTagData,
       coordinates: {
-        latitude: fakeTagData.coordinatesString.latitude,
-        longitude: fakeTagData.coordinatesString.longitude,
+        latitude: fakeTagData.coordinates.latitude,
+        longitude: fakeTagData.coordinates.longitude,
       },
     };
     delete data.status;
@@ -354,17 +355,6 @@ describe('test graphql mutate', () => {
     expect(mutationResult.imageUploadUrls.length).toEqual(
       data.imageUploadNumber
     );
-
-    // check detail collection data directly from firestore
-    const detailDocData = (
-      await firestore.collection('tagData').doc(mutationResult.tag.id).get()
-    ).data();
-    // console.log(detailDoc);
-    expect(detailDocData).toMatchObject({
-      createTime: expect.any(firebase.firestore.Timestamp),
-      lastUpdateTime: expect.any(firebase.firestore.Timestamp),
-      streetViewInfo: fakeTagData.streetViewInfo,
-    });
   });
 
   test('test update tag data', async () => {
@@ -393,9 +383,7 @@ describe('test graphql mutate', () => {
     };
 
     // first add data to firestore
-    const addFakeDataResponse = await addFakeDataToFirestore(
-      firebaseAPIinstance
-    );
+    const addFakeDataResponse = await addFakeDataToFirestore(dataSources);
     const fakeTagId = addFakeDataResponse.tag.id;
 
     const { mutationResult } = await graphQLMutationHelper(
@@ -421,7 +409,7 @@ describe('test graphql mutate', () => {
   });
 
   test('test update tag status', async () => {
-    const response = await addFakeDataToFirestore(firebaseAPIinstance);
+    const response = await addFakeDataToFirestore(dataSources);
     const fakeTagId = response.tag.id;
 
     const testStatusName = '資訊有誤';
@@ -457,7 +445,7 @@ describe('test graphql mutate', () => {
     // console.log(responseData);
     expect(mutationResult).toMatchObject({
       statusName: testStatusName,
-      createTime: expect.any(String),
+      createTime: expect.stringMatching(timestampStringRegex),
       description: 'test update status',
     });
 
@@ -488,7 +476,7 @@ describe('test graphql mutate', () => {
     expect(queryResult[0].status.statusName).toEqual(testStatusName);
   });
   test('test `updateUpVoteStatus` and upvote related query', async () => {
-    const response = await addFakeDataToFirestore(firebaseAPIinstance, true);
+    const response = await addFakeDataToFirestore(dataSources, true);
 
     // upvote
     const mutateTag = gql`
@@ -536,7 +524,7 @@ describe('test graphql mutate', () => {
     // console.log(queryResult.data.tag);
     expect(queryResult.status).toMatchObject({
       statusName: '待處理',
-      createTime: expect.any(String),
+      createTime: expect.stringMatching(timestampStringRegex),
       numberOfUpVote: 1,
       hasUpVote: true,
     });
@@ -586,7 +574,7 @@ describe('test graphql mutate', () => {
     );
     expect(cancelQueryResult.status).toMatchObject({
       statusName: '待處理',
-      createTime: expect.any(String),
+      createTime: expect.stringMatching(timestampStringRegex),
       numberOfUpVote: 0,
       hasUpVote: false,
     });
@@ -627,7 +615,7 @@ describe('test graphql mutate', () => {
     expect(await queryHasReadGuide()).toBe(true);
   });
   test('test update tag: upload new image and delete exist image', async () => {
-    const response = await addFakeDataToFirestore(firebaseAPIinstance);
+    const response = await addFakeDataToFirestore(dataSources);
     const fakeTagId = response.tag.id;
 
     const updateImageMutation = gql`
@@ -675,7 +663,7 @@ describe('test graphql mutate', () => {
       .set({ archivedThreshold: testThreshold });
 
     // add 問題任務 tag
-    const response = await addFakeDataToFirestore(firebaseAPIinstance, true);
+    const response = await addFakeDataToFirestore(dataSources, true);
     const tagId = response.tag.id;
 
     // set numberOfUpVote to 3
@@ -723,7 +711,7 @@ describe('test graphql mutate', () => {
     });
   });
   test('test incrementViewCount', async () => {
-    const response = await addFakeDataToFirestore(firebaseAPIinstance);
+    const response = await addFakeDataToFirestore(dataSources);
     const fakeTagId = response.tag.id;
 
     const incrementViewCountMutation = gql`

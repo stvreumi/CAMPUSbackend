@@ -1,5 +1,8 @@
 const { v4: uuidv4 } = require('uuid');
 const { ForbiddenError } = require('apollo-server');
+const { firestore } = require('firebase-admin');
+
+const { FieldValue } = firestore;
 
 function generateFileName(imageNumber, tagID) {
   return [...new Array(imageNumber)].map(
@@ -62,7 +65,47 @@ function checkUserLogIn(logIn) {
   }
 }
 
-exports.generateFileName = generateFileName;
-exports.getLatestStatus = getLatestStatus;
-exports.getTagDataFromTagDocSnap = getTagDataFromTagDocSnap;
-exports.checkUserLogIn = checkUserLogIn;
+/**
+ *
+ * @param {firestore.DocumentReference} tagDocRef
+ * @param {string} missionName
+ * @param {string} description
+ * @param {string} uid
+ * @returns {Promise<void>}
+ */
+async function insertDefualtStatusObjToTagDoc(
+  tagDocRef,
+  missionName,
+  description = '',
+  uid
+) {
+  const getDefaultStatus = () => {
+    switch (missionName) {
+      case '設施任務':
+        return '存在';
+      case '問題任務':
+        return '待處理';
+      case '動態任務':
+        return '人少';
+      default:
+        return '';
+    }
+  };
+  const defaultStatusData = {
+    statusName: getDefaultStatus(),
+    description,
+    createTime: FieldValue.serverTimestamp(),
+    createUserId: uid,
+    numberOfUpVote: missionName === '問題任務' ? 0 : null,
+  };
+  // add tag default status, need to use original CollectionReference
+  await tagDocRef.collection('status').add(defaultStatusData);
+}
+
+module.exports = {
+  generateFileName,
+  getLatestStatus,
+  getTagDataFromTagDocSnap,
+  checkUserLogIn,
+  insertDefualtStatusObjToTagDoc,
+};

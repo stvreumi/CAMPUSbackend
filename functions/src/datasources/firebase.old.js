@@ -18,7 +18,7 @@ const { upVoteActionName, cancelUpVoteActionName } = require('./constants');
  * @typedef {import('../types').DecodedUserInfoFromAuthHeader} DecodedUserInfoFromAuthHeader
  * @typedef {import('../types').Status} Status
  * @typedef {import('../types').AddTagDataInput} AddTagDataInput
- * @typedef {import('../types').RawTagFromFirestore} RawTagFromFirestore
+ * @typedef {import('../types').RawTagDocumentFields} RawTagFromFirestore
  * @typedef {import('../types').AddorUpdateTagResponse} AddorUpdateTagResponse
  * @typedef {import('../types').UpdateTagDataInput} UpdateTagDataInput
  */
@@ -183,6 +183,7 @@ class FirebaseAPI extends DataSource {
    * Get archived threshold of number of upVote in 問題任務
    * @returns {Promise<number>}
    */
+  // TODO, move it to server side and using subscription
   async getArchivedThresholdOfNumberOfUpVote() {
     const docSnap = await this.firestore.collection('setting').doc('tag').get();
     if (docSnap.exists) {
@@ -311,6 +312,7 @@ class FirebaseAPI extends DataSource {
    * @return {Promise<boolean>} Return the status of hasReadGuide. `true` means that
    *  the user has read the guide.
    */
+  // TODO
   async getHasReadGuideStatus({ userInfo }) {
     const { logIn, uid } = userInfo;
     checkUserLogIn(logIn);

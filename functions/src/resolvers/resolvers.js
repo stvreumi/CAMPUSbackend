@@ -7,7 +7,11 @@ const {
   coordinateResolvers,
 } = require('./map_resolvers');
 
-/** @typedef {import('../types').ResolverArgsInfo} ResolverArgsInfo */
+/**
+ * @typedef {import('../types').ResolverArgsInfo} ResolverArgsInfo
+ * @typedef {import('../types').AddTagDataInput} AddTagDataInput
+ * @typedef {import('../types').UpdateTagDataInput} UpdateTagDataInput
+ */
 
 const queryResolvers = {
   Query: {
@@ -17,70 +21,132 @@ const queryResolvers = {
      * @param {ResolverArgsInfo} info
      */
     unarchivedTagList: async (_, __, { dataSources }) =>
-      dataSources.firebaseAPI.getAllUnarchivedTags(),
+      dataSources.tagDataSource.getAllUnarchivedTags(),
     /**
      * @param {*} _
      * @param {{tagId: string}} params
      * @param {ResolverArgsInfo} info
      */
     tag: async (_, { tagId }, { dataSources }) =>
-      dataSources.firebaseAPI.getTagData({ tagId }),
+      dataSources.tagDataSource.getTagData({ tagId }),
     /**
      * @param {*} _
      * @param {{uid: string}} params
      * @param {ResolverArgsInfo} info
      */
     userAddTagHistory: async (_, { uid }, { dataSources }) =>
-      dataSources.firebaseAPI.getUserAddTagHistory({ uid }),
+      dataSources.tagDataSource.getUserAddTagHistory({ uid }),
     /**
      * @param {*} _
      * @param {*} __
      * @param {ResolverArgsInfo} info
      */
     hasReadGuide: async (_, __, { dataSources, userInfo }) =>
-      dataSources.firebaseAPI.getHasReadGuideStatus({ userInfo }),
+      dataSources.userDataSource.getHasReadGuideStatus({ userInfo }),
     /**
      * @param {*} _
      * @param {*} __
      * @param {ResolverArgsInfo} info
      */
     archivedThreshold: async (_, __, { dataSources }) =>
-      dataSources.firebaseAPI.getArchivedThresholdOfNumberOfUpVote(),
+      dataSources.tagDataSource.archivedThreshold,
   },
 };
 
 const mutationResolvers = {
   Mutation: {
-    addNewTagData: async (_, { data }, { dataSources, userInfo }) =>
-      dataSources.firebaseAPI.addNewTagData({ data, userInfo }),
-    updateTagData: async (_, { tagId, data }, { dataSources, userInfo }) =>
-      dataSources.firebaseAPI.updateTagData({ tagId, data, userInfo }),
+    /**
+     * @param {*} _
+     * @param {{data: AddTagDataInput}} param
+     * @param {ResolverArgsInfo} info
+     */
+    addNewTagData: async (_, { data }, { dataSources, userInfo }) => {
+      const {
+        tag,
+        imageUploadNumber,
+      } = await dataSources.tagDataSource.addNewTagData({ data, userInfo });
+      const imageUploadUrls = Promise.all(
+        dataSources.storageDataSource.getImageUploadUrls({
+          imageUploadNumber,
+          tagId: tag.id,
+        })
+      );
+      return { tag, imageUploadNumber, imageUploadUrls };
+    },
+    /**
+     *
+     * @param {*} _
+     * @param {{tagId: string, data: UpdateTagDataInput}} param
+     * @param {ResolverArgsInfo} info
+     */
+    updateTagData: async (_, { tagId, data }, { dataSources, userInfo }) => {
+      const { imageDeleteUrls, imageUploadNumber = 0 } = data;
+      const { tag } = await dataSources.tagDataSource.updateTagData({
+        tagId,
+        data,
+        userInfo,
+      });
+      return {
+        tag,
+        imageUploadNumber,
+        imageUploadUrls: await dataSources.storageDataSource.getImageUploadUrls(
+          { imageUploadNumber, tagId }
+        ),
+        imageDeleteStatus: await dataSources.storageDataSource.doImageDelete(
+          tagId,
+          imageDeleteUrls
+        ),
+      };
+    },
+    /**
+     *
+     * @param {*} _
+     * @param {{tagId: string, statusName: string, description: string}} param
+     * @param {ResolverArgsInfo} info
+     * @returns
+     */
     updateTagStatus: async (
       _,
       { tagId, statusName, description },
       { dataSources, userInfo }
     ) =>
-      dataSources.firebaseAPI.updateTagStatus({
+      dataSources.tagDataSource.updateTagStatus({
         tagId,
         statusName,
         description,
         userInfo,
       }),
+    /**
+     *
+     * @param {*} _
+     * @param {{tagId: string, action: string}} param
+     * @param {ResolverArgsInfo} info
+     */
     updateUpVoteStatus: async (
       _,
       { tagId, action },
       { dataSources, userInfo }
     ) =>
-      dataSources.firebaseAPI.updateNumberOfUpVote({ tagId, action, userInfo }),
+      dataSources.tagDataSource.updateNumberOfUpVote({
+        tagId,
+        action,
+        userInfo,
+      }),
+    /**
+     *
+     * @param {*} _
+     * @param {*} __
+     * @param {ResolverArgsInfo} info
+     */
     setHasReadGuide: async (_, __, { dataSources, userInfo }) =>
-      dataSources.firebaseAPI.setHasReadGuide({ userInfo }),
+      dataSources.userDataSource.setHasReadGuide({ userInfo }),
     /**
      * @param {*} _
      * @param {{tagId: string}} string
      * @param {ResolverArgsInfo} info
      */
     incrementViewCount: async (_, { tagId }, { dataSources, userInfo }) =>
-      dataSources.firebaseAPI.incrementTagViewCount(tagId, userInfo),
+      dataSources.tagDataSource.incrementTagViewCount(tagId, userInfo),
   },
 };
 

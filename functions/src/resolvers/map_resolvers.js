@@ -1,24 +1,73 @@
 //@ts-check
+const { DateTime } = require('luxon');
+
+/**
+ * @typedef {import('../types').ResolverArgsInfo} ResolverArgsInfo
+ * @typedef {import('../types').RawTagDocumentFields} RawTagDocumentFields
+ * @typedef {import('../types').RawStatusDocumentFields} RawStatusDocumentFields
+ */
+
 const tagResolvers = {
   Tag: {
-    createTime: async (tag, _, __) => tag.createTime.toDate().toString(),
+    /**
+     * @param {RawTagDocumentFields} tag
+     * @param {*} _
+     * @param {*} __
+     */
+    createTime: async (tag, _, __) =>
+      DateTime.fromISO(tag.createTime.toDate().toISOString())
+        .setZone('UTC+8')
+        .toString(),
+    /**
+     * @param {RawTagDocumentFields} tag
+     * @param {*} _
+     * @param {*} __
+     */
     lastUpdateTime: async (tag, _, __) =>
-      tag.lastUpdateTime.toDate().toString(),
+      DateTime.fromISO(tag.createTime.toDate().toISOString())
+        .setZone('UTC+8')
+        .toString(),
     createUser: async (tag, _, __) => ({
       uid: tag.createUserId,
     }),
+    /**
+     * @param {RawTagDocumentFields} tag
+     * @param {*} _
+     * @param {ResolverArgsInfo} info
+     */
     imageUrl: async (tag, _, { dataSources }) =>
-      dataSources.firebaseAPI.getImageUrls({ tagId: tag.id }),
+      dataSources.storageDataSource.getImageUrls({ tagId: tag.id }),
+    /**
+     * @param {RawTagDocumentFields} tag
+     * @param {*} _
+     * @param {ResolverArgsInfo} info
+     */
     status: async (tag, _, { dataSources, userInfo }) =>
-      dataSources.firebaseAPI.getLatestStatusData({ tagId: tag.id, userInfo }),
+      dataSources.tagDataSource.getLatestStatusData({
+        tagId: tag.id,
+        userInfo,
+      }),
+    /**
+     * @param {RawTagDocumentFields} tag
+     * @param {*} _
+     * @param {ResolverArgsInfo} info
+     */
     statusHistory: async (tag, _, { dataSources }) =>
-      dataSources.firebaseAPI.getStatusHistory({ tagId: tag.id }),
+      dataSources.tagDataSource.getStatusHistory({ tagId: tag.id }),
   },
 };
 
 const statusResolvers = {
   Status: {
-    createTime: async (status, _, __) => status.createTime.toDate().toString(),
+    /**
+     * @param {Status} RawStatusDocumentFields
+     * @param {*} _
+     * @param {*} __
+     */
+    createTime: async (status, _, __) =>
+      DateTime.fromISO(status.createTime.toDate().toISOString())
+        .setZone('UTC+8')
+        .toString(),
     createUser: async (status, _, __) => ({ uid: status.createUserId }),
   },
 };
@@ -26,12 +75,22 @@ const statusResolvers = {
 const userResolvers = {
   User: {
     uid: async ({ uid }, _, __) => uid,
+    /**
+     * @param {{uid: string}} param
+     * @param {*} _
+     * @param {ResolverArgsInfo} info
+     */
     displayName: async ({ uid }, _, { dataSources }) =>
-      dataSources.firebaseAPI.getUserName({
+      dataSources.authDataSource.getUserName({
         uid,
       }),
+    /**
+     * @param {{uid: string}} param
+     * @param {*} _
+     * @param {ResolverArgsInfo} info
+     */
     email: async ({ uid }, _, { dataSources }) =>
-      dataSources.firebaseAPI.getUserEmail({ uid }),
+      dataSources.authDataSource.getUserEmail({ uid }),
   },
 };
 

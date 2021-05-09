@@ -4,18 +4,19 @@ const functions = require('firebase-functions');
 // The Firebase Admin SDK to access the Firebase Realtime Database.
 const admin = require('firebase-admin');
 
-admin.initializeApp();
-
 const express = require('express');
 const { express: voyagerMiddleware } = require('graphql-voyager/middleware');
 const apolloServer = require('./src');
-const uploadImageProcessing = require('./functionTriggers/uploadImageProcessing');
-const deleteImagesTrigger = require('./functionTriggers/deleteImagesTrigger');
+const uploadImageProcessingImplementation = require('./functionTriggers/uploadImageProcessing');
+const deleteImagesTriggerImplementation = require('./functionTriggers/deleteImagesTrigger');
+
+admin.initializeApp();
 
 // console.log('hello');
 // console.log(process.env);
 
 const apolloServerApp = express();
+
 const apolloServerAdmin = apolloServer({ admin });
 
 apolloServerAdmin.applyMiddleware({ app: apolloServerApp, path: '/' });
@@ -30,15 +31,19 @@ const voyagerApp = express();
 // use in production
 voyagerApp.use('/', voyagerMiddleware({ endpointUrl: '/graphql' }));
 
-exports.graphql = functions.https.onRequest(apolloServerApp);
-exports.voyager = functions.https.onRequest(voyagerApp);
-exports.uploadImageProcessing = functions.storage
+/** firebase function endpoints */
+
+const graphql = functions.https.onRequest(apolloServerApp);
+const voyager = functions.https.onRequest(voyagerApp);
+const uploadImageProcessing = functions.storage
   .object()
   .onFinalize(async object => {
-    await uploadImageProcessing(admin, object);
+    await uploadImageProcessingImplementation(admin, object);
   });
-exports.deleteImagesTrigger = functions.firestore
+const deleteImagesTrigger = functions.firestore
   .document('tagData/{tagId}')
   .onDelete(async (snap, _) => {
-    await deleteImagesTrigger(admin, snap);
+    await deleteImagesTriggerImplementation(admin, snap);
   });
+
+exports = { graphql, voyager, uploadImageProcessing, deleteImagesTrigger };
