@@ -8,9 +8,6 @@ const StorageDataSource = require('./datasources/StorageDataSource');
 const AuthDataSource = require('./datasources/AuthDataSource');
 const UserDataSource = require('./datasources/UserDataSource');
 
-/** test */
-const { fakeUserInfo } = require('./__test__/testUtils');
-
 /**
  * @typedef {import('firebase-admin')} firebaseAdmin
  */
