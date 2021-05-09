@@ -1,5 +1,9 @@
 import { firestore } from 'firebase-admin';
-import FirebaseAPI from './datasources/firebase';
+/** dataSources */
+import TagDataSource from './datasources/TagDataSource';
+import StorageDataSource from './datasources/StorageDataSource';
+import AuthDataSource from './datasources/AuthDataSource';
+import UserDataSource from './datasources/UserDataSource';
 
 interface User {
   logIn: boolean;
@@ -28,6 +32,10 @@ export interface Status {
   hasUpVote?: Boolean;
 }
 
+export interface RawStatusDocumentFields extends Status {
+  createTime: firestore.Timestamp;
+}
+
 export interface StatusWithDocumentReference extends Status {
   statusDocRef: firestore.DocumentReference;
 }
@@ -45,21 +53,23 @@ export interface Tag {
   description: string;
   imageUrl: Array<string>;
   streetViewInfo: StreetView;
-  status: object;
-  statusHistory: Array<object>;
+  status: Status;
+  statusHistory: Array<Status>;
+  viewCount: number;
 }
 
-export interface RawTagFromFirestore {
+export interface RawTagDocumentFields {
   id: string;
   locationName: string;
   accessibility: number;
-  category: object;
+  category: Category;
   floor: number;
-  coordinates: object;
+  coordinates: Coordinate;
   createTime: firestore.Timestamp;
   lastUpdateTime: firestore.Timestamp;
-  createUser: object;
+  createUser: User;
   streetViewInfo: StreetView;
+  geohash: string;
 }
 
 export interface AddorUpdateTagResponse {
@@ -89,12 +99,6 @@ export interface UpdateTagDataInput {
   imageUploadNumber?: number
 }
 
-export interface Category {
-  missionName: string;
-  subTypeName: string;
-  targetName: string;
-}
-
 export interface Coordinate {
   latitude: string;
   longitude: string;
@@ -113,11 +117,18 @@ export interface DecodedUserInfoFromAuthHeader {
   uid: string;
 }
 
-interface Datasources {
-  firebaseAPI: FirebaseAPI;
+interface DataSources {
+  tagDataSource: TagDataSource;
+  storageDataSource: StorageDataSource;
+  authDataSource: AuthDataSource;
+  userDataSource: UserDataSource;
+}
+
+interface RawUserDocumentFields {
+  hasReadGuide?: boolean;
 }
 
 export interface ResolverArgsInfo {
-  dataSources: Datasources;
+  dataSources: DataSources;
   userInfo: DecodedUserInfoFromAuthHeader;
 }

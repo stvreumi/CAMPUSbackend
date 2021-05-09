@@ -1,6 +1,10 @@
-const firebase = require('@firebase/testing');
-const axios = require('axios').default;
+const firebase = require('@firebase/rules-unit-testing');
+const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
+
+/**
+ * @typedef {import('../types').DataSources} DataSources
+ */
 
 const fakeDataId = 'test-fakedata-id';
 
@@ -22,11 +26,7 @@ const fakeStreetViewData = {
 const fakeTagData = {
   locationName: 'test',
   category: { ...fakeCategory },
-  coordinates: new firebase.firestore.GeoPoint(
-    24.786671229129603,
-    120.99745541810988
-  ),
-  coordinatesString: {
+  coordinates: {
     longitude: '120.99745541810988',
     latitude: '24.786671229129603',
   },
@@ -36,10 +36,9 @@ const fakeTagData = {
   floor: 3,
   imageUploadNumber: 2,
 };
- 
+
 const fakeStatusData = {
   statusName: '存在',
-  createTime: firebase.firestore.FieldValue.serverTimestamp(),
 };
 
 const fakeUserInfo = {
@@ -51,7 +50,7 @@ const fakeUserInfo = {
 
 /**
  * Mock firebase admin instance
- * @param {String} projectId The projectId to initiate firebase admin
+ * @param {string} projectId The projectId to initiate firebase admin
  * @returns {FirebaseError.app.App} the mock and initiate firebase app instance
  */
 function mockFirebaseAdmin(projectId) {
@@ -96,22 +95,17 @@ function mockFirebaseAdmin(projectId) {
   admin.storage = jest.fn(() => ({
     bucket: mockBucket,
   }));
-  admin.firestore.GeoPoint = firebase.firestore.GeoPoint;
-  admin.firestore.FieldValue = firebase.firestore.FieldValue;
   return admin;
 }
 
 /**
  * Add fakeData to firestore
- * @param {FirebaseAPI} firestore Firestore instance to add fake data
+ * @param {() => DataSources} dataSources Firestore instance to add fake data
  * @param {Boolean} testNumberOfUpVote true if we want to add fake data to test
  *   numberOfUpVote, which is 問題任務
  * @return {AddNewTagResponse} Contain the upload tag information, and image
  */
-async function addFakeDataToFirestore(
-  firebaseAPIinstance,
-  testNumberOfUpVote = false
-) {
+async function addFakeDataToFirestore(dataSources, testNumberOfUpVote = false) {
   const hasNumberOfUpVoteCategory = {
     missionName: '問題任務',
     subTypeName: '',
@@ -124,7 +118,10 @@ async function addFakeDataToFirestore(
     data.category = { ...hasNumberOfUpVoteCategory };
   }
 
-  return firebaseAPIinstance.addNewTagData({ data, userInfo: fakeUserInfo });
+  return dataSources().tagDataSource.addNewTagData({
+    data,
+    userInfo: fakeUserInfo,
+  });
 }
 
 /**
@@ -139,12 +136,13 @@ async function clearFirestoreDatabase(databaseID) {
   await axios.delete(clearURL);
   // console.log('clear response:', res.status);
 }
-
-exports.mockFirebaseAdmin = mockFirebaseAdmin;
-exports.addFakeDataToFirestore = addFakeDataToFirestore;
-exports.fakeTagData = fakeTagData;
-exports.fakeDataId = fakeDataId;
-exports.fakeCategory = fakeCategory;
-exports.fakeStatusData = fakeStatusData;
-exports.fakeUserInfo = fakeUserInfo;
-exports.clearFirestoreDatabase = clearFirestoreDatabase;
+module.exports = {
+  mockFirebaseAdmin,
+  addFakeDataToFirestore,
+  fakeTagData,
+  fakeDataId,
+  fakeCategory,
+  fakeStatusData,
+  fakeUserInfo,
+  clearFirestoreDatabase,
+};
