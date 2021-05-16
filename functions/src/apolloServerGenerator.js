@@ -59,13 +59,14 @@ const dataSourcesGenerator = admin => {
  * @param {boolean} param.introspection true: enables introspection of the schema
  * @param {boolean} param.playground true: enables the playground when connect to
  *  the graphql endpoint
+ * @param {(logIn: boolean) => object | undefined} param.contextInTest
  * @returns ApolloServer Generator
  */
 function apolloServerGenerator({
-  // closure
   test = false,
   introspection = true,
   playground = true,
+  contextInTest = undefined,
 }) {
   const apolloServerInstanciator = (dataSources, context) =>
     new ApolloServer({
@@ -80,24 +81,14 @@ function apolloServerGenerator({
       introspection,
       playground,
     });
+
+  // context
   const contextInProduction = dataSources => async ({ req }) => {
     const userInfo = await dataSources().authDataSource.getUserInfoFromToken(
       req
     );
     return {
       userInfo,
-    };
-  };
-  const contextInTest = logIn => async () => {
-    if (logIn) {
-      return { userInfo: fakeUserInfo };
-    }
-    return {
-      userInfo: {
-        logIn: false,
-        uid: 'anonymous',
-        displayName: 'anonymous',
-      },
     };
   };
   if (test === true) {

@@ -1,13 +1,16 @@
 /** @module TagDataSource */
 const { DataSource } = require('apollo-datasource');
-const { FieldValue, GeoPoint } = require('firebase-admin').firestore;
-const { geohashForLocation } = require('geofire-common');
+const { FieldValue, FieldPath } = require('firebase-admin').firestore;
 
 const {
-  getTagDataFromTagDocSnap,
+  getIdWithDataFromDocSnap,
   getLatestStatus,
   checkUserLogIn,
   insertDefualtStatusObjToTagDoc,
+  getMillsFromTimestamp,
+  queryOrdeyByTimestampWithPageParams,
+  generateTagDataToStoreInFirestore,
+  getPage,
 } = require('./firebaseUtils');
 
 const { upVoteActionName, cancelUpVoteActionName } = require('./constants');
@@ -22,62 +25,10 @@ const { upVoteActionName, cancelUpVoteActionName } = require('./constants');
  * @typedef {import('../types').AddTagDataInput} AddTagDataInput
  * @typedef {import('../types').AddorUpdateTagResponse} AddorUpdateTagResponse
  * @typedef {import('../types').UpdateTagDataInput} UpdateTagDataInput
+ * @typedef {import('../types').PageParams} PageParams
+ * @typedef {import('../types').TagPage} TagPage
+ * @typedef {import('../types').StatusPage} StatusPage
  */
-
-/**
- * Generate tag data object which stroe in the firestore from original raw data
- * @param {string} action
- * @param {AddTagDataInput} data
- * @param {Promise<string>} uid
- */
-function generateTagDataToStoreInFirestore(action, data, uid) {
-  // get data which would be non-null
-  const {
-    locationName,
-    coordinates,
-    category,
-    floor = null,
-    streetViewInfo = null,
-  } = data;
-
-  const tagData = {
-    locationName,
-    category,
-    lastUpdateTime: FieldValue.serverTimestamp(),
-    floor,
-    streetViewInfo,
-  };
-  if (coordinates) {
-    const { latitude, longitude } = coordinates;
-    tagData.coordinates = new GeoPoint(
-      parseFloat(latitude),
-      parseFloat(longitude)
-    );
-    // https://firebase.google.com/docs/firestore/solutions/geoqueries
-    tagData.geohash = geohashForLocation([
-      parseFloat(latitude),
-      parseFloat(longitude),
-    ]);
-  }
-  if (action === 'add') {
-    // get data which would be nullable
-    return {
-      ...tagData,
-      createTime: FieldValue.serverTimestamp(),
-      createUserId: uid,
-      archived: false,
-      viewCount: 0,
-    };
-  }
-  if (action === 'update') {
-    // filter out not change data (undefined)
-    return Object.keys(tagData)
-      .filter(key => tagData[key] !== undefined && tagData[key] !== null)
-      .reduce((obj, key) => ({ ...obj, [key]: tagData[key] }), {});
-  }
-
-  throw Error('Undefined action of tagData operation.');
-}
 
 //@ts-check
 class TagDataSource extends DataSource {
@@ -107,18 +58,16 @@ class TagDataSource extends DataSource {
 
   /**
    * Return data list from collection `tagData`
-   * (Geofirestore `d` field is removed from verson 4)
-   * @returns {Promise<RawTagDocumentFields>[]} Data array with id
+   * @param {PageParams} pageParams
+   * @returns {Promise<TagPage>}
    */
-  async getAllUnarchivedTags() {
-    const list = [];
-    const querySnapshot = await this.tagDataCollectionReference
+  async getAllUnarchivedTags(pageParams) {
+    const query = this.tagDataCollectionReference
       .where('archived', '==', false)
-      .get();
-    querySnapshot.forEach(doc => {
-      list.push(getTagDataFromTagDocSnap(doc));
-    });
-    return Promise.all(list);
+      .orderBy('lastUpdateTime', 'desc')
+      .orderBy(FieldPath.documentId());
+    const { data: tags, pageInfo } = await getPage(query, pageParams);
+    return { tags, ...pageInfo };
   }
 
   /**
@@ -133,31 +82,28 @@ class TagDataSource extends DataSource {
     if (!doc.exists) {
       return null;
     }
-    return {
-      id: doc.id,
-      ...doc.data(),
-    };
+    return getIdWithDataFromDocSnap(doc);
   }
 
   /**
-   * TODO: add paginate function
    * Get status history of current tag document `status` collection
    * @param {object} param
    * @param {string} param.tagId The tadId of the document we want to get the latest
    *   status
-   * @returns {Promise<Status>[]} The status data list from new to old
+   * @param {PageParams} param.pageParams
+   * @returns {Promise<StatusPage>} The status data list from new to old
    */
-  async getStatusHistory({ tagId }) {
+  async getStatusHistory({ tagId, pageParams }) {
     const docRef = await this.tagDataCollectionReference.doc(tagId);
-    const statusDocSnap = await docRef
+
+    const query = await docRef
       .collection('status')
       .orderBy('createTime', 'desc')
-      .get();
-    const statusResList = [];
-    statusDocSnap.forEach(doc => {
-      statusResList.push(doc.data());
-    });
-    return statusResList;
+      .orderBy(FieldPath.documentId());
+
+    const { data: statusList, pageInfo } = await getPage(query, pageParams);
+
+    return { statusList, ...pageInfo };
   }
 
   /**
@@ -225,7 +171,7 @@ class TagDataSource extends DataSource {
         uid
       );
 
-      return getTagDataFromTagDocSnap(await refAfterTagAdd.get());
+      return getIdWithDataFromDocSnap(await refAfterTagAdd.get());
     }
     if (action === 'update') {
       const refOfUpdateTag = this.tagDataCollectionReference.doc(tagId);
@@ -245,7 +191,7 @@ class TagDataSource extends DataSource {
       // update tagData to server
       await refOfUpdateTag.update(tagData);
 
-      return getTagDataFromTagDocSnap(await refOfUpdateTag.get());
+      return getIdWithDataFromDocSnap(await refOfUpdateTag.get());
     }
 
     throw Error('Undefined action of tagData operation.');
@@ -454,19 +400,17 @@ class TagDataSource extends DataSource {
    * Return tag data list from collection `tagData` created by the specific user
    * @param {object} param
    * @param {string} param.uid User id of the specific user.
-   * @returns {Promise<RawTagFromFirestore>[]} Data with id
+   * @param {PageParams} param.pageParams
+   * @returns {Promise<TagPage>}
    */
-  async getUserAddTagHistory({ uid }) {
-    const list = [];
-    const querySnapshot = await this.firestore
-      .collection('tagData')
+  async getUserAddTagHistory({ uid, pageParams }) {
+    const query = this.tagDataCollectionReference
       .where('createUserId', '==', uid)
       .orderBy('createTime', 'desc')
-      .get();
-    querySnapshot.forEach(doc => {
-      list.push(getTagDataFromTagDocSnap(doc));
-    });
-    return Promise.all(list);
+      .orderBy(FieldPath.documentId());
+    const { data: tags, pageInfo } = await getPage(query, pageParams);
+
+    return { tags, ...pageInfo };
   }
 } // class TagDataSource
 

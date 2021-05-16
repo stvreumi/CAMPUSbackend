@@ -40,19 +40,11 @@ export interface StatusWithDocumentReference extends Status {
   statusDocRef: firestore.DocumentReference;
 }
 
-export interface Tag {
-  id: string;
-  locationName: string;
-  accessibility: number;
-  category: Category;
-  floor: number;
+export interface Tag extends RawTagDocumentFields {
   coordinates: Coordinate;
   createTime: string;
   lastUpdateTime: string;
-  createUser: object;
-  description: string;
   imageUrl: Array<string>;
-  streetViewInfo: StreetView;
   status: Status;
   statusHistory: Array<Status>;
   viewCount: number;
@@ -64,7 +56,7 @@ export interface RawTagDocumentFields {
   accessibility: number;
   category: Category;
   floor: number;
-  coordinates: Coordinate;
+  coordinates: firestore.GeoPoint;
   createTime: firestore.Timestamp;
   lastUpdateTime: firestore.Timestamp;
   createUser: User;
@@ -97,6 +89,27 @@ export interface UpdateTagDataInput {
   streetViewInfo?: StreetView
   imageDeleteUrls?: String[]
   imageUploadNumber?: number
+}
+
+export interface Page {
+  cursor: string;
+  empty: boolean;
+}
+
+export interface DataPage {
+  data: object[];
+}
+export interface TagPage extends Page {
+  Tags: Tag[];
+}
+
+export interface StatusPage extends Page {
+  statusList: Status[];
+}
+
+export interface PageParams {
+  pageSize: number;
+  cursor: string;
 }
 
 export interface Coordinate {
