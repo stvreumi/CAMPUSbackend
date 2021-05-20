@@ -30,8 +30,9 @@ ENV PATH /node_app/node_modules/.bin:$PATH
 # pre-download emulators
 WORKDIR /node_app/app
 
-# https://github.com/firebase/firebase-tools#deployment-and-local-emulation
-RUN firebase setup:emulators:firestore
+# fix permision denied problem
+RUN mkdir -p /home/node/.cache/firebase/emulators \ 
+    && chown node:node /home/node/.cache/firebase/emulators
 
 USER node
-CMD ["firebase", "emulators:start"]
+CMD ["firebase", "emulators:start", "--import=./emulator-data", "--export-on-exit"]
