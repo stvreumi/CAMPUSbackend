@@ -7,13 +7,18 @@ services:
       - ./functions/package.json:/node_app/package.json
       - ./functions/package-lock.json:/node_app/package-lock.json
       - no-used:/node_app/app/functions/node_modules
+      # avoid emulators repeated download
+      - emulators:/home/node/.cache/firebase/emulators/
     ports:
       # need to specify host as 0.0.0.0 so that we can connect to the container
       # fron host
       # from: https://stackoverflow.com/questions/66176947/run-google-firestore-emulator-with-docker-compose
       - "5001:5001"
       - "4000:4000"
+      - "9099:9099"
+      - "8080:8080"
     stdin_open: true
     tty: true
 volumes:
   no-used:
+  emulators:
