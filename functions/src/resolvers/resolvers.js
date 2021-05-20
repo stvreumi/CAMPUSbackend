@@ -11,17 +11,18 @@ const {
  * @typedef {import('../types').ResolverArgsInfo} ResolverArgsInfo
  * @typedef {import('../types').AddTagDataInput} AddTagDataInput
  * @typedef {import('../types').UpdateTagDataInput} UpdateTagDataInput
+ * @typedef {import('../types').PageParams} PageParams
  */
 
 const queryResolvers = {
   Query: {
     /**
      * @param {*} _
-     * @param {*} __
+     * @param {{pageParams: PageParams}} params
      * @param {ResolverArgsInfo} info
      */
-    unarchivedTagList: async (_, __, { dataSources }) =>
-      dataSources.tagDataSource.getAllUnarchivedTags(),
+    unarchivedTagList: async (_, { pageParams }, { dataSources }) =>
+      dataSources.tagDataSource.getAllUnarchivedTags(pageParams),
     /**
      * @param {*} _
      * @param {{tagId: string}} params
@@ -31,11 +32,11 @@ const queryResolvers = {
       dataSources.tagDataSource.getTagData({ tagId }),
     /**
      * @param {*} _
-     * @param {{uid: string}} params
+     * @param {{uid: string, pageParams: PageParams}} params
      * @param {ResolverArgsInfo} info
      */
-    userAddTagHistory: async (_, { uid }, { dataSources }) =>
-      dataSources.tagDataSource.getUserAddTagHistory({ uid }),
+    userAddTagHistory: async (_, { uid, pageParams }, { dataSources }) =>
+      dataSources.tagDataSource.getUserAddTagHistory({ uid, pageParams }),
     /**
      * @param {*} _
      * @param {*} __

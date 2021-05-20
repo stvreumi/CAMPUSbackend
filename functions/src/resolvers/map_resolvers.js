@@ -5,6 +5,7 @@ const { DateTime } = require('luxon');
  * @typedef {import('../types').ResolverArgsInfo} ResolverArgsInfo
  * @typedef {import('../types').RawTagDocumentFields} RawTagDocumentFields
  * @typedef {import('../types').RawStatusDocumentFields} RawStatusDocumentFields
+ * @typedef {import('../types').PageParams} PageParams
  */
 
 const tagResolvers = {
@@ -49,11 +50,11 @@ const tagResolvers = {
       }),
     /**
      * @param {RawTagDocumentFields} tag
-     * @param {*} _
+     * @param {{pageParams: PageParams}} params
      * @param {ResolverArgsInfo} info
      */
-    statusHistory: async (tag, _, { dataSources }) =>
-      dataSources.tagDataSource.getStatusHistory({ tagId: tag.id }),
+    statusHistory: async (tag, { pageParams }, { dataSources }) =>
+      dataSources.tagDataSource.getStatusHistory({ tagId: tag.id, pageParams }),
   },
 };
 

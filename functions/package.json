@@ -12,7 +12,7 @@
     "serve_docs": "npx docsify serve ../docs",
     "firestore": "firebase emulators:start --only firestore",
     "test": "firebase emulators:exec \"jest --watch\" ",
-    "test-one-time": "firebase emulators:exec \"jest --runInBand\" "
+    "test-debug": "firebase emulators:exec \"jest --runInBand --watch\" "
   },
   "engines": {
     "node": "12"

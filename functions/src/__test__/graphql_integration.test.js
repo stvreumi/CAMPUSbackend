@@ -53,6 +53,56 @@ function generateGraphQLHelper(type, testClient) {
   return undefined;
 }
 
+const testPaginate = async (
+  query,
+  queryName,
+  testFiledPath,
+  graphQLQueryHelper,
+  params = {}
+) => {
+  // https://stackoverflow.com/a/43849204
+  const getListValueByPath = (path, obj) =>
+    path.split('.').reduce((parentObj, key) => parentObj[key] || null, obj);
+  const getCusrsorValueByPath = (path, obj) =>
+    path
+      .split('.')
+      .slice(0, -1)
+      .reduce((parentObj, key) => parentObj[key] || null, obj);
+  const lastCursor = await [3, 7].reduce(async (cursor, pageSize) => {
+    const cursorResolve = await cursor;
+    const { queryResult } = await graphQLQueryHelper(query, queryName, {
+      pageParams: {
+        pageSize,
+        cursor: cursorResolve,
+      },
+      ...params,
+    });
+
+    expect(getListValueByPath(testFiledPath, queryResult)).toHaveLength(
+      pageSize
+    );
+    return getCusrsorValueByPath(testFiledPath, queryResult).cursor;
+  }, '');
+
+  const { queryResult: queryExpectEmptyResult } = await graphQLQueryHelper(
+    query,
+    queryName,
+    {
+      pageParams: {
+        cursor: lastCursor,
+      },
+      ...params,
+    }
+  );
+
+  expect(
+    getListValueByPath(testFiledPath, queryExpectEmptyResult)
+  ).toHaveLength(0);
+  expect(
+    getCusrsorValueByPath(testFiledPath, queryExpectEmptyResult).empty
+  ).toBeTruthy();
+};
+
 describe('test graphql query', () => {
   /** @type {() => DataSources} */
   let dataSources;
@@ -89,31 +139,39 @@ describe('test graphql query', () => {
     const queryUnarchivedTagList = gql`
       query {
         unarchivedTagList {
-          id
-          locationName
-          category {
-            missionName
-            subTypeName
-            targetName
+          tags {
+            id
+            locationName
+            category {
+              missionName
+              subTypeName
+              targetName
+            }
+            coordinates {
+              latitude
+              longitude
+            }
+            status {
+              statusName
+              createTime
+              numberOfUpVote
+              hasUpVote
+            }
+            statusHistory {
+              statusList {
+                statusName
+                createTime
+                numberOfUpVote
+                hasUpVote
+              }
+              cursor
+              empty
+            }
+            floor
+            archived
           }
-          coordinates {
-            latitude
-            longitude
-          }
-          status {
-            statusName
-            createTime
-            numberOfUpVote
-            hasUpVote
-          }
-          statusHistory {
-            statusName
-            createTime
-            numberOfUpVote
-            hasUpVote
-          }
-          floor
-          archived
+          cursor
+          empty
         }
       }
     `;
@@ -121,9 +179,9 @@ describe('test graphql query', () => {
       queryUnarchivedTagList,
       'unarchivedTagList'
     );
-    expect(queryResult).toEqual(expect.any(Array));
+    expect(queryResult.tags).toEqual(expect.any(Array));
     // console.log(tagRenderListResult);
-    expect(queryResult[0]).toMatchObject({
+    expect(queryResult.tags[0]).toMatchObject({
       id: expect.any(String),
       locationName: fakeTagData.locationName,
       category: {
@@ -141,14 +199,16 @@ describe('test graphql query', () => {
         numberOfUpVote: null,
         hasUpVote: null,
       },
-      statusHistory: [
-        {
-          statusName: expect.any(String),
-          createTime: expect.stringMatching(timestampStringRegex),
-          numberOfUpVote: null,
-          hasUpVote: null,
-        },
-      ],
+      statusHistory: {
+        statusList: [
+          {
+            statusName: expect.any(String),
+            createTime: expect.stringMatching(timestampStringRegex),
+            numberOfUpVote: null,
+            hasUpVote: null,
+          },
+        ],
+      },
       floor: expect.any(Number),
       archived: false,
     });
@@ -174,7 +234,7 @@ describe('test graphql query', () => {
     const { queryResult } = await graphQLQueryHelper(queryTag, 'tag', {
       id: fakeTagId,
     });
-    console.log(queryResult.createTime);
+
     expect(queryResult).toMatchObject({
       id: fakeTagId,
       createTime: expect.stringMatching(timestampStringRegex),
@@ -201,10 +261,14 @@ describe('test graphql query', () => {
             hasUpVote
           }
           statusHistory {
-            statusName
-            createTime
-            numberOfUpVote
-            hasUpVote
+            statusList {
+              statusName
+              createTime
+              numberOfUpVote
+              hasUpVote
+            }
+            cursor
+            empty
           }
         }
       }
@@ -219,7 +283,7 @@ describe('test graphql query', () => {
       numberOfUpVote: expect.any(Number),
       hasUpVote: expect.any(Boolean),
     });
-    expect(queryResult.statusHistory[0]).toMatchObject({
+    expect(queryResult.statusHistory.statusList[0]).toMatchObject({
       statusName: expect.any(String),
       createTime: expect.stringMatching(timestampStringRegex),
       numberOfUpVote: expect.any(Number),
@@ -231,11 +295,15 @@ describe('test graphql query', () => {
     const queryUserAddTagHistory = gql`
       query testQueryUserAddTagHistory($uid: ID!) {
         userAddTagHistory(uid: $uid) {
-          id
-          createUser {
-            uid
+          tags {
+            id
+            createUser {
+              uid
+            }
+            imageUrl
           }
-          imageUrl
+          cursor
+          empty
         }
       }
     `;
@@ -246,8 +314,8 @@ describe('test graphql query', () => {
       { uid }
     );
 
-    expect(queryResult).toEqual(expect.any(Array));
-    expect(queryResult[0]).toMatchObject({
+    expect(queryResult.tags).toEqual(expect.any(Array));
+    expect(queryResult.tags[0]).toMatchObject({
       id: fakeTagId,
       createUser: {
         uid: fakeUserInfo.uid,
@@ -281,7 +349,7 @@ describe('test graphql query', () => {
   });
 });
 
-describe('test graphql mutate', () => {
+describe('test graphql mutate and paginate function', () => {
   let graphQLQueryHelper;
   let graphQLMutationHelper;
   let firestore;
@@ -453,15 +521,23 @@ describe('test graphql mutate', () => {
     const queryUnarchivedTagList = gql`
       query {
         unarchivedTagList {
-          id
-          status {
-            statusName
-            createTime
+          tags {
+            id
+            status {
+              statusName
+              createTime
+            }
+            statusHistory {
+              statusList {
+                statusName
+                createTime
+              }
+              cursor
+              empty
+            }
           }
-          statusHistory {
-            statusName
-            createTime
-          }
+          cursor
+          empty
         }
       }
     `;
@@ -470,10 +546,8 @@ describe('test graphql mutate', () => {
       'unarchivedTagList'
     );
 
-    // console.log(tagRenderListResult[0].statusHistory);
-
-    expect(queryResult[0].statusHistory).toHaveLength(2);
-    expect(queryResult[0].status.statusName).toEqual(testStatusName);
+    expect(queryResult.tags[0].statusHistory.statusList).toHaveLength(2);
+    expect(queryResult.tags[0].status.statusName).toEqual(testStatusName);
   });
   test('test `updateUpVoteStatus` and upvote related query', async () => {
     const response = await addFakeDataToFirestore(dataSources, true);
@@ -743,5 +817,115 @@ describe('test graphql mutate', () => {
     });
 
     expect(queryResult).toMatchObject({ viewCount: 1 });
+  });
+  test('test unarchivedTagList with paginate function', async () => {
+    // add many tag into firestore
+    await Promise.all(
+      [...new Array(10)].map(() => addFakeDataToFirestore(dataSources))
+    );
+
+    // unarchived tag list
+    const queryUnarchivedTagList = gql`
+      query tags($pageParams: PageParams) {
+        unarchivedTagList(pageParams: $pageParams) {
+          tags {
+            id
+          }
+          cursor
+          empty
+        }
+      }
+    `;
+
+    await testPaginate(
+      queryUnarchivedTagList,
+      'unarchivedTagList',
+      'tags',
+      graphQLQueryHelper
+    );
+
+    // user add tag history
+    const queryUserAddTagHistory = gql`
+      query testQueryUserAddTagHistory($uid: ID!, $pageParams: PageParams) {
+        userAddTagHistory(uid: $uid, pageParams: $pageParams) {
+          tags {
+            id
+          }
+          cursor
+          empty
+        }
+      }
+    `;
+    await testPaginate(
+      queryUserAddTagHistory,
+      'userAddTagHistory',
+      'tags',
+      graphQLQueryHelper,
+      {
+        uid: fakeUserInfo.uid,
+      }
+    );
+  });
+  test('test status paginate function', async () => {
+    const response = await addFakeDataToFirestore(dataSources);
+    const testTagId = response.tag.id;
+
+    const testStatusName = 'test';
+
+    const mutateTag = gql`
+      mutation tagUpdateTest(
+        $tagId: ID!
+        $statusName: String!
+        $description: String
+      ) {
+        updateTagStatus(
+          tagId: $tagId
+          statusName: $statusName
+          description: $description
+        ) {
+          statusName
+          createTime
+          description
+        }
+      }
+    `;
+    // update status multiple times
+    // there already has been a status(default)
+    await Promise.all(
+      [...new Array(9)].map(() =>
+        graphQLMutationHelper(mutateTag, 'updateTagStatus', {
+          tagId: testTagId,
+          statusName: testStatusName,
+          description: 'test update status',
+        })
+      )
+    );
+
+    // test if the status update mutation would work
+    const queryTag = gql`
+      query testStatusHistoryWithPaginate(
+        $tagId: ID!
+        $pageParams: PageParams
+      ) {
+        tag(tagId: $tagId) {
+          statusHistory(pageParams: $pageParams) {
+            statusList {
+              id
+            }
+            cursor
+            empty
+          }
+        }
+      }
+    `;
+    await testPaginate(
+      queryTag,
+      'tag',
+      'statusHistory.statusList',
+      graphQLQueryHelper,
+      {
+        tagId: testTagId,
+      }
+    );
   });
 });

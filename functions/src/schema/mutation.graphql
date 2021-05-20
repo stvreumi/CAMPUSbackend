@@ -1,0 +1,13 @@
+type Mutation {
+  """
+  The description in the input will store in the status data
+  """
+  addNewTagData(data: addTagDataInput!): AddorUpdateTagResponse!
+  updateTagData(tagId: ID!, data: updateTagDataInput!): AddorUpdateTagResponse!
+  updateTagStatus(tagId: ID!, statusName: String!, description: String): Status!
+  updateUpVoteStatus(tagId: ID!, action: updateUpVoteAction!): updateUpVoteResponse
+  "true the update is successful, need to add token in the header"
+  setHasReadGuide: Boolean!
+  "true if the increment operation success"
+  incrementViewCount(tagId: ID!): Boolean!
+}
