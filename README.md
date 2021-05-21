@@ -29,7 +29,7 @@
 - We don't push the image to Dockerhub, so the image would be built locally.
 - After the container is up, you can send GraphQL request to the following link to test new feature. <br/>
   http://0.0.0.0:5001/smartcampus-1b31f/us-central1/graphql
-- The firestore data would be store in the directory `./emulator-data` when you exit. And it would be import to the firestore when you start the container next time. If you want to empty the firestore, just delete the content in the directory.
+- The firestore emulator data would be store in the directory `./emulator-data` when you exit. And it would be import to the firestore emulator when you start the container next time. If you want to empty the firestore emulator, just delete the content in the directory.
   - You must have `./emulator-data` directory before set up container, or the container would crash.
 - If you want to test the auth functionality, you can see [here](https://firebase.google.com/docs/emulator-suite/connect_auth). The port(9099) already be exposed. Make sure you connect to the auth service using `0.0.0.0:9099` rather than `localhost:9099`
 - **Connect to the service by `0.0.0.0:<port>` rather than `localhost:<port>`**
