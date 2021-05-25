@@ -13,10 +13,11 @@ services:
       # need to specify host as 0.0.0.0 so that we can connect to the container
       # fron host
       # from: https://stackoverflow.com/questions/66176947/run-google-firestore-emulator-with-docker-compose
-      - "5001:5001"
-      - "4000:4000"
-      - "9099:9099"
-      - "8080:8080"
+      # from: https://stackoverflow.com/questions/20778771/what-is-the-difference-between-0-0-0-0-127-0-0-1-and-localhost
+      - "0.0.0.0:5001:5001"
+      - "0.0.0.0:4000:4000"
+      - "0.0.0.0:9099:9099"
+      - "0.0.0.0:8080:8080"
     stdin_open: true
     tty: true
 volumes:
