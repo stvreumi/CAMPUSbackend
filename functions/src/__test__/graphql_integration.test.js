@@ -388,6 +388,9 @@ describe('test graphql mutate and paginate function', () => {
               targetName
             }
             floor
+            status {
+              statusName
+            }
           }
           imageUploadNumber
           imageUploadUrls
@@ -401,8 +404,6 @@ describe('test graphql mutate and paginate function', () => {
         longitude: fakeTagData.coordinates.longitude,
       },
     };
-    delete data.status;
-    delete data.coordinatesString;
 
     const { mutationResult } = await graphQLMutationHelper(
       mutateTag,
@@ -416,6 +417,9 @@ describe('test graphql mutate and paginate function', () => {
         id: expect.any(String),
         locationName: data.locationName,
         floor: expect.any(Number),
+        status: {
+          statusName: data.statusName,
+        },
       },
       imageUploadNumber: data.imageUploadNumber,
       imageUploadUrls: expect.any(Array),
@@ -448,6 +452,7 @@ describe('test graphql mutate and paginate function', () => {
       category: {
         missionName: '動態任務',
       },
+      statusName: '人少',
     };
 
     // first add data to firestore
@@ -496,6 +501,7 @@ describe('test graphql mutate and paginate function', () => {
           statusName
           createTime
           description
+          numberOfUpVote
         }
       }
     `;
@@ -515,6 +521,7 @@ describe('test graphql mutate and paginate function', () => {
       statusName: testStatusName,
       createTime: expect.stringMatching(timestampStringRegex),
       description: 'test update status',
+      numberOfUpVote: null,
     });
 
     // test if the status update mutation would work
@@ -614,12 +621,11 @@ describe('test graphql mutate and paginate function', () => {
       }
     `;
 
-    const {
-      mutationResult: cancelMutationResult,
-    } = await graphQLMutationHelper(cancelMutateTag, 'updateUpVoteStatus', {
-      tagId: response.tag.id,
-      action: 'CANCEL_UPVOTE',
-    });
+    const { mutationResult: cancelMutationResult } =
+      await graphQLMutationHelper(cancelMutateTag, 'updateUpVoteStatus', {
+        tagId: response.tag.id,
+        action: 'CANCEL_UPVOTE',
+      });
     expect(cancelMutationResult).toMatchObject({
       tagId: response.tag.id,
       numberOfUpVote: 0,
@@ -651,6 +657,74 @@ describe('test graphql mutate and paginate function', () => {
       createTime: expect.stringMatching(timestampStringRegex),
       numberOfUpVote: 0,
       hasUpVote: false,
+    });
+  });
+  test('test update tag status and check if it can update numberOfUpVote', async () => {
+    const response = await addFakeDataToFirestore(dataSources, true);
+    const fakeTagId = response.tag.id;
+    const testStatusName = '已解決';
+
+    const mutateTag = gql`
+      mutation tagUpdateTest(
+        $tagId: ID!
+        $statusName: String!
+        $description: String
+        $hasNumberOfUpVote: Boolean
+      ) {
+        updateTagStatus(
+          tagId: $tagId
+          statusName: $statusName
+          description: $description
+          hasNumberOfUpVote: $hasNumberOfUpVote
+        ) {
+          statusName
+          createTime
+          description
+          numberOfUpVote
+        }
+      }
+    `;
+
+    const { mutationResult } = await graphQLMutationHelper(
+      mutateTag,
+      'updateTagStatus',
+      {
+        tagId: fakeTagId,
+        statusName: testStatusName,
+        description: 'test update status',
+        hasNumberOfUpVote: true,
+      }
+    );
+
+    // console.log(responseData);
+    expect(mutationResult).toMatchObject({
+      statusName: testStatusName,
+      createTime: expect.stringMatching(timestampStringRegex),
+      description: 'test update status',
+      numberOfUpVote: 0,
+    });
+
+    // upvote
+    const upVoteOfMutateTag = gql`
+      mutation upVoteTest($tagId: ID!, $action: updateUpVoteAction!) {
+        updateUpVoteStatus(tagId: $tagId, action: $action) {
+          tagId
+          numberOfUpVote
+          hasUpVote
+        }
+      }
+    `;
+
+    const { mutationResult: upVoteMutationResult } =
+      await graphQLMutationHelper(upVoteOfMutateTag, 'updateUpVoteStatus', {
+        tagId: fakeTagId,
+        action: 'UPVOTE',
+      });
+
+    expect(upVoteMutationResult).toMatchObject({
+      tagId: fakeTagId,
+      numberOfUpVote: 1,
+      hasUpVote: true,
     });
   });
   test('test get and set hasReadGuide', async () => {

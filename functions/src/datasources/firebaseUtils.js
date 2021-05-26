@@ -2,8 +2,7 @@ const { v4: uuidv4 } = require('uuid');
 const { ForbiddenError } = require('apollo-server');
 const { firestore } = require('firebase-admin');
 
-const { Timestamp, GeoPoint, FieldPath } = require('firebase-admin').firestore;
-const { DateTime } = require('luxon');
+const { Timestamp, GeoPoint } = require('firebase-admin').firestore;
 const { geohashForLocation } = require('geofire-common');
 
 const { FieldValue } = firestore;
@@ -57,9 +56,10 @@ async function getLatestStatus(docRef) {
  * Generate tag data object which stroe in the firestore from original raw data
  * @param {string} action
  * @param {AddTagDataInput} data
- * @param {Promise<string>} uid
+ * @param {DecodedUserInfoFromAuthHeader} userInfo
  */
-function generateTagDataToStoreInFirestore(action, data, uid) {
+function generateTagDataToStoreInFirestore(action, data, userInfo) {
+  const { uid } = userInfo;
   // get data which would be non-null
   const {
     locationName,
@@ -133,43 +133,6 @@ function checkUserLogIn(logIn) {
 
 /**
  *
- * @param {firestore.DocumentReference} tagDocRef
- * @param {string} missionName
- * @param {string} description
- * @param {string} uid
- * @returns {Promise<void>}
- */
-async function insertDefualtStatusObjToTagDoc(
-  tagDocRef,
-  missionName,
-  description = '',
-  uid
-) {
-  const getDefaultStatus = () => {
-    switch (missionName) {
-      case '設施任務':
-        return '存在';
-      case '問題任務':
-        return '待處理';
-      case '動態任務':
-        return '人少';
-      default:
-        return '';
-    }
-  };
-  const defaultStatusData = {
-    statusName: getDefaultStatus(),
-    description,
-    createTime: FieldValue.serverTimestamp(),
-    createUserId: uid,
-    numberOfUpVote: missionName === '問題任務' ? 0 : null,
-  };
-  // add tag default status, need to use original CollectionReference
-  await tagDocRef.collection('status').add(defaultStatusData);
-}
-
-/**
- *
  * @param {number | string} mills
  * @returns {Timestamp}
  */
@@ -179,12 +142,6 @@ const getFirebaseTimestamp = mills => {
   }
   return Timestamp.fromMillis(mills);
 };
-
-/**
- *
- * @param {Timestamp} timestamp
- */
-const getMillsFromTimestamp = timestamp => timestamp.toMillis();
 
 /**
  * The cursor format is : "${timeMillis},{documentId}"
@@ -231,6 +188,11 @@ const queryOrdeyByTimestampWithPageParams = async (
  * @param {PageParams} pageParams
  */
 const getPage = async (query, pageParams) => {
+  /**
+   *
+   * @param {Timestamp} timestamp
+   */
+  const getMillsFromTimestamp = timestamp => timestamp.toMillis();
   const dataHandleFunction = getIdWithDataFromDocSnap;
 
   const { data, empty } = await queryOrdeyByTimestampWithPageParams(
@@ -258,9 +220,7 @@ module.exports = {
   getLatestStatus,
   getIdWithDataFromDocSnap,
   checkUserLogIn,
-  insertDefualtStatusObjToTagDoc,
   queryOrdeyByTimestampWithPageParams,
-  getMillsFromTimestamp,
   generateTagDataToStoreInFirestore,
   getPage,
 };

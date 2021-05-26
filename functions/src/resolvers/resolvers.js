@@ -1,10 +1,9 @@
-const { merge } = require('lodash');
-
 const {
   tagResolvers,
   statusResolvers,
   userResolvers,
   coordinateResolvers,
+  pageResolvers,
 } = require('./map_resolvers');
 
 /**
@@ -62,10 +61,8 @@ const mutationResolvers = {
      * @param {ResolverArgsInfo} info
      */
     addNewTagData: async (_, { data }, { dataSources, userInfo }) => {
-      const {
-        tag,
-        imageUploadNumber,
-      } = await dataSources.tagDataSource.addNewTagData({ data, userInfo });
+      const { tag, imageUploadNumber } =
+        await dataSources.tagDataSource.addNewTagData({ data, userInfo });
       const imageUploadUrls = Promise.all(
         dataSources.storageDataSource.getImageUploadUrls({
           imageUploadNumber,
@@ -102,13 +99,13 @@ const mutationResolvers = {
     /**
      *
      * @param {*} _
-     * @param {{tagId: string, statusName: string, description: string}} param
+     * @param {{tagId: string, statusName: string, description: string, hasNumberOfUpVote: string}} param
      * @param {ResolverArgsInfo} info
      * @returns
      */
     updateTagStatus: async (
       _,
-      { tagId, statusName, description },
+      { tagId, statusName, description, hasNumberOfUpVote = false },
       { dataSources, userInfo }
     ) =>
       dataSources.tagDataSource.updateTagStatus({
@@ -116,6 +113,7 @@ const mutationResolvers = {
         statusName,
         description,
         userInfo,
+        hasNumberOfUpVote,
       }),
     /**
      *
@@ -151,13 +149,14 @@ const mutationResolvers = {
   },
 };
 
-const resolvers = merge(
-  queryResolvers,
-  mutationResolvers,
-  tagResolvers,
-  statusResolvers,
-  userResolvers,
-  coordinateResolvers
-);
+const resolvers = {
+  ...queryResolvers,
+  ...mutationResolvers,
+  ...tagResolvers,
+  ...statusResolvers,
+  ...userResolvers,
+  ...coordinateResolvers,
+  ...pageResolvers,
+};
 
 module.exports = resolvers;

@@ -21,6 +21,7 @@
         "argsIgnorePattern": "^_"
       }
     ],
+    "no-underscore-dangle": ["error", { "allow": ["__resolveType"] }],
     "import/no-extraneous-dependencies": [
       "error",
       { "devDependencies": ["**/__test__/*"] }
