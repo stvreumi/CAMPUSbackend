@@ -110,6 +110,7 @@ input addTagDataInput {
   imageUploadNumber: Int
   floor: Int
   streetViewInfo: StreetViewInput
+  statusName: String!
 }
 
 input updateTagDataInput {
@@ -120,6 +121,7 @@ input updateTagDataInput {
   streetViewInfo: StreetViewInput
   imageDeleteUrls: [String!]
   imageUploadNumber: Int
+  statusName: String
 }
 
 input CoordinateInput {

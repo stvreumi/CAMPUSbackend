@@ -6,9 +6,6 @@ const {
   getIdWithDataFromDocSnap,
   getLatestStatus,
   checkUserLogIn,
-  insertDefualtStatusObjToTagDoc,
-  getMillsFromTimestamp,
-  queryOrdeyByTimestampWithPageParams,
   generateTagDataToStoreInFirestore,
   getPage,
 } = require('./firebaseUtils');
@@ -151,25 +148,28 @@ class TagDataSource extends DataSource {
    * @param {string} params.tagId
    * @param {AddTagDataInput | UpdateTagDataInput} params.data contain the necessary filed should
    *  be added to tagData document
-   * @param {string} params.uid The uid of the user who initiate the action
+   * @param {DecodedUserInfoFromAuthHeader} params.userInfo The uid of the user who initiate the action
    * @returns {Promise<RawTagDocumentFields>}
    */
-  async addorUpdateTagDataToFirestore(action, { tagId = '', data, uid }) {
-    const { description } = data;
-    const tagData = generateTagDataToStoreInFirestore(action, data, uid);
+  // TODO: refactor this function
+  async addorUpdateTagDataToFirestore(action, { tagId = '', data, userInfo }) {
+    const { description, statusName } = data;
+    const tagData = generateTagDataToStoreInFirestore(action, data, userInfo);
 
     if (action === 'add') {
-      const { missionName } = tagData.category;
       // add tagData to server
       const refAfterTagAdd = await this.tagDataCollectionReference.add(tagData);
 
       // add tag default status, need to use original CollectionReference
-      await insertDefualtStatusObjToTagDoc(
-        refAfterTagAdd,
-        missionName,
+      const { id: newAddedTagId } = refAfterTagAdd;
+      const { missionName } = data.category;
+      await this.updateTagStatus({
+        tagId: newAddedTagId,
+        statusName,
         description,
-        uid
-      );
+        userInfo,
+        hasNumberOfUpVote: missionName === '問題任務',
+      });
 
       return getIdWithDataFromDocSnap(await refAfterTagAdd.get());
     }
@@ -177,15 +177,22 @@ class TagDataSource extends DataSource {
       const refOfUpdateTag = this.tagDataCollectionReference.doc(tagId);
 
       // the category has changed, need to push new status data to status history
+      // TODO: consider if this section is needed.
       if (Object.prototype.hasOwnProperty.call(tagData, 'category')) {
-        const { missionName } = tagData.category;
         // add tag default status, need to use original CollectionReference
-        await insertDefualtStatusObjToTagDoc(
-          refOfUpdateTag,
-          missionName,
-          '(修改任務內容)',
-          uid
-        );
+        if (!statusName) {
+          throw Error(
+            'You need to provide statusName if you want to change category'
+          );
+        }
+        const { missionName } = data.category;
+        await this.updateTagStatus({
+          tagId,
+          statusName,
+          description: '(修改任務內容)',
+          userInfo,
+          hasNumberOfUpVote: missionName === '問題任務',
+        });
       }
 
       // update tagData to server
@@ -210,12 +217,12 @@ class TagDataSource extends DataSource {
    */
   async addNewTagData({ data, userInfo }) {
     // check user status
-    const { logIn, uid } = userInfo;
+    const { logIn } = userInfo;
     checkUserLogIn(logIn);
     // add tagData to firestore
     const tag = await this.addorUpdateTagDataToFirestore('add', {
       data,
-      uid,
+      userInfo,
     });
 
     const { imageUploadNumber } = data;
@@ -252,7 +259,7 @@ class TagDataSource extends DataSource {
     const tag = await this.addorUpdateTagDataToFirestore('update', {
       tagId,
       data,
-      uid,
+      userInfo,
     });
 
     return {
@@ -268,9 +275,16 @@ class TagDataSource extends DataSource {
    * @param {string} params.statusName the latest status name we want to update
    * @param {string} params.description
    * @param {DecodedUserInfoFromAuthHeader} params.userInfo
+   * @param {boolean} params.hasNumberOfUpVote
    * @return {Promise<Status>} the latest status data
    */
-  async updateTagStatus({ tagId, statusName, description, userInfo }) {
+  async updateTagStatus({
+    tagId,
+    statusName,
+    description,
+    userInfo,
+    hasNumberOfUpVote = false,
+  }) {
     const { logIn, uid } = userInfo;
     checkUserLogIn(logIn);
 
@@ -279,6 +293,7 @@ class TagDataSource extends DataSource {
       description,
       createTime: FieldValue.serverTimestamp(),
       createUserId: uid,
+      numberOfUpVote: hasNumberOfUpVote ? 0 : null,
     };
     const docRef = await this.tagDataCollectionReference
       .doc(tagId)

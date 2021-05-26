@@ -102,9 +102,24 @@ const coordinateResolvers = {
   },
 };
 
+const pageResolvers = {
+  Page: {
+    __resolveType(page, _, __) {
+      if (page.tags) {
+        return 'TagPage';
+      }
+      if (page.statusList) {
+        return 'StatusPage';
+      }
+      return null;
+    },
+  },
+};
+
 module.exports = {
   tagResolvers,
   statusResolvers,
   userResolvers,
   coordinateResolvers,
+  pageResolvers,
 };

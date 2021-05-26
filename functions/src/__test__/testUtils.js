@@ -35,6 +35,7 @@ const fakeTagData = {
   streetViewInfo: { ...fakeStreetViewData },
   floor: 3,
   imageUploadNumber: 2,
+  statusName: '存在',
 };
 
 const fakeStatusData = {
@@ -116,6 +117,7 @@ async function addFakeDataToFirestore(dataSources, testNumberOfUpVote = false) {
   };
   if (testNumberOfUpVote) {
     data.category = { ...hasNumberOfUpVoteCategory };
+    data.statusName = '待處理';
   }
 
   return dataSources().tagDataSource.addNewTagData({

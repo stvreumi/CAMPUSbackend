@@ -4,8 +4,16 @@ type Mutation {
   """
   addNewTagData(data: addTagDataInput!): AddorUpdateTagResponse!
   updateTagData(tagId: ID!, data: updateTagDataInput!): AddorUpdateTagResponse!
-  updateTagStatus(tagId: ID!, statusName: String!, description: String): Status!
-  updateUpVoteStatus(tagId: ID!, action: updateUpVoteAction!): updateUpVoteResponse
+  updateTagStatus(
+    tagId: ID!
+    statusName: String!
+    description: String
+    hasNumberOfUpVote: Boolean
+  ): Status!
+  updateUpVoteStatus(
+    tagId: ID!
+    action: updateUpVoteAction!
+  ): updateUpVoteResponse
   "true the update is successful, need to add token in the header"
   setHasReadGuide: Boolean!
   "true if the increment operation success"
