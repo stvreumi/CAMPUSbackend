@@ -1,0 +1,36 @@
+
+# graphql must have at least one query...
+type Query {
+  serverName: String!
+}
+
+type TagFieldsForSubscription {
+  id: ID!
+  changeType: String!
+  category: Category
+  coordinates: Coordinate
+  lastUpdateTime: String
+  archived: Boolean
+}
+
+type Category {
+  "設施任務/問題任務/動態任務"
+  missionName: String!
+  "**類型"
+  subTypeName: String
+  "具體**"
+  targetName: String
+}
+
+type Coordinate {
+  latitude: String!
+  longitude: String!
+}
+
+type Subscription {
+  archivedThreshold: Int
+  tagChangeSubscription(
+    "the number of milliseconds elapsed since January 1, 1970 00:00:00 UTC."
+    subAfter: String!
+  ): TagFieldsForSubscription!
+}

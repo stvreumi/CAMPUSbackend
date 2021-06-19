@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-  campus-backend:
+  emulator:
     build: .
     volumes:
       - .:/node_app/app
@@ -20,6 +20,15 @@ services:
       - "0.0.0.0:8080:8080"
     stdin_open: true
     tty: true
+  subscription:
+    image: node:12-alpine
+    volumes: 
+      - ./subscriptions:/node_app/app
+    env_file: ./subscriptions/compose.env
+    ports:
+      - "8333:8333"
+    working_dir: /node_app/app
+    command: sh emulator-entry.sh
 volumes:
   no-used:
   emulators:

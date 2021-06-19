@@ -19,6 +19,7 @@ const UserDataSource = require('./datasources/UserDataSource');
 const dataSourcesGenerator = admin => {
   const firestore = admin.firestore();
   let archivedThreshold = 10;
+  // the return function is the unsubscriber
   const archivedThresholdOfNumberOfUpVoteObserver = firestore
     .collection('setting')
     .doc('tag')
@@ -83,14 +84,16 @@ function apolloServerGenerator({
     });
 
   // context
-  const contextInProduction = dataSources => async ({ req }) => {
-    const userInfo = await dataSources().authDataSource.getUserInfoFromToken(
-      req
-    );
-    return {
-      userInfo,
+  const contextInProduction =
+    dataSources =>
+    async ({ req }) => {
+      const userInfo = await dataSources().authDataSource.getUserInfoFromToken(
+        req
+      );
+      return {
+        userInfo,
+      };
     };
-  };
   if (test === true) {
     /**
      * Test server

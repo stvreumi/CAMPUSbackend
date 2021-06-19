@@ -300,6 +300,11 @@ class TagDataSource extends DataSource {
       .collection('status')
       .add(statusData);
 
+    // also update the field `lastUpdateTime` in the tag
+    await this.tagDataCollectionReference
+      .doc(tagId)
+      .update({ lastUpdateTime: FieldValue.serverTimestamp() });
+
     return (await docRef.get()).data();
   }
 

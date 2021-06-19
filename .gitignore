@@ -37,3 +37,4 @@ credentials.csv
 
 # firebase caches
 .firebase
+.firebaserc
