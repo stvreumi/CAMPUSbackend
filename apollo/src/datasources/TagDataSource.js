@@ -1,6 +1,6 @@
 /** @module TagDataSource */
 const { DataSource } = require('apollo-datasource');
-const { FieldValue, FieldPath } = require('firebase-admin').firestore;
+const { FieldValue } = require('firebase-admin').firestore;
 
 const {
   getIdWithDataFromDocSnap,
@@ -61,9 +61,12 @@ class TagDataSource extends DataSource {
   async getAllUnarchivedTags(pageParams) {
     const query = this.tagDataCollectionReference
       .where('archived', '==', false)
-      .orderBy('lastUpdateTime', 'desc')
-      .orderBy(FieldPath.documentId());
-    const { data: tags, pageInfo } = await getPage(query, pageParams);
+      .orderBy('lastUpdateTime', 'desc');
+    const { data: tags, pageInfo } = await getPage(
+      query,
+      pageParams,
+      this.tagDataCollectionReference
+    );
     return { tags, ...pageInfo };
   }
 
@@ -91,14 +94,17 @@ class TagDataSource extends DataSource {
    * @returns {Promise<StatusPage>} The status data list from new to old
    */
   async getStatusHistory({ tagId, pageParams }) {
-    const docRef = await this.tagDataCollectionReference.doc(tagId);
+    const docRef = this.tagDataCollectionReference.doc(tagId);
 
     const query = await docRef
       .collection('status')
-      .orderBy('createTime', 'desc')
-      .orderBy(FieldPath.documentId());
+      .orderBy('createTime', 'desc');
 
-    const { data: statusList, pageInfo } = await getPage(query, pageParams);
+    const { data: statusList, pageInfo } = await getPage(
+      query,
+      pageParams,
+      docRef.collection('status')
+    );
 
     return { statusList, ...pageInfo };
   }
@@ -430,9 +436,12 @@ class TagDataSource extends DataSource {
   async getUserAddTagHistory({ uid, pageParams }) {
     const query = this.tagDataCollectionReference
       .where('createUserId', '==', uid)
-      .orderBy('createTime', 'desc')
-      .orderBy(FieldPath.documentId());
-    const { data: tags, pageInfo } = await getPage(query, pageParams);
+      .orderBy('createTime', 'desc');
+    const { data: tags, pageInfo } = await getPage(
+      query,
+      pageParams,
+      this.tagDataCollectionReference
+    );
 
     return { tags, ...pageInfo };
   }

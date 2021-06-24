@@ -6,8 +6,8 @@
     "gen_docs": "npx jsdoc2md -f ./src/* ./src/datasources/* localIndex.js > ../docs/graphql.md",
     "serve_docs": "npx docsify serve ../docs",
     "firestore": "firebase emulators:start --only firestore",
-    "test": "firebase emulators:exec \"jest --watch\" ",
-    "test-debug": "firebase emulators:exec \"jest --runInBand --watch\" "
+    "test": "firebase emulators:exec \"jest --watch\"  --only firestore ",
+    "test-debug": "firebase emulators:exec \"jest --runInBand --watch\"  --only firestore "
   },
   "engines": {
     "node": "14"
@@ -30,7 +30,6 @@
     "graphql-voyager": "^1.0.0-rc.29",
     "luxon": "^1.27.0",
     "request-promise": "^4.2.6",
-    "sharp": "^0.28.3",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
