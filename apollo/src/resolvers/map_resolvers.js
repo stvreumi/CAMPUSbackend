@@ -16,18 +16,22 @@ const tagResolvers = {
      * @param {*} __
      */
     createTime: async (tag, _, __) =>
-      DateTime.fromISO(tag.createTime.toDate().toISOString())
-        .setZone('UTC+8')
-        .toString(),
+      tag.createTime
+        ? DateTime.fromISO(tag.createTime.toDate().toISOString())
+            .setZone('UTC+8')
+            .toString()
+        : null,
     /**
      * @param {RawTagDocumentFields} tag
      * @param {*} _
      * @param {*} __
      */
     lastUpdateTime: async (tag, _, __) =>
-      DateTime.fromISO(tag.createTime.toDate().toISOString())
-        .setZone('UTC+8')
-        .toString(),
+      tag.lastUpdateTime
+        ? DateTime.fromISO(tag.lastUpdateTime.toDate().toISOString())
+            .setZone('UTC+8')
+            .toString()
+        : null,
     createUser: async (tag, _, __) => ({
       uid: tag.createUserId,
     }),
@@ -97,8 +101,10 @@ const userResolvers = {
 
 const coordinateResolvers = {
   Coordinate: {
-    latitude: async (coordinates, _, __) => coordinates.latitude.toString(),
-    longitude: async (coordinates, _, __) => coordinates.longitude.toString(),
+    latitude: async (coordinates, _, __) =>
+      coordinates ? coordinates.latitude.toString() : null,
+    longitude: async (coordinates, _, __) =>
+      coordinates ? coordinates.longitude.toString() : null,
   },
 };
 

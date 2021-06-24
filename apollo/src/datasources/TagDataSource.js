@@ -113,7 +113,6 @@ class TagDataSource extends DataSource {
    * @return {Promise<Status>} the latest status data
    */
   async getLatestStatusData({ tagId, userInfo }) {
-    const { uid } = userInfo;
     const tagDocRef = this.tagDataCollectionReference.doc(tagId);
 
     const { statusDocRef, ...latestStatusData } = await getLatestStatus(
@@ -126,17 +125,22 @@ class TagDataSource extends DataSource {
     }
 
     // check if user has upvote
-    const tagStatusUpVoteUserRef = statusDocRef
-      .collection('UpVoteUser')
-      .doc(uid);
-    const tagStatusUpVoteUserSnap = await tagStatusUpVoteUserRef.get();
+    let hasUpVote = null;
+    if (userInfo) {
+      const { uid } = userInfo;
+      const tagStatusUpVoteUserRef = statusDocRef
+        .collection('UpVoteUser')
+        .doc(uid);
+      const tagStatusUpVoteUserSnap = await tagStatusUpVoteUserRef.get();
+      // if this task is not 問題任務, return `hasUpVote` with null
+      const { numberOfUpVote } = latestStatusData;
+      hasUpVote =
+        numberOfUpVote !== null ? tagStatusUpVoteUserSnap.exists : null;
+    }
 
-    // if this task is not 問題任務, return `hasUpVote` with null
-    const { numberOfUpVote } = latestStatusData;
     return {
       ...latestStatusData,
-      hasUpVote:
-        numberOfUpVote !== null ? tagStatusUpVoteUserSnap.exists : null,
+      hasUpVote,
     };
   }
 

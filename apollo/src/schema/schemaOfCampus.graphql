@@ -35,6 +35,12 @@ type StatusPage implements Page {
   empty: Boolean!
 }
 
+type TagFieldsForSubscription {
+  changeType: String!
+  subAfter: String
+  tagContent: Tag!
+}
+
 type Category {
   "設施任務/問題任務/動態任務"
   missionName: String!

@@ -149,9 +149,33 @@ const mutationResolvers = {
   },
 };
 
+const subscriptionResolvers = {
+  Subscription: {
+    archivedThreshold: {
+      subscribe: (_, __, { pubsub }) =>
+        pubsub.asyncIterator(['archivedThreshold_change']),
+    },
+    tagChangeSubscription: {
+      // TODO
+      // It seems that we don't need to add timestamp. When the client
+      // connect and subscribe, it just receive the event happended after that.
+      // So the client should create connection to subscription before query
+      // to prevent when there is event occured in the query time?
+      // Still needed, or the snapshot would return every tags on every connection
+      // may need to rewrite the async iterator
+      // Write this comment to the notion.
+      // add a regex in the pubsub subscribe function, and add to the subscriptions
+      // using the event name
+      subscribe: (_, { subAfter }, { pubsub }) =>
+        pubsub.asyncIterator([`tagChangeSubscription_${subAfter}`]),
+    },
+  },
+};
+
 const resolvers = {
   ...queryResolvers,
   ...mutationResolvers,
+  ...subscriptionResolvers,
   ...tagResolvers,
   ...statusResolvers,
   ...userResolvers,

@@ -50,25 +50,29 @@ class CampusPubSub extends PubSubEngine {
    * @returns {Promise<number>}
    */
   async subscribe(triggerName, onMessage, _) {
-    //ISO string example 2011-10-05T14:48:00.000Z
-    const tagChangeSubscriptionEventPrefix = "tagChangeSubscription_";
-    if (!(triggerName in this.handlers) && !(triggerName.startsWith(tagChangeSubscriptionEventPrefix))) {
+    // ISO string example 2011-10-05T14:48:00.000Z
+    const tagChangeSubscriptionEventPrefix = 'tagChangeSubscription_';
+    if (
+      !(triggerName in this.handlers) &&
+      !triggerName.startsWith(tagChangeSubscriptionEventPrefix)
+    ) {
       throw new Error(
         `Cannot subscribe to topic/trigger-name ${triggerName} - no handlers`
       );
     }
     const subscriptionId = await this.getNextSubscriptionId();
-    if(triggerName.startsWith(tagChangeSubscriptionEventPrefix)) {
+    if (triggerName.startsWith(tagChangeSubscriptionEventPrefix)) {
       const handler = this.handlers.tagChangeSubscription;
-      const subAfter = triggerName.substr(tagChangeSubscriptionEventPrefix.length)
-      this.subscriptions.set(subscriptionId, handler(onMessage, {subAfter}));
+      const subAfter = triggerName.substr(
+        tagChangeSubscriptionEventPrefix.length
+      );
+      this.subscriptions.set(subscriptionId, handler(onMessage, { subAfter }));
       return;
     }
 
     // else
     const handler = this.handlers[triggerName];
     this.subscriptions.set(subscriptionId, handler(onMessage));
-    return;
   }
 
   /**

@@ -1,0 +1,11 @@
+type Subscription {
+  archivedThreshold: Int
+  tagChangeSubscription(
+    """
+    The tag content changing events occured after this timestamp would be monitor
+    and subscribe.
+    format: the number of milliseconds elapsed since January 1, 1970 00:00:00 UTC.
+    """
+    subAfter: String!
+  ): TagFieldsForSubscription!
+}

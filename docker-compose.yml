@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   emulator:
-    build: .
+    build: ./functions
     volumes:
       - .:/node_app/app
       - ./functions/package.json:/node_app/package.json
@@ -20,15 +20,16 @@ services:
       - "0.0.0.0:8080:8080"
     stdin_open: true
     tty: true
-  subscription:
-    image: node:12-alpine
+  apollo:
+    build: ./apollo/Dockerfile-testing
     volumes: 
-      - ./subscriptions:/node_app/app
-    env_file: ./subscriptions/compose.env
+      - ./apollo:/node_app/app
+      - ./apollo/package.json:/node_app/package.json
+      - ./apollo/package-lock.json:/node_app/package-lock.json
+      - no-used:/node_app/app/apollo/node_modules
+    env_file: ./apollo/compose.env
     ports:
-      - "8333:8333"
-    working_dir: /node_app/app
-    command: sh emulator-entry.sh
+      - "8333:8080"
 volumes:
   no-used:
   emulators:

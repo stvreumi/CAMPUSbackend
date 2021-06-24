@@ -1,7 +1,8 @@
-const { ApolloServer } = require('apollo-server-express');
+const { ApolloServer } = require('apollo-server');
 
 const typeDefs = require('./schema/schema');
 const resolvers = require('./resolvers/resolvers');
+const CampusPubSub = require('./CampusPubSub');
 /** dataSources */
 const TagDataSource = require('./datasources/TagDataSource');
 const StorageDataSource = require('./datasources/StorageDataSource');
@@ -52,6 +53,16 @@ const dataSourcesGenerator = admin => {
   });
 };
 
+const subscriptions = {
+  path: '/subscriptions',
+  onConnect: (connectionParams, webSocket, context) => {
+    console.log('Client connected');
+  },
+  onDisconnect: (webSocket, context) => {
+    console.log('Client disconnected');
+  },
+};
+
 /**
  * Apollo server generator(production/test)
  * @param {object} param
@@ -66,7 +77,9 @@ const dataSourcesGenerator = admin => {
 function apolloServerGenerator({
   test = false,
   introspection = true,
-  playground = true,
+  // https://github.com/apollographql/apollo-server/issues/5145
+  // make the subscription result scrollable
+  playground = { version: '1.7.40' },
   contextInTest = undefined,
 }) {
   const apolloServerInstanciator = (dataSources, context) =>
@@ -74,6 +87,7 @@ function apolloServerGenerator({
       typeDefs,
       resolvers,
       dataSources,
+      subscriptions,
       formatError: error => {
         console.log(error);
         return error;
@@ -85,14 +99,25 @@ function apolloServerGenerator({
 
   // context
   const contextInProduction =
-    dataSources =>
-    async ({ req }) => {
-      const userInfo = await dataSources().authDataSource.getUserInfoFromToken(
-        req
-      );
-      return {
-        userInfo,
-      };
+    (dataSources, firestore) =>
+    async ({ req, connection }) => {
+      const contextReturn = {};
+      if (connection) {
+        const pubsub = new CampusPubSub(firestore);
+        contextReturn.pubsub = pubsub;
+        contextReturn.dataSources = dataSources();
+      }
+
+      if (req) {
+        const { authorization } = req.headers;
+        const userInfo =
+          await dataSources().authDataSource.getUserInfoFromToken(
+            authorization
+          );
+        contextReturn.userInfo = userInfo;
+      }
+
+      return contextReturn;
     };
   if (test === true) {
     /**
@@ -114,7 +139,7 @@ function apolloServerGenerator({
     const dataSources = dataSourcesGenerator(admin);
     return apolloServerInstanciator(
       dataSources,
-      contextInProduction(dataSources)
+      contextInProduction(dataSources, admin.firestore())
     );
   };
   return productionServerGenerator;
