@@ -1,0 +1,53 @@
+name: apollo-graphql-deploy-to-gcp-cloud-run
+
+on:
+  push:
+    branches: 
+      - master
+    paths:
+      - 'apollo/**'
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Enter the name of this workflow trigger'
+        required: true
+
+env:
+  REGION: asia-east1
+  SERVICE: campus-apollo-graphql-server
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Into the repo
+      uses: actions/checkout@v2
+    # below steps reference from here
+    # https://github.com/google-github-actions/deploy-cloudrun/blob/main/.github/workflows/example-workflow.yaml
+    # https://cloud.google.com/community/tutorials/cicd-cloud-run-github-actions?hl=zh-tw
+
+    # setup cloud SDK is needed since it would need the credential to configure
+    # in the docker.
+    - name: Setup Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0.2.0
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true  # Set to true to authenticate the Cloud Run action
+    - name: Authorize Docker push
+      run: gcloud auth configure-docker
+    - name: Build and Push Container
+      # https://yaml-multiline.info/
+      # Keep newlines (literal), No newline at end (strip)
+      run: |-
+        docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} example-app/
+        docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
+    - name: Deploy to Cloud Run
+      id: deploy
+      uses: google-github-actions/deploy-cloudrun@main
+      with:
+        service: ${{ env.SERVICE }}
+        image: gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
+        region: ${{ env.REGION }}
+    
