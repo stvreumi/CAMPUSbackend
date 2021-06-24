@@ -11,10 +11,13 @@ const query = loadSchemaFromFile('query.graphql');
 
 const mutation = loadSchemaFromFile('mutation.graphql');
 
+const subscription = loadSchemaFromFile('subscription.graphql');
+
 const mergeSchema = `
   ${typeDefsOfCampus}
   ${query}
   ${mutation}
+  ${subscription}
 `;
 
 const typeDefs = gql`

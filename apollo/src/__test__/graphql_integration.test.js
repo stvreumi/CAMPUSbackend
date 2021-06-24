@@ -69,6 +69,7 @@ const testPaginate = async (
       .slice(0, -1)
       .reduce((parentObj, key) => parentObj[key] || null, obj);
   const lastCursor = await [3, 7].reduce(async (cursor, pageSize) => {
+    // the last return value by async function is a Prmoise, need to resolve
     const cursorResolve = await cursor;
     const { queryResult } = await graphQLQueryHelper(query, queryName, {
       pageParams: {

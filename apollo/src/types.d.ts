@@ -53,7 +53,6 @@ export interface Tag extends RawTagDocumentFields {
 export interface RawTagDocumentFields {
   id: string;
   locationName: string;
-  accessibility: number;
   category: Category;
   floor: number;
   coordinates: firestore.GeoPoint;

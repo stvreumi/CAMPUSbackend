@@ -1,11 +1,8 @@
 const { v4: uuidv4 } = require('uuid');
 const { ForbiddenError } = require('apollo-server');
-const { firestore } = require('firebase-admin');
 
-const { Timestamp, GeoPoint } = require('firebase-admin').firestore;
+const { Timestamp, GeoPoint, FieldValue } = require('firebase-admin').firestore;
 const { geohashForLocation } = require('geofire-common');
-
-const { FieldValue } = firestore;
 
 const maxPageSize = 30;
 const defaultPageSize = 10;
@@ -22,6 +19,7 @@ function generateFileName(imageNumber, tagID) {
  * @typedef {import('../types').PageParams} PageParams
  * @typedef {import('firebase-admin').firestore.QueryDocumentSnapshot} QueryDocumentSnapshot
  * @typedef {import('firebase-admin').firestore.Query} Query
+ * @typedef {import('firebase-admin').firestore.CollectionReference} TagCollectionReference
  */
 
 /**
@@ -132,45 +130,32 @@ function checkUserLogIn(logIn) {
 }
 
 /**
- *
- * @param {number | string} mills
- * @returns {Timestamp}
- */
-const getFirebaseTimestamp = mills => {
-  if (typeof mills === 'string') {
-    return Timestamp.fromMillis(parseInt(mills, 10));
-  }
-  return Timestamp.fromMillis(mills);
-};
-
-/**
  * The cursor format is : "${timeMillis},{documentId}"
  * @param {Query} query
  * @param {(doc: QueryDocumentSnapshot) => object} dataHandleFunction
  * @param {PageParams} pageParams
+ * @param {TagCollectionReference} collectionReference
  */
-const queryOrdeyByTimestampWithPageParams = async (
+const queryOrdeyWithPageParams = async (
   query,
   dataHandleFunction,
-  pageParams = {}
+  pageParams = {},
+  collectionReference
 ) => {
   const { pageSize = defaultPageSize, cursor = '' } = pageParams;
-  const cursorRegex = /\d+,\w+/g;
+  const cursorRegex = /\w+/g;
   const hasCursor = cursorRegex.test(cursor);
-
-  const [timeCursor, idCursor] = hasCursor ? cursor.split(',') : [null, null];
+  const cursorSnapshot = hasCursor
+    ? await collectionReference.doc(cursor).get()
+    : null;
 
   // limit the the lenth of the data in a fetch
   const queryPageSize = pageSize > maxPageSize ? maxPageSize : pageSize;
 
   const data = [];
 
-  const cursorTimestamp = hasCursor ? getFirebaseTimestamp(timeCursor) : null;
   const querySnapshot = hasCursor
-    ? await query
-        .startAfter(cursorTimestamp, idCursor)
-        .limit(queryPageSize)
-        .get()
+    ? await query.startAfter(cursorSnapshot).limit(queryPageSize).get()
     : await query.limit(queryPageSize).get();
   querySnapshot.forEach(doc => {
     data.push(dataHandleFunction(doc));
@@ -186,31 +171,28 @@ const queryOrdeyByTimestampWithPageParams = async (
  *
  * @param {Query} query
  * @param {PageParams} pageParams
+ * @param {TagCollectionReference} collectionReference
  */
-const getPage = async (query, pageParams) => {
+const getPage = async (query, pageParams, collectionReference) => {
   /**
    *
    * @param {Timestamp} timestamp
    */
-  const getMillsFromTimestamp = timestamp => timestamp.toMillis();
   const dataHandleFunction = getIdWithDataFromDocSnap;
 
-  const { data, empty } = await queryOrdeyByTimestampWithPageParams(
+  const { data, empty } = await queryOrdeyWithPageParams(
     query,
     dataHandleFunction,
-    pageParams
+    pageParams,
+    collectionReference
   );
 
-  const { createTime: cursorCreateTime, id: cursorId } = !empty
-    ? data[data.length - 1]
-    : {};
+  const { id: cursorId } = !empty ? data[data.length - 1] : {};
   return {
     data,
     pageInfo: {
       empty,
-      cursor: !empty
-        ? `${getMillsFromTimestamp(cursorCreateTime)},${cursorId}`
-        : '',
+      cursor: !empty ? `${cursorId}` : '',
     },
   };
 };
@@ -220,7 +202,6 @@ module.exports = {
   getLatestStatus,
   getIdWithDataFromDocSnap,
   checkUserLogIn,
-  queryOrdeyByTimestampWithPageParams,
   generateTagDataToStoreInFirestore,
   getPage,
 };

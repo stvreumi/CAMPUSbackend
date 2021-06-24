@@ -32,12 +32,10 @@ class AuthDataSource extends DataSource {
 
   /**
    * Verify token from reqeust header and return user object
-   * @param {import("express").Request} req request object from express
+   * @param {string} authorization request object from express
    * @returns {Promise<DecodedUserInfoFromAuthHeader>}
    */
-  async getUserInfoFromToken(req) {
-    const { authorization } = req.headers;
-
+  async getUserInfoFromToken(authorization) {
     if (authorization) {
       const token = authorization.replace('Bearer ', '');
       try {

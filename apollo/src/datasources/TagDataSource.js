@@ -1,6 +1,6 @@
 /** @module TagDataSource */
 const { DataSource } = require('apollo-datasource');
-const { FieldValue, FieldPath } = require('firebase-admin').firestore;
+const { FieldValue } = require('firebase-admin').firestore;
 
 const {
   getIdWithDataFromDocSnap,
@@ -61,9 +61,12 @@ class TagDataSource extends DataSource {
   async getAllUnarchivedTags(pageParams) {
     const query = this.tagDataCollectionReference
       .where('archived', '==', false)
-      .orderBy('lastUpdateTime', 'desc')
-      .orderBy(FieldPath.documentId());
-    const { data: tags, pageInfo } = await getPage(query, pageParams);
+      .orderBy('lastUpdateTime', 'desc');
+    const { data: tags, pageInfo } = await getPage(
+      query,
+      pageParams,
+      this.tagDataCollectionReference
+    );
     return { tags, ...pageInfo };
   }
 
@@ -91,14 +94,17 @@ class TagDataSource extends DataSource {
    * @returns {Promise<StatusPage>} The status data list from new to old
    */
   async getStatusHistory({ tagId, pageParams }) {
-    const docRef = await this.tagDataCollectionReference.doc(tagId);
+    const docRef = this.tagDataCollectionReference.doc(tagId);
 
     const query = await docRef
       .collection('status')
-      .orderBy('createTime', 'desc')
-      .orderBy(FieldPath.documentId());
+      .orderBy('createTime', 'desc');
 
-    const { data: statusList, pageInfo } = await getPage(query, pageParams);
+    const { data: statusList, pageInfo } = await getPage(
+      query,
+      pageParams,
+      docRef.collection('status')
+    );
 
     return { statusList, ...pageInfo };
   }
@@ -113,7 +119,6 @@ class TagDataSource extends DataSource {
    * @return {Promise<Status>} the latest status data
    */
   async getLatestStatusData({ tagId, userInfo }) {
-    const { uid } = userInfo;
     const tagDocRef = this.tagDataCollectionReference.doc(tagId);
 
     const { statusDocRef, ...latestStatusData } = await getLatestStatus(
@@ -126,17 +131,22 @@ class TagDataSource extends DataSource {
     }
 
     // check if user has upvote
-    const tagStatusUpVoteUserRef = statusDocRef
-      .collection('UpVoteUser')
-      .doc(uid);
-    const tagStatusUpVoteUserSnap = await tagStatusUpVoteUserRef.get();
+    let hasUpVote = null;
+    if (userInfo) {
+      const { uid } = userInfo;
+      const tagStatusUpVoteUserRef = statusDocRef
+        .collection('UpVoteUser')
+        .doc(uid);
+      const tagStatusUpVoteUserSnap = await tagStatusUpVoteUserRef.get();
+      // if this task is not 問題任務, return `hasUpVote` with null
+      const { numberOfUpVote } = latestStatusData;
+      hasUpVote =
+        numberOfUpVote !== null ? tagStatusUpVoteUserSnap.exists : null;
+    }
 
-    // if this task is not 問題任務, return `hasUpVote` with null
-    const { numberOfUpVote } = latestStatusData;
     return {
       ...latestStatusData,
-      hasUpVote:
-        numberOfUpVote !== null ? tagStatusUpVoteUserSnap.exists : null,
+      hasUpVote,
     };
   }
 
@@ -300,6 +310,11 @@ class TagDataSource extends DataSource {
       .collection('status')
       .add(statusData);
 
+    // also update the field `lastUpdateTime` in the tag
+    await this.tagDataCollectionReference
+      .doc(tagId)
+      .update({ lastUpdateTime: FieldValue.serverTimestamp() });
+
     return (await docRef.get()).data();
   }
 
@@ -421,9 +436,12 @@ class TagDataSource extends DataSource {
   async getUserAddTagHistory({ uid, pageParams }) {
     const query = this.tagDataCollectionReference
       .where('createUserId', '==', uid)
-      .orderBy('createTime', 'desc')
-      .orderBy(FieldPath.documentId());
-    const { data: tags, pageInfo } = await getPage(query, pageParams);
+      .orderBy('createTime', 'desc');
+    const { data: tags, pageInfo } = await getPage(
+      query,
+      pageParams,
+      this.tagDataCollectionReference
+    );
 
     return { tags, ...pageInfo };
   }

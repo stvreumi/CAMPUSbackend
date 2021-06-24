@@ -35,5 +35,9 @@ credentials.csv
 # environment files
 .env
 
-# firebase caches
+# firebase caches, logs
 .firebase
+.firebaserc
+emulator-data
+firestore-debug.log
+ui-debug.log
