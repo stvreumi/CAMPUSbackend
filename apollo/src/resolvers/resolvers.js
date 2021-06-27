@@ -1,3 +1,4 @@
+const { PubSub } = require('apollo-server');
 const {
   tagResolvers,
   statusResolvers,
@@ -11,6 +12,7 @@ const {
  * @typedef {import('../types').AddTagDataInput} AddTagDataInput
  * @typedef {import('../types').UpdateTagDataInput} UpdateTagDataInput
  * @typedef {import('../types').PageParams} PageParams
+ * @typedef {import(../CampusPubSub)} PubSub
  */
 
 const queryResolvers = {
@@ -156,16 +158,13 @@ const subscriptionResolvers = {
         pubsub.asyncIterator(['archivedThreshold_change']),
     },
     tagChangeSubscription: {
-      // TODO
-      // It seems that we don't need to add timestamp. When the client
-      // connect and subscribe, it just receive the event happended after that.
-      // So the client should create connection to subscription before query
-      // to prevent when there is event occured in the query time?
-      // Still needed, or the snapshot would return every tags on every connection
-      // may need to rewrite the async iterator
-      // Write this comment to the notion.
-      // add a regex in the pubsub subscribe function, and add to the subscriptions
-      // using the event name
+      /**
+       * Subscribe to the events occured after the unix timestamp (millseconds)
+       * @param {*} _
+       * @param {{subAfter: string}}
+       * @param {{pubsub: PubSub}}
+       * @returns
+       */
       subscribe: (_, { subAfter }, { pubsub }) =>
         pubsub.asyncIterator([`tagChangeSubscription_${subAfter}`]),
     },
