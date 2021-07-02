@@ -16,6 +16,7 @@ const { upVoteActionName, cancelUpVoteActionName } = require('./constants');
 /**
  * @typedef {import('../types').RawTagDocumentFields} RawTagDocumentFields
  * @typedef {import('firebase-admin').firestore.CollectionReference<RawTagDocumentFields>} TagCollectionReference
+ * @typedef {import('firebase-admin').firestore.DocumentReference} DocumentReference
  * @typedef {import('firebase-admin').firestore.Firestore} Firestore
  * @typedef {import('../types').DecodedUserInfoFromAuthHeader} DecodedUserInfoFromAuthHeader
  * @typedef {import('../types').Status} Status
@@ -34,13 +35,20 @@ class TagDataSource extends DataSource {
    * @param {TagCollectionReference} tagDataCollectionReference
    * @param {number} archivedThreshold
    * @param {Firestore} firestore
+   * @param {import('events').EventEmitter} eventEmitter
    */
-  constructor(tagDataCollectionReference, archivedThreshold, firestore) {
+  constructor(
+    tagDataCollectionReference,
+    archivedThreshold,
+    firestore,
+    eventEmitter
+  ) {
     super();
 
     this.tagDataCollectionReference = tagDataCollectionReference;
     this.archivedThreshold = archivedThreshold;
     this.firestore = firestore;
+    this.eventEmitter = eventEmitter;
   }
 
   /**
@@ -74,7 +82,7 @@ class TagDataSource extends DataSource {
    * get tag detail from collection `tag_detail`
    * @async
    * @param {object} param
-   * @param {string} param.id tagId of the document with detailed info.
+   * @param {string} param.tagId tagId of the document with detailed info.
    * @returns {Promise<RawTagDocumentFields>|null}
    */
   async getTagData({ tagId }) {
@@ -178,7 +186,6 @@ class TagDataSource extends DataSource {
         statusName,
         description,
         userInfo,
-        hasNumberOfUpVote: missionName === '問題任務',
       });
 
       return getIdWithDataFromDocSnap(await refAfterTagAdd.get());
@@ -201,7 +208,6 @@ class TagDataSource extends DataSource {
           statusName,
           description: '(修改任務內容)',
           userInfo,
-          hasNumberOfUpVote: missionName === '問題任務',
         });
       }
 
@@ -285,19 +291,12 @@ class TagDataSource extends DataSource {
    * @param {string} params.statusName the latest status name we want to update
    * @param {string} params.description
    * @param {DecodedUserInfoFromAuthHeader} params.userInfo
-   * @param {boolean} params.hasNumberOfUpVote
    * @return {Promise<Status>} the latest status data
    */
-  async updateTagStatus({
-    tagId,
-    statusName,
-    description,
-    userInfo,
-    hasNumberOfUpVote = false,
-  }) {
+  async updateTagStatus({ tagId, statusName, description, userInfo }) {
     const { logIn, uid } = userInfo;
     checkUserLogIn(logIn);
-
+    const hasNumberOfUpVote = statusName === '已解決';
     const statusData = {
       statusName,
       description,
@@ -396,10 +395,13 @@ class TagDataSource extends DataSource {
       missionName === '問題任務' &&
       numberOfUpVote > (await this.archivedThreshold)
     ) {
+      const docRef = this.tagDataCollectionReference.doc(tagId);
       // archived tag
-      await this.tagDataCollectionReference
-        .doc(tagId)
-        .update({ archived: true });
+      await docRef.update({ archived: true });
+
+      // event: archived
+      const idWithResultData = getIdWithDataFromDocSnap(await docRef.get());
+      await this.triggerEvent('archived', idWithResultData);
     }
   }
 
@@ -444,6 +446,15 @@ class TagDataSource extends DataSource {
     );
 
     return { tags, ...pageInfo };
+  }
+
+  /**
+   *
+   * @param {string} eventName
+   * @param {RawTagDocumentFields} tagData
+   */
+  async triggerEvent(eventName, tagData) {
+    this.eventEmitter.emit(eventName, tagData);
   }
 } // class TagDataSource
 

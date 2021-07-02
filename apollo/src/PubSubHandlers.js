@@ -3,9 +3,10 @@ const { DateTime } = require('luxon');
 /**
  *
  * @param {import('firebase-admin').firestore.Firestore} firestore
+ * @param {import('events').EventEmitter} eventEmitter
  * @returns
  */
-const PubSubHandlers = firestore => ({
+const PubSubHandlers = (firestore, eventEmitter) => ({
   archivedThreshold_change: onMessage =>
     firestore
       .collection('setting')
@@ -17,39 +18,22 @@ const PubSubHandlers = firestore => ({
           });
         }
       }),
-  tagChangeSubscription: (onMessage, { subAfter }) => {
-    let firestoreTimestamp;
-    const millsOfSubAfter = parseInt(subAfter, 10);
-    try {
-      firestoreTimestamp = Timestamp.fromMillis(millsOfSubAfter);
-    } catch (e) {
-      throw Error('The timestamp format is not valid');
-    }
-
-    return firestore
-      .collection('tagData')
-      .where('archived', '==', false)
-      .orderBy('lastUpdateTime')
-      .startAfter(firestoreTimestamp)
-      .onSnapshot(querySnapshot => {
-        querySnapshot.docChanges().forEach(change => {
-          const changeType = change.type;
-          const data = change.doc.data();
-          const { id } = change.doc;
-          onMessage({
-            tagChangeSubscription: {
-              changeType,
-              subAfter: DateTime.fromMillis(millsOfSubAfter)
-                .setZone('UTC+8')
-                .toString(),
-              tagContent: {
-                id,
-                ...data,
-              },
-            },
-          });
-        });
-      });
+  tagChangeSubscription: onMessage => {
+    const listenOnTagChangeEvents = changeType => {
+      eventEmitter.on(changeType, idWithResultData =>
+        onMessage({
+          tagChangeSubscription: {
+            changeType,
+            subAfter: null,
+            tagContent: idWithResultData,
+          },
+        })
+      );
+    };
+    // register listening function
+    listenOnTagChangeEvents('added');
+    listenOnTagChangeEvents('updated');
+    listenOnTagChangeEvents('archived');
   },
 });
 

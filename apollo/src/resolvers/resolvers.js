@@ -71,6 +71,8 @@ const mutationResolvers = {
           tagId: tag.id,
         })
       );
+      // event: added
+      await dataSources.tagDataSource.triggerEvent('added', tag);
       return { tag, imageUploadNumber, imageUploadUrls };
     },
     /**
@@ -86,6 +88,8 @@ const mutationResolvers = {
         data,
         userInfo,
       });
+      // event: updated
+      await dataSources.tagDataSource.triggerEvent('updated', tag);
       return {
         tag,
         imageUploadNumber,
@@ -109,14 +113,19 @@ const mutationResolvers = {
       _,
       { tagId, statusName, description, hasNumberOfUpVote = false },
       { dataSources, userInfo }
-    ) =>
-      dataSources.tagDataSource.updateTagStatus({
+    ) => {
+      const updatedStatus = dataSources.tagDataSource.updateTagStatus({
         tagId,
         statusName,
         description,
         userInfo,
         hasNumberOfUpVote,
-      }),
+      });
+      // event: updated
+      const tag = dataSources.tagDataSource.getTagData({ tagId });
+      await dataSources.tagDataSource.triggerEvent('updated', tag);
+      return updatedStatus;
+    },
     /**
      *
      * @param {*} _
@@ -161,12 +170,12 @@ const subscriptionResolvers = {
       /**
        * Subscribe to the events occured after the unix timestamp (millseconds)
        * @param {*} _
-       * @param {{subAfter: string}}
+       * @param {*} __
        * @param {{pubsub: PubSub}}
        * @returns
        */
-      subscribe: (_, { subAfter }, { pubsub }) =>
-        pubsub.asyncIterator([`tagChangeSubscription_${subAfter}`]),
+      subscribe: (_, __, { pubsub }) =>
+        pubsub.asyncIterator(['tagChangeSubscription']),
     },
   },
 };
