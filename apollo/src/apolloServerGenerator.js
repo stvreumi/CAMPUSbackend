@@ -1,4 +1,5 @@
 const { ApolloServer } = require('apollo-server');
+const EventEmitter = require('events');
 
 const typeDefs = require('./schema/schema');
 const resolvers = require('./resolvers/resolvers');
@@ -13,11 +14,13 @@ const UserDataSource = require('./datasources/UserDataSource');
  * @typedef {import('firebase-admin')} firebaseAdmin
  */
 
+const campusEventEmitter = new EventEmitter();
+
 /**
  *
  * @param {firebaseAdmin} admin
  */
-const dataSourcesGenerator = admin => {
+function dataSourcesGenerator(admin) {
   const firestore = admin.firestore();
   let archivedThreshold = 10;
   // the return function is the unsubscriber
@@ -31,7 +34,6 @@ const dataSourcesGenerator = admin => {
     });
   const firebaseServiceReference = {
     tagDataCollectionRef: firestore.collection('tagData'),
-    runTransaction: firestore.runTransaction,
     userCollectionRef: firestore.collection('user'),
     auth: admin.auth(),
     bucket: admin.storage().bucket(),
@@ -42,7 +44,8 @@ const dataSourcesGenerator = admin => {
     tagDataSource: new TagDataSource(
       firebaseServiceReference.tagDataCollectionRef,
       archivedThreshold,
-      firestore
+      firestore,
+      campusEventEmitter
     ),
     userDataSource: new UserDataSource(
       firebaseServiceReference.userCollectionRef
@@ -51,7 +54,7 @@ const dataSourcesGenerator = admin => {
     storageDataSource: new StorageDataSource(firebaseServiceReference.bucket),
     authDataSource: new AuthDataSource(firebaseServiceReference.auth),
   });
-};
+}
 
 const subscriptions = {
   path: '/subscriptions',
@@ -62,6 +65,56 @@ const subscriptions = {
     console.log('Client disconnected');
   },
 };
+
+/**
+ *
+ * @param {Function} dataSources
+ * @param {Function} context
+ * @param {boolean} introspection
+ * @param {object} playground
+ * @returns
+ */
+function apolloServerInstanciator(
+  dataSources,
+  context,
+  introspection,
+  playground
+) {
+  return new ApolloServer({
+    typeDefs,
+    resolvers,
+    dataSources,
+    subscriptions,
+    formatError: error => {
+      console.log(error);
+      return error;
+    },
+    context,
+    introspection,
+    playground,
+  });
+}
+
+function contextInProduction(dataSources, firestore) {
+  const pubsub = new CampusPubSub(firestore, campusEventEmitter);
+  return async ({ req, connection }) => {
+    const contextReturn = {};
+    if (connection) {
+      contextReturn.pubsub = pubsub;
+      contextReturn.dataSources = dataSources();
+    }
+
+    if (req) {
+      const { authorization } = req.headers;
+      const userInfo = await dataSources().authDataSource.getUserInfoFromToken(
+        authorization
+      );
+      contextReturn.userInfo = userInfo;
+    }
+
+    return contextReturn;
+  };
+}
 
 /**
  * Apollo server generator(production/test)
@@ -82,43 +135,6 @@ function apolloServerGenerator({
   playground = { version: '1.7.40' },
   contextInTest = undefined,
 }) {
-  const apolloServerInstanciator = (dataSources, context) =>
-    new ApolloServer({
-      typeDefs,
-      resolvers,
-      dataSources,
-      subscriptions,
-      formatError: error => {
-        console.log(error);
-        return error;
-      },
-      context,
-      introspection,
-      playground,
-    });
-
-  // context
-  const contextInProduction =
-    (dataSources, firestore) =>
-    async ({ req, connection }) => {
-      const contextReturn = {};
-      if (connection) {
-        const pubsub = new CampusPubSub(firestore);
-        contextReturn.pubsub = pubsub;
-        contextReturn.dataSources = dataSources();
-      }
-
-      if (req) {
-        const { authorization } = req.headers;
-        const userInfo =
-          await dataSources().authDataSource.getUserInfoFromToken(
-            authorization
-          );
-        contextReturn.userInfo = userInfo;
-      }
-
-      return contextReturn;
-    };
   if (test === true) {
     /**
      * Test server
@@ -127,7 +143,12 @@ function apolloServerGenerator({
      */
     const testServerGenerator = ({ admin, logIn }) => {
       const dataSources = dataSourcesGenerator(admin);
-      return apolloServerInstanciator(dataSources, contextInTest(logIn));
+      return apolloServerInstanciator(
+        dataSources,
+        contextInTest(logIn),
+        introspection,
+        playground
+      );
     };
     return testServerGenerator;
   }
@@ -139,7 +160,9 @@ function apolloServerGenerator({
     const dataSources = dataSourcesGenerator(admin);
     return apolloServerInstanciator(
       dataSources,
-      contextInProduction(dataSources, admin.firestore())
+      contextInProduction(dataSources, admin.firestore()),
+      introspection,
+      playground
     );
   };
   return productionServerGenerator;

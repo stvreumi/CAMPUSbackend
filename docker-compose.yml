@@ -21,7 +21,9 @@ services:
     stdin_open: true
     tty: true
   apollo:
-    build: ./apollo/Dockerfile-testing
+    build: 
+      context: ./apollo
+      dockerfile: Dockerfile-testing
     volumes: 
       - ./apollo:/node_app/app
       - ./apollo/package.json:/node_app/package.json

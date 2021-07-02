@@ -7,6 +7,8 @@ const admin = require("firebase-admin");
 const uploadImageProcessingImplementation = require("./functionTriggers/uploadImageProcessing");
 const deleteImagesTriggerImplementation = require("./functionTriggers/deleteImagesTrigger");
 
+admin.initializeApp();
+
 exports.uploadImageProcessing = functions.storage
   .object()
   .onFinalize(

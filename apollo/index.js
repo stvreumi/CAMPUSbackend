@@ -24,4 +24,6 @@ const apolloServerAdmin = apolloServer({ admin });
  */
 apolloServerAdmin.listen({ port: 8080 }).then(({ url }) => {
   console.log(`🚀 Server ready at ${url}`);
+  console.log(`if you are in the docker dev environment, please visit http://localhost:8333
+or see the config in the docker-compose.yml`);
 });

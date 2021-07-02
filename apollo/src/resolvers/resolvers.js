@@ -1,3 +1,4 @@
+const { PubSub } = require('apollo-server');
 const {
   tagResolvers,
   statusResolvers,
@@ -11,6 +12,7 @@ const {
  * @typedef {import('../types').AddTagDataInput} AddTagDataInput
  * @typedef {import('../types').UpdateTagDataInput} UpdateTagDataInput
  * @typedef {import('../types').PageParams} PageParams
+ * @typedef {import(../CampusPubSub)} PubSub
  */
 
 const queryResolvers = {
@@ -69,6 +71,8 @@ const mutationResolvers = {
           tagId: tag.id,
         })
       );
+      // event: added
+      await dataSources.tagDataSource.triggerEvent('added', tag);
       return { tag, imageUploadNumber, imageUploadUrls };
     },
     /**
@@ -84,6 +88,8 @@ const mutationResolvers = {
         data,
         userInfo,
       });
+      // event: updated
+      await dataSources.tagDataSource.triggerEvent('updated', tag);
       return {
         tag,
         imageUploadNumber,
@@ -107,14 +113,19 @@ const mutationResolvers = {
       _,
       { tagId, statusName, description, hasNumberOfUpVote = false },
       { dataSources, userInfo }
-    ) =>
-      dataSources.tagDataSource.updateTagStatus({
+    ) => {
+      const updatedStatus = dataSources.tagDataSource.updateTagStatus({
         tagId,
         statusName,
         description,
         userInfo,
         hasNumberOfUpVote,
-      }),
+      });
+      // event: updated
+      const tag = dataSources.tagDataSource.getTagData({ tagId });
+      await dataSources.tagDataSource.triggerEvent('updated', tag);
+      return updatedStatus;
+    },
     /**
      *
      * @param {*} _
@@ -156,18 +167,15 @@ const subscriptionResolvers = {
         pubsub.asyncIterator(['archivedThreshold_change']),
     },
     tagChangeSubscription: {
-      // TODO
-      // It seems that we don't need to add timestamp. When the client
-      // connect and subscribe, it just receive the event happended after that.
-      // So the client should create connection to subscription before query
-      // to prevent when there is event occured in the query time?
-      // Still needed, or the snapshot would return every tags on every connection
-      // may need to rewrite the async iterator
-      // Write this comment to the notion.
-      // add a regex in the pubsub subscribe function, and add to the subscriptions
-      // using the event name
-      subscribe: (_, { subAfter }, { pubsub }) =>
-        pubsub.asyncIterator([`tagChangeSubscription_${subAfter}`]),
+      /**
+       * Subscribe to the events occured after the unix timestamp (millseconds)
+       * @param {*} _
+       * @param {*} __
+       * @param {{pubsub: PubSub}}
+       * @returns
+       */
+      subscribe: (_, __, { pubsub }) =>
+        pubsub.asyncIterator(['tagChangeSubscription']),
     },
   },
 };
