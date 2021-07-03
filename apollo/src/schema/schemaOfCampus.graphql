@@ -44,7 +44,6 @@ type TagFieldsForSubscription {
       threshold.  
   """
   changeType: String!
-  subAfter: String
   tagContent: Tag!
 }
 
