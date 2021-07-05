@@ -24,7 +24,6 @@ const PubSubHandlers = (firestore, eventEmitter) => ({
         onMessage({
           tagChangeSubscription: {
             changeType,
-            subAfter: null,
             tagContent: idWithResultData,
           },
         })
