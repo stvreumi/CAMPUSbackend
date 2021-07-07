@@ -99,9 +99,11 @@ const userResolvers = {
      * @param {*} _
      * @param {ResolverArgsInfo} info
      */
-    email: async (_, __, { dataSources, userInfo }) => {
-      const { uid, logIn } = userInfo;
-      return logIn ? dataSources.authDataSource.getUserEmail({ uid }) : null;
+    email: async ({ uid }, __, { dataSources, userInfo }) => {
+      const { uid: logInUserUid, logIn } = userInfo;
+      return logIn && logInUserUid === uid
+        ? dataSources.authDataSource.getUserEmail({ uid })
+        : null;
     },
     /**
      * @param {{uid: string}} param

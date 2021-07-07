@@ -22,7 +22,6 @@ class AuthDataSource extends DataSource {
 
     // for user dataloader
     this.userDataloader = new DataLoader(async uids => {
-      console.log(uids);
       const { users, notFound } = await this.auth.getUsers(uids);
       const userData = {};
       users.forEach(user => {
