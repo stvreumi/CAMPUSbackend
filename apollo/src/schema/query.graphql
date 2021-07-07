@@ -6,4 +6,5 @@ type Query {
   hasReadGuide: Boolean!
   "問題任務 archived threshold"
   archivedThreshold: Int!
+  getUserData(uid: ID!): User
 }

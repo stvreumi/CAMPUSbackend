@@ -1,5 +1,6 @@
 /** @module UserDataSource */
 const { DataSource } = require('apollo-datasource');
+const { FieldValue } = require('firebase-admin').firestore;
 const { checkUserLogIn } = require('./firebaseUtils');
 
 // used for type annotation
@@ -66,20 +67,50 @@ class UserDataSource extends DataSource {
 
     const userDocRef = this.userCollectionRef.doc(uid);
 
-    const doc = await userDocRef.get();
+    await userDocRef.set(
+      {
+        hasReadGuide: true,
+      },
+      { merge: true }
+    );
+    return true;
+  }
 
-    if (!doc.exists) {
+  /**
+   *
+   * @param {{uid: string}} param
+   * @returns {Number}
+   */
+  async getUserAddTagNumber({ uid }) {
+    const docSnapshot = await this.userCollectionRef.doc(uid).get();
+    if (!docSnapshot.exists) return null;
+
+    const { userAddTagNumber } = docSnapshot.data();
+    if (!userAddTagNumber) return 0;
+    return userAddTagNumber;
+  }
+
+  /**
+   *
+   * @param {{uid: string, action: string}} param
+   */
+  async updateUserAddTagNumber({ uid, action }) {
+    const userDocRef = this.userCollectionRef.doc(uid);
+    if (action === 'increment') {
       await userDocRef.set(
-        {
-          hasReadGuide: true,
-        },
+        { userAddTagNumber: FieldValue.increment(1) },
         { merge: true }
       );
-
-      return true;
     }
-
-    return false;
+    // Currently, the decrement function would not be used.
+    // When a tag is deleted, the firebase function would be triggered and decrement
+    // related userAddTagNumber.
+    if (action === 'decrement') {
+      await userDocRef.set(
+        { userAddTagNumber: FieldValue.increment(-1) },
+        { merge: true }
+      );
+    }
   }
 } // class UserDataSource
 

@@ -178,9 +178,7 @@ class TagDataSource extends DataSource {
       // add tagData to server
       const refAfterTagAdd = await this.tagDataCollectionReference.add(tagData);
 
-      // add tag default status, need to use original CollectionReference
       const { id: newAddedTagId } = refAfterTagAdd;
-      const { missionName } = data.category;
       await this.updateTagStatus({
         tagId: newAddedTagId,
         statusName,
@@ -202,7 +200,6 @@ class TagDataSource extends DataSource {
             'You need to provide statusName if you want to change category'
           );
         }
-        const { missionName } = data.category;
         await this.updateTagStatus({
           tagId,
           statusName,

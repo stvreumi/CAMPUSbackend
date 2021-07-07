@@ -74,8 +74,10 @@ type Status {
 type User {
   uid: ID!
   displayName: String
-  "only available to user itself?need authorization mechanism"
+  photoURL: String
+  "only available when user is login"
   email: String
+  userAddTagNumber: Int
 }
 
 type Coordinate {

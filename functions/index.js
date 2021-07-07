@@ -5,7 +5,7 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 
 const uploadImageProcessingImplementation = require("./functionTriggers/uploadImageProcessing");
-const deleteImagesTriggerImplementation = require("./functionTriggers/deleteImagesTrigger");
+const deleteTagTriggerImplementation = require("./functionTriggers/deleteTagTrigger");
 
 admin.initializeApp();
 
@@ -14,8 +14,8 @@ exports.uploadImageProcessing = functions.storage
   .onFinalize(
     async (object) => await uploadImageProcessingImplementation(admin, object)
   );
-exports.deleteImagesTrigger = functions.firestore
+exports.deleteTagTrigger = functions.firestore
   .document("tagData/{tagId}")
   .onDelete(async (snap, _) => {
-    await deleteImagesTriggerImplementation(admin, snap);
+    await deleteTagTriggerImplementation(admin, snap);
   });

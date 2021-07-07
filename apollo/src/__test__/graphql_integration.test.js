@@ -13,8 +13,10 @@ const {
   fakeTagData,
   mockFirebaseAdmin,
   addFakeDataToFirestore,
-  fakeUserInfo,
+  fakeUserRecord,
   clearFirestoreDatabase,
+  clearAllAuthAccounts,
+  addTestAccountToAuthEmulator,
 } = require('./testUtils');
 
 /**
@@ -110,14 +112,23 @@ describe('test graphql query', () => {
   let firestore;
   let fakeTagId;
   let graphQLQueryHelper;
+  let userInfoAfterAccountCreated;
+  let mutateClient;
   beforeAll(async () => {
+    await clearAllAuthAccounts(testProjectId);
     // set up firebase admin
     const admin = mockFirebaseAdmin(testProjectId);
+    const uid = await addTestAccountToAuthEmulator(admin.auth());
+    userInfoAfterAccountCreated = { uid, logIn: true };
     dataSources = dataSourcesGenerator(admin);
 
     // set up apollo server and test client
-    const server = apolloServer({ admin, logIn: true });
-    const { query } = createTestClient(server);
+    const server = apolloServer({
+      admin,
+      userInfo: userInfoAfterAccountCreated,
+    });
+    const { query, mutate } = createTestClient(server);
+    mutateClient = mutate;
 
     // set up firestore instance
     firestore = admin.firestore();
@@ -127,12 +138,13 @@ describe('test graphql query', () => {
   });
   afterAll(async () => {
     await Promise.all(firebase.apps().map(app => app.delete()));
+    await clearAllAuthAccounts(testProjectId);
   });
   beforeEach(async () => {
     await clearFirestoreDatabase(testProjectId);
 
     // add data
-    const response = await addFakeDataToFirestore(dataSources);
+    const response = await addFakeDataToFirestore(mutateClient);
     fakeTagId = response.tag.id;
   });
 
@@ -241,8 +253,8 @@ describe('test graphql query', () => {
       createTime: expect.stringMatching(timestampStringRegex),
       lastUpdateTime: expect.stringMatching(timestampStringRegex),
       createUser: {
-        uid: fakeUserInfo.uid,
-        displayName: fakeUserInfo.displayName,
+        uid: userInfoAfterAccountCreated.uid,
+        displayName: fakeUserRecord.displayName,
       },
       imageUrl: [expect.any(String)],
       floor: expect.any(Number),
@@ -250,7 +262,7 @@ describe('test graphql query', () => {
     });
   });
   test('test query tag with 問題任務, which has information about numberOfUpVote and hasUpVote', async () => {
-    const response = await addFakeDataToFirestore(dataSources, true);
+    const response = await addFakeDataToFirestore(mutateClient, true);
     const tagId = response.tag.id;
     const queryTag = gql`
       query testQueryTag($id: ID!) {
@@ -292,7 +304,7 @@ describe('test graphql query', () => {
     });
   });
   test('test query userAddTagHistory', async () => {
-    const { uid } = fakeUserInfo;
+    const { uid } = userInfoAfterAccountCreated;
     const queryUserAddTagHistory = gql`
       query testQueryUserAddTagHistory($uid: ID!) {
         userAddTagHistory(uid: $uid) {
@@ -319,15 +331,12 @@ describe('test graphql query', () => {
     expect(queryResult.tags[0]).toMatchObject({
       id: fakeTagId,
       createUser: {
-        uid: fakeUserInfo.uid,
+        uid: userInfoAfterAccountCreated.uid,
       },
       imageUrl: [expect.any(String)],
     });
   });
   test('test archived threshold number query', async () => {
-    // TODO: don't konw how to test this, since the realtime update need to take
-    // some time after we update the field value in the firestore, so the result
-    // of the graphql doesn't change.
     // first add threshold into firestore
     const testThreshold = 3;
     await firestore
@@ -348,6 +357,32 @@ describe('test graphql query', () => {
 
     expect(queryResult).toBe(testThreshold);
   });
+  test('test get user data', async () => {
+    const { uid } = userInfoAfterAccountCreated;
+    const getUserData = gql`
+      query testGetUserData($uid: ID!) {
+        getUserData(uid: $uid) {
+          uid
+          displayName
+          photoURL
+          email
+          userAddTagNumber
+        }
+      }
+    `;
+    const { queryResult } = await graphQLQueryHelper(
+      getUserData,
+      'getUserData',
+      { uid }
+    );
+    expect(queryResult).toMatchObject({
+      uid,
+      displayName: fakeUserRecord.displayName,
+      photoURL: fakeUserRecord.photoURL,
+      email: fakeUserRecord.email,
+      userAddTagNumber: 1,
+    });
+  });
 });
 
 describe('test graphql mutate and paginate function', () => {
@@ -355,14 +390,23 @@ describe('test graphql mutate and paginate function', () => {
   let graphQLMutationHelper;
   let firestore;
   let dataSources;
-  beforeAll(() => {
+  let userInfoAfterAccountCreated;
+  let mutateClient;
+  beforeAll(async () => {
+    await clearAllAuthAccounts(testProjectId);
     // set up firebase admin
     const admin = mockFirebaseAdmin(testProjectId);
     dataSources = dataSourcesGenerator(admin);
+    const uid = await addTestAccountToAuthEmulator(admin.auth());
+    userInfoAfterAccountCreated = { uid, logIn: true };
 
     // set up apollo server and test client
-    const server = apolloServer({ admin, logIn: true });
+    const server = apolloServer({
+      admin,
+      userInfo: userInfoAfterAccountCreated,
+    });
     const { mutate, query } = createTestClient(server);
+    mutateClient = mutate;
     graphQLQueryHelper = generateGraphQLHelper('query', query);
     graphQLMutationHelper = generateGraphQLHelper('mutation', mutate);
 
@@ -371,6 +415,7 @@ describe('test graphql mutate and paginate function', () => {
   });
   afterAll(async () => {
     await Promise.all(firebase.apps().map(app => app.delete()));
+    await clearAllAuthAccounts(testProjectId);
   });
   beforeEach(async () => {
     await clearFirestoreDatabase(testProjectId);
@@ -457,7 +502,7 @@ describe('test graphql mutate and paginate function', () => {
     };
 
     // first add data to firestore
-    const addFakeDataResponse = await addFakeDataToFirestore(dataSources);
+    const addFakeDataResponse = await addFakeDataToFirestore(mutateClient);
     const fakeTagId = addFakeDataResponse.tag.id;
 
     const { mutationResult } = await graphQLMutationHelper(
@@ -483,7 +528,7 @@ describe('test graphql mutate and paginate function', () => {
   });
 
   test('test update tag status', async () => {
-    const response = await addFakeDataToFirestore(dataSources);
+    const response = await addFakeDataToFirestore(mutateClient);
     const fakeTagId = response.tag.id;
 
     const testStatusName = '資訊有誤';
@@ -558,7 +603,7 @@ describe('test graphql mutate and paginate function', () => {
     expect(queryResult.tags[0].status.statusName).toEqual(testStatusName);
   });
   test('test `updateUpVoteStatus` and upvote related query', async () => {
-    const response = await addFakeDataToFirestore(dataSources, true);
+    const response = await addFakeDataToFirestore(mutateClient, true);
 
     // upvote
     const mutateTag = gql`
@@ -605,7 +650,7 @@ describe('test graphql mutate and paginate function', () => {
     });
     // console.log(queryResult.data.tag);
     expect(queryResult.status).toMatchObject({
-      statusName: '待處理',
+      statusName: '已解決',
       createTime: expect.stringMatching(timestampStringRegex),
       numberOfUpVote: 1,
       hasUpVote: true,
@@ -654,14 +699,14 @@ describe('test graphql mutate and paginate function', () => {
       }
     );
     expect(cancelQueryResult.status).toMatchObject({
-      statusName: '待處理',
+      statusName: '已解決',
       createTime: expect.stringMatching(timestampStringRegex),
       numberOfUpVote: 0,
       hasUpVote: false,
     });
   });
   test('test update tag status and check if it can update numberOfUpVote', async () => {
-    const response = await addFakeDataToFirestore(dataSources, true);
+    const response = await addFakeDataToFirestore(mutateClient, true);
     const fakeTagId = response.tag.id;
     const testStatusName = '已解決';
 
@@ -764,7 +809,7 @@ describe('test graphql mutate and paginate function', () => {
     expect(await queryHasReadGuide()).toBe(true);
   });
   test('test update tag: upload new image and delete exist image', async () => {
-    const response = await addFakeDataToFirestore(dataSources);
+    const response = await addFakeDataToFirestore(mutateClient);
     const fakeTagId = response.tag.id;
 
     const updateImageMutation = gql`
@@ -812,7 +857,7 @@ describe('test graphql mutate and paginate function', () => {
       .set({ archivedThreshold: testThreshold });
 
     // add 問題任務 tag
-    const response = await addFakeDataToFirestore(dataSources, true);
+    const response = await addFakeDataToFirestore(mutateClient, true);
     const tagId = response.tag.id;
 
     // set numberOfUpVote to 3
@@ -860,7 +905,7 @@ describe('test graphql mutate and paginate function', () => {
     });
   });
   test('test incrementViewCount', async () => {
-    const response = await addFakeDataToFirestore(dataSources);
+    const response = await addFakeDataToFirestore(mutateClient);
     const fakeTagId = response.tag.id;
 
     const incrementViewCountMutation = gql`
@@ -896,7 +941,7 @@ describe('test graphql mutate and paginate function', () => {
   test('test unarchivedTagList with paginate function', async () => {
     // add many tag into firestore
     await Promise.all(
-      [...new Array(10)].map(() => addFakeDataToFirestore(dataSources))
+      [...new Array(10)].map(() => addFakeDataToFirestore(mutateClient))
     );
 
     // unarchived tag list
@@ -937,12 +982,12 @@ describe('test graphql mutate and paginate function', () => {
       'tags',
       graphQLQueryHelper,
       {
-        uid: fakeUserInfo.uid,
+        uid: userInfoAfterAccountCreated.uid,
       }
     );
   });
   test('test status paginate function', async () => {
-    const response = await addFakeDataToFirestore(dataSources);
+    const response = await addFakeDataToFirestore(mutateClient);
     const testTagId = response.tag.id;
 
     const testStatusName = 'test';
