@@ -1,4 +1,3 @@
-const { PubSub } = require('apollo-server');
 const {
   tagResolvers,
   statusResolvers,
@@ -52,6 +51,14 @@ const queryResolvers = {
      */
     archivedThreshold: async (_, __, { dataSources }) =>
       dataSources.tagDataSource.archivedThreshold,
+    /**
+     *
+     * @param {*} _
+     * @param {{uid: string}} param
+     * @param {*} __
+     * @returns
+     */
+    getUserData: async (_, { uid }, __) => ({ uid }),
   },
 };
 
@@ -71,6 +78,13 @@ const mutationResolvers = {
           tagId: tag.id,
         })
       );
+
+      // increment userAddTagNumber
+      const { uid } = userInfo;
+      await dataSources.userDataSource.updateUserAddTagNumber({
+        uid,
+        action: 'increment',
+      });
       // event: added
       await dataSources.tagDataSource.triggerEvent('added', tag);
       return { tag, imageUploadNumber, imageUploadUrls };

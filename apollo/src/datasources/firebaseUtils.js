@@ -1,7 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const { ForbiddenError } = require('apollo-server');
 
-const { Timestamp, GeoPoint, FieldValue } = require('firebase-admin').firestore;
+const { GeoPoint, FieldValue } = require('firebase-admin').firestore;
 const { geohashForLocation } = require('geofire-common');
 
 const maxPageSize = 30;

@@ -6,8 +6,7 @@
     "gen_docs": "npx jsdoc2md -f ./src/* ./src/datasources/* localIndex.js > ../docs/graphql.md",
     "serve_docs": "npx docsify serve ../docs",
     "firestore": "firebase emulators:start --only firestore",
-    "test": "firebase emulators:exec \"jest --watch\"  --only firestore ",
-    "test-debug": "firebase emulators:exec \"jest --runInBand --watch\"  --only firestore "
+    "test": "firebase emulators:exec \"jest --runInBand --watch\"  --only firestore,auth "
   },
   "engines": {
     "node": "14"
@@ -19,6 +18,7 @@
     "apollo-server-fastify": "^2.25.1",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
+    "dataloader": "^2.0.0",
     "dotenv": "^10.0.0",
     "firebase": "^8.6.7",
     "firebase-admin": "^9.9.0",

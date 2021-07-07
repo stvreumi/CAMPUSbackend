@@ -12,6 +12,7 @@ const UserDataSource = require('./datasources/UserDataSource');
 
 /**
  * @typedef {import('firebase-admin')} firebaseAdmin
+ * @typedef {import('./types').DecodedUserInfoFromAuthHeader} DecodedUserInfoFromAuthHeader
  */
 
 const campusEventEmitter = new EventEmitter();
@@ -72,13 +73,15 @@ const subscriptions = {
  * @param {Function} context
  * @param {boolean} introspection
  * @param {object} playground
+ * @param {boolean} debug
  * @returns
  */
 function apolloServerInstanciator(
   dataSources,
   context,
   introspection,
-  playground
+  playground,
+  debug = false
 ) {
   return new ApolloServer({
     typeDefs,
@@ -87,8 +90,11 @@ function apolloServerInstanciator(
     subscriptions,
     formatError: error => {
       console.log(error);
-      return error;
+      if (debug) console.log(error.extensions.exception.stacktrace);
     },
+    // to show stacktrace
+    // https://www.apollographql.com/docs/apollo-server/data/errors/#omitting-or-including-stacktrace
+    debug,
     context,
     introspection,
     playground,
@@ -106,9 +112,10 @@ function contextInProduction(dataSources, firestore) {
 
     if (req) {
       const { authorization } = req.headers;
-      const userInfo = await dataSources().authDataSource.getUserInfoFromToken(
-        authorization
-      );
+      const userInfo =
+        await dataSources().authDataSource.verifyUserInfoFromToken(
+          authorization
+        );
       contextReturn.userInfo = userInfo;
     }
 
@@ -133,21 +140,23 @@ function apolloServerGenerator({
   // https://github.com/apollographql/apollo-server/issues/5145
   // make the subscription result scrollable
   playground = { version: '1.7.40' },
-  contextInTest = undefined,
 }) {
   if (test === true) {
     /**
      * Test server
-     * @param {{admin: firebaseAdmin, logIn: boolean}} param
+     * @param {{admin: firebaseAdmin, userInfo: DecodedUserInfoFromAuthHeader}} param
      * @returns
      */
-    const testServerGenerator = ({ admin, logIn }) => {
+    const testServerGenerator = ({ admin, userInfo }) => {
       const dataSources = dataSourcesGenerator(admin);
       return apolloServerInstanciator(
         dataSources,
-        contextInTest(logIn),
+        // context
+        () => ({ userInfo }),
         introspection,
-        playground
+        playground,
+        // debug
+        true
       );
     };
     return testServerGenerator;

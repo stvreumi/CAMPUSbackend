@@ -1,9 +1,12 @@
 const firebase = require('@firebase/rules-unit-testing');
 const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
+const gql = require('graphql-tag');
 
 /**
  * @typedef {import('../types').DataSources} DataSources
+ * @typedef {import('firebase-admin').app.App} firebaseAdminApp
+ * @typedef {import('firebase-admin').auth.Auth} firebaseAdminAppAuth
  */
 
 const fakeDataId = 'test-fakedata-id';
@@ -42,33 +45,19 @@ const fakeStatusData = {
   statusName: '存在',
 };
 
-const fakeUserInfo = {
-  logIn: true,
-  uid: 'test-uid',
+const fakeUserRecord = {
   email: 'test-uid@test.com',
   displayName: 'test-display-name',
+  photoURL: 'http://photo.url',
 };
 
 /**
  * Mock firebase admin instance
  * @param {string} projectId The projectId to initiate firebase admin
- * @returns {FirebaseError.app.App} the mock and initiate firebase app instance
+ * @returns {firebaseAdminApp} the mock and initiate firebase app instance
  */
 function mockFirebaseAdmin(projectId) {
   const admin = firebase.initializeAdminApp({ projectId });
-  // mock auth
-  const mockAuthVerifyIdToken = jest.fn(_token => ({
-    uid: fakeUserInfo.uid,
-    email: fakeUserInfo.email,
-  }));
-  const mockAuthGetUser = jest.fn(_uid => ({
-    displayName: fakeUserInfo.displayName,
-    email: fakeUserInfo.email,
-  }));
-  admin.auth = jest.fn(() => ({
-    verifyIdToken: mockAuthVerifyIdToken,
-    getUser: mockAuthGetUser,
-  }));
 
   // mock storage
   const mockBuckeFile = jest.fn(_ => ({
@@ -101,29 +90,54 @@ function mockFirebaseAdmin(projectId) {
 
 /**
  * Add fakeData to firestore
- * @param {() => DataSources} dataSources Firestore instance to add fake data
+ * @param {Function} mutateClient
  * @param {Boolean} testNumberOfUpVote true if we want to add fake data to test
  *   numberOfUpVote, which is 問題任務
  * @return {AddNewTagResponse} Contain the upload tag information, and image
  */
-async function addFakeDataToFirestore(dataSources, testNumberOfUpVote = false) {
+async function addFakeDataToFirestore(
+  mutateClient,
+  testNumberOfUpVote = false
+) {
+  const addNewTag = gql`
+    mutation tagAddTest($data: addTagDataInput!) {
+      addNewTagData(data: $data) {
+        tag {
+          id
+          locationName
+          category {
+            missionName
+            subTypeName
+            targetName
+          }
+          floor
+          status {
+            statusName
+          }
+        }
+        imageUploadNumber
+        imageUploadUrls
+      }
+    }
+  `;
+  const data = {
+    ...fakeTagData,
+  };
   const hasNumberOfUpVoteCategory = {
     missionName: '問題任務',
     subTypeName: '',
     targetName: '',
   };
-  const data = {
-    ...fakeTagData,
-  };
   if (testNumberOfUpVote) {
     data.category = { ...hasNumberOfUpVoteCategory };
-    data.statusName = '待處理';
+    data.statusName = '已解決';
   }
 
-  return dataSources().tagDataSource.addNewTagData({
-    data,
-    userInfo: fakeUserInfo,
+  const result = await mutateClient({
+    mutation: addNewTag,
+    variables: { data },
   });
+  return result.data.addNewTagData;
 }
 
 /**
@@ -131,13 +145,36 @@ async function addFakeDataToFirestore(dataSources, testNumberOfUpVote = false) {
  * ref: https://firebase.google.com/docs/emulator-suite/connect_firestore#clear_your_database_between_tests
  * or use `clearFirestoreData({ projectId: string }) => Promise`
  * ref: https://firebase.google.com/docs/rules/unit-tests#test_sdk_methods
- * @param {String} databaseID the id of the firestore emulator
+ * @param {String} projectID the id of the firestore emulator
  */
-async function clearFirestoreDatabase(databaseID) {
-  const clearURL = `http://localhost:8080/emulator/v1/projects/${databaseID}/databases/(default)/documents`;
+async function clearFirestoreDatabase(projectID) {
+  const clearURL = `http://localhost:8080/emulator/v1/projects/${projectID}/databases/(default)/documents`;
   await axios.delete(clearURL);
   // console.log('clear response:', res.status);
 }
+
+/**
+ * https://stackoverflow.com/questions/65464512/create-a-user-programatically-using-firebase-auth-emulator
+ * https://firebase.google.com/docs/auth/admin/manage-users#create_a_user
+ * @param {firebaseAdminAppAuth} auth
+ * @returns {string}
+ */
+async function addTestAccountToAuthEmulator(auth) {
+  const { email, displayName, photoURL } = fakeUserRecord;
+  const { uid } = await auth.createUser({ email, displayName, photoURL });
+  return uid;
+}
+
+/**
+ * Clear auth accounts
+ * https://firebase.google.com/docs/reference/rest/auth#section-auth-emulator-clearaccounts
+ * @param {string} projectID
+ */
+async function clearAllAuthAccounts(projectID) {
+  const clearURL = `http://localhost:9099/emulator/v1/projects/${projectID}/accounts`;
+  await axios.delete(clearURL);
+}
+
 module.exports = {
   mockFirebaseAdmin,
   addFakeDataToFirestore,
@@ -145,6 +182,8 @@ module.exports = {
   fakeDataId,
   fakeCategory,
   fakeStatusData,
-  fakeUserInfo,
+  fakeUserRecord,
   clearFirestoreDatabase,
+  clearAllAuthAccounts,
+  addTestAccountToAuthEmulator,
 };

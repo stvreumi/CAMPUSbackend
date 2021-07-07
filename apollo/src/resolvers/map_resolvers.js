@@ -86,16 +86,30 @@ const userResolvers = {
      * @param {ResolverArgsInfo} info
      */
     displayName: async ({ uid }, _, { dataSources }) =>
-      dataSources.authDataSource.getUserName({
-        uid,
-      }),
+      dataSources.authDataSource.getUserName({ uid }),
     /**
      * @param {{uid: string}} param
      * @param {*} _
      * @param {ResolverArgsInfo} info
      */
-    email: async ({ uid }, _, { dataSources }) =>
-      dataSources.authDataSource.getUserEmail({ uid }),
+    photoURL: async ({ uid }, _, { dataSources }) =>
+      dataSources.authDataSource.getUserPhotoURL({ uid }),
+    /**
+     * @param {{uid: string}} param
+     * @param {*} _
+     * @param {ResolverArgsInfo} info
+     */
+    email: async (_, __, { dataSources, userInfo }) => {
+      const { uid, logIn } = userInfo;
+      return logIn ? dataSources.authDataSource.getUserEmail({ uid }) : null;
+    },
+    /**
+     * @param {{uid: string}} param
+     * @param {*} _
+     * @param {ResolverArgsInfo} info
+     */
+    userAddTagNumber: async ({ uid }, _, { dataSources }) =>
+      dataSources.userDataSource.getUserAddTagNumber({ uid }),
   },
 };
 
