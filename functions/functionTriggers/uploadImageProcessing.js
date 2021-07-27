@@ -1,8 +1,8 @@
-const path = require('path');
-const os = require('os');
-const fs = require('fs');
-const sharp = require('sharp');
-const { v4: uuidv4 } = require('uuid');
+const path = require("path");
+const os = require("os");
+const fs = require("fs");
+const sharp = require("sharp");
+const { v4: uuidv4 } = require("uuid");
 
 /**
  * @typedef {import('firebase-functions').storage.ObjectMetadata} ObjectMetadata
@@ -25,7 +25,7 @@ async function uploadImageProcessing(admin, object) {
   } = object;
 
   console.log(metadata);
-  const convertExtensionName = '.jpg';
+  const convertExtensionName = ".jpg";
 
   // bucket instance
   const bucket = admin.storage().bucket(fileBucket);
@@ -35,7 +35,7 @@ async function uploadImageProcessing(admin, object) {
   const tagId = path.dirname(filePath);
   const tempFilePath = path.join(os.tmpdir(), fileName);
   const newFileMetadata = {
-    contentType: 'image/jpeg',
+    contentType: "image/jpeg",
     metadata: {
       tagId,
       firebaseStorageDownloadTokens: uuidv4(),
@@ -44,7 +44,7 @@ async function uploadImageProcessing(admin, object) {
 
   // check if the file is already update and convert to jpeg
   if (fileName.endsWith(convertExtensionName)) {
-    console.log('already convert to ', convertExtensionName);
+    console.log("already convert to ", convertExtensionName);
     return;
   }
 
@@ -53,7 +53,7 @@ async function uploadImageProcessing(admin, object) {
 
   // download upload file
   await fileRef.download({ destination: tempFilePath });
-  console.log('Image downloaded locally to', tempFilePath);
+  console.log("Image downloaded locally to", tempFilePath);
 
   // delete upload file
   await fileRef.delete();
