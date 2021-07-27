@@ -41,13 +41,13 @@ jobs:
       # https://yaml-multiline.info/
       # Keep newlines (literal), No newline at end (strip)
       run: |-
-        docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} example-app/
-        docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
+        docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} apollo/
+        docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
     - name: Deploy to Cloud Run
       id: deploy
       uses: google-github-actions/deploy-cloudrun@main
       with:
         service: ${{ env.SERVICE }}
-        image: gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
+        image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
         region: ${{ env.REGION }}
     
