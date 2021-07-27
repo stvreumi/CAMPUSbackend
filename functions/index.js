@@ -11,8 +11,8 @@ admin.initializeApp();
 
 exports.uploadImageProcessing = functions.storage
   .object()
-  .onFinalize(
-    async (object) => await uploadImageProcessingImplementation(admin, object)
+  .onFinalize(async (object) =>
+    uploadImageProcessingImplementation(admin, object)
   );
 exports.deleteTagTrigger = functions.firestore
   .document("tagData/{tagId}")
