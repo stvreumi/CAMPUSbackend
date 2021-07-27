@@ -1,27 +1,28 @@
-const { merge } = require('lodash');
-
 const {
   tagResolvers,
   statusResolvers,
   userResolvers,
   coordinateResolvers,
+  pageResolvers,
 } = require('./map_resolvers');
 
 /**
  * @typedef {import('../types').ResolverArgsInfo} ResolverArgsInfo
  * @typedef {import('../types').AddTagDataInput} AddTagDataInput
  * @typedef {import('../types').UpdateTagDataInput} UpdateTagDataInput
+ * @typedef {import('../types').PageParams} PageParams
+ * @typedef {import(../CampusPubSub)} PubSub
  */
 
 const queryResolvers = {
   Query: {
     /**
      * @param {*} _
-     * @param {*} __
+     * @param {{pageParams: PageParams}} params
      * @param {ResolverArgsInfo} info
      */
-    unarchivedTagList: async (_, __, { dataSources }) =>
-      dataSources.tagDataSource.getAllUnarchivedTags(),
+    unarchivedTagList: async (_, { pageParams }, { dataSources }) =>
+      dataSources.tagDataSource.getAllUnarchivedTags(pageParams),
     /**
      * @param {*} _
      * @param {{tagId: string}} params
@@ -31,11 +32,11 @@ const queryResolvers = {
       dataSources.tagDataSource.getTagData({ tagId }),
     /**
      * @param {*} _
-     * @param {{uid: string}} params
+     * @param {{uid: string, pageParams: PageParams}} params
      * @param {ResolverArgsInfo} info
      */
-    userAddTagHistory: async (_, { uid }, { dataSources }) =>
-      dataSources.tagDataSource.getUserAddTagHistory({ uid }),
+    userAddTagHistory: async (_, { uid, pageParams }, { dataSources }) =>
+      dataSources.tagDataSource.getUserAddTagHistory({ uid, pageParams }),
     /**
      * @param {*} _
      * @param {*} __
@@ -50,6 +51,14 @@ const queryResolvers = {
      */
     archivedThreshold: async (_, __, { dataSources }) =>
       dataSources.tagDataSource.archivedThreshold,
+    /**
+     *
+     * @param {*} _
+     * @param {{uid: string}} param
+     * @param {*} __
+     * @returns
+     */
+    getUserData: async (_, { uid }, __) => ({ uid }),
   },
 };
 
@@ -61,16 +70,23 @@ const mutationResolvers = {
      * @param {ResolverArgsInfo} info
      */
     addNewTagData: async (_, { data }, { dataSources, userInfo }) => {
-      const {
-        tag,
-        imageUploadNumber,
-      } = await dataSources.tagDataSource.addNewTagData({ data, userInfo });
+      const { tag, imageUploadNumber } =
+        await dataSources.tagDataSource.addNewTagData({ data, userInfo });
       const imageUploadUrls = Promise.all(
         dataSources.storageDataSource.getImageUploadUrls({
           imageUploadNumber,
           tagId: tag.id,
         })
       );
+
+      // increment userAddTagNumber
+      const { uid } = userInfo;
+      await dataSources.userDataSource.updateUserAddTagNumber({
+        uid,
+        action: 'increment',
+      });
+      // event: added
+      await dataSources.tagDataSource.triggerEvent('added', tag);
       return { tag, imageUploadNumber, imageUploadUrls };
     },
     /**
@@ -86,6 +102,8 @@ const mutationResolvers = {
         data,
         userInfo,
       });
+      // event: updated
+      await dataSources.tagDataSource.triggerEvent('updated', tag);
       return {
         tag,
         imageUploadNumber,
@@ -101,21 +119,27 @@ const mutationResolvers = {
     /**
      *
      * @param {*} _
-     * @param {{tagId: string, statusName: string, description: string}} param
+     * @param {{tagId: string, statusName: string, description: string, hasNumberOfUpVote: string}} param
      * @param {ResolverArgsInfo} info
      * @returns
      */
     updateTagStatus: async (
       _,
-      { tagId, statusName, description },
+      { tagId, statusName, description, hasNumberOfUpVote = false },
       { dataSources, userInfo }
-    ) =>
-      dataSources.tagDataSource.updateTagStatus({
+    ) => {
+      const updatedStatus = dataSources.tagDataSource.updateTagStatus({
         tagId,
         statusName,
         description,
         userInfo,
-      }),
+        hasNumberOfUpVote,
+      });
+      // event: updated
+      const tag = dataSources.tagDataSource.getTagData({ tagId });
+      await dataSources.tagDataSource.triggerEvent('updated', tag);
+      return updatedStatus;
+    },
     /**
      *
      * @param {*} _
@@ -150,13 +174,35 @@ const mutationResolvers = {
   },
 };
 
-const resolvers = merge(
-  queryResolvers,
-  mutationResolvers,
-  tagResolvers,
-  statusResolvers,
-  userResolvers,
-  coordinateResolvers
-);
+const subscriptionResolvers = {
+  Subscription: {
+    archivedThreshold: {
+      subscribe: (_, __, { pubsub }) =>
+        pubsub.asyncIterator(['archivedThreshold_change']),
+    },
+    tagChangeSubscription: {
+      /**
+       * Subscribe to the events occured after the unix timestamp (millseconds)
+       * @param {*} _
+       * @param {*} __
+       * @param {{pubsub: PubSub}}
+       * @returns
+       */
+      subscribe: (_, __, { pubsub }) =>
+        pubsub.asyncIterator(['tagChangeSubscription']),
+    },
+  },
+};
+
+const resolvers = {
+  ...queryResolvers,
+  ...mutationResolvers,
+  ...subscriptionResolvers,
+  ...tagResolvers,
+  ...statusResolvers,
+  ...userResolvers,
+  ...coordinateResolvers,
+  ...pageResolvers,
+};
 
 module.exports = resolvers;

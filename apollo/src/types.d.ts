@@ -40,19 +40,11 @@ export interface StatusWithDocumentReference extends Status {
   statusDocRef: firestore.DocumentReference;
 }
 
-export interface Tag {
-  id: string;
-  locationName: string;
-  accessibility: number;
-  category: Category;
-  floor: number;
+export interface Tag extends RawTagDocumentFields {
   coordinates: Coordinate;
   createTime: string;
   lastUpdateTime: string;
-  createUser: object;
-  description: string;
   imageUrl: Array<string>;
-  streetViewInfo: StreetView;
   status: Status;
   statusHistory: Array<Status>;
   viewCount: number;
@@ -61,10 +53,9 @@ export interface Tag {
 export interface RawTagDocumentFields {
   id: string;
   locationName: string;
-  accessibility: number;
   category: Category;
   floor: number;
-  coordinates: Coordinate;
+  coordinates: firestore.GeoPoint;
   createTime: firestore.Timestamp;
   lastUpdateTime: firestore.Timestamp;
   createUser: User;
@@ -79,24 +70,43 @@ export interface AddorUpdateTagResponse {
   imageDeleteStatus: boolean;
 }
 
-export interface AddTagDataInput {
-  locationName: string;
-  category: Category;
-  coordinates: Coordinate;
-  description?: string;
-  imageUploadNumber: number;
+interface TagDataInput {
+  locationName?: string;
+  category?: Category;
+  coordinates?: Coordinate;
+  imageUploadNumber?: number;
   floor?: number;
   streetViewInfo?: StreetView;
+  statusName?: string;
 }
 
-export interface UpdateTagDataInput {
-  locationName?: string
-  category?: Category
-  coordinates?: Coordinate
-  floor?: number
-  streetViewInfo?: StreetView
-  imageDeleteUrls?: String[]
-  imageUploadNumber?: number
+export interface AddNewTagDataInput extends TagDataInput {
+  description?: string;
+}
+
+export interface UpdateTagDataInput extends TagDataInput{
+  imageDeleteUrls?: String[];
+}
+
+export interface Page {
+  cursor: string;
+  empty: boolean;
+}
+
+export interface DataPage {
+  data: object[];
+}
+export interface TagPage extends Page {
+  Tags: Tag[];
+}
+
+export interface StatusPage extends Page {
+  statusList: Status[];
+}
+
+export interface PageParams {
+  pageSize: number;
+  cursor: string;
 }
 
 export interface Coordinate {

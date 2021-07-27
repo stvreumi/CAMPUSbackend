@@ -1,0 +1,4 @@
+type Subscription {
+  archivedThreshold: Int
+  tagChangeSubscription: TagFieldsForSubscription!
+}

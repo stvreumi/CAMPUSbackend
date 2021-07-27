@@ -1,0 +1,10 @@
+type Query {
+  unarchivedTagList(pageParams: PageParams): TagPage!
+  tag(tagId: ID!): Tag
+  userAddTagHistory(uid: ID!, pageParams: PageParams): TagPage!
+  "true if the use have read the guide, need to add token in the header"
+  hasReadGuide: Boolean!
+  "問題任務 archived threshold"
+  archivedThreshold: Int!
+  getUserData(uid: ID!): User
+}

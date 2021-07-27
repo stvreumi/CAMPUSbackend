@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+  emulator:
+    build: ./functions
+    volumes:
+      - .:/node_app/app
+      - ./functions/package.json:/node_app/package.json
+      - ./functions/package-lock.json:/node_app/package-lock.json
+      - no-used:/node_app/app/functions/node_modules
+      # avoid emulators repeated download
+      - emulators:/home/node/.cache/firebase/emulators/
+    ports:
+      # need to specify host as 0.0.0.0 so that we can connect to the container
+      # fron host
+      # from: https://stackoverflow.com/questions/66176947/run-google-firestore-emulator-with-docker-compose
+      # from: https://stackoverflow.com/questions/20778771/what-is-the-difference-between-0-0-0-0-127-0-0-1-and-localhost
+      - "0.0.0.0:5001:5001"
+      - "0.0.0.0:4000:4000"
+      - "0.0.0.0:9099:9099"
+      - "0.0.0.0:8080:8080"
+    stdin_open: true
+    tty: true
+  apollo:
+    build: 
+      context: ./apollo
+      dockerfile: Dockerfile-testing
+    volumes: 
+      - ./apollo:/node_app/app
+      - ./apollo/package.json:/node_app/package.json
+      - ./apollo/package-lock.json:/node_app/package-lock.json
+      - no-used:/node_app/app/apollo/node_modules
+    env_file: ./apollo/compose.env
+    ports:
+      - "8333:8080"
+volumes:
+  no-used:
+  emulators:

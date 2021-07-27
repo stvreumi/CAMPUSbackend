@@ -5,6 +5,7 @@ const { DateTime } = require('luxon');
  * @typedef {import('../types').ResolverArgsInfo} ResolverArgsInfo
  * @typedef {import('../types').RawTagDocumentFields} RawTagDocumentFields
  * @typedef {import('../types').RawStatusDocumentFields} RawStatusDocumentFields
+ * @typedef {import('../types').PageParams} PageParams
  */
 
 const tagResolvers = {
@@ -15,18 +16,22 @@ const tagResolvers = {
      * @param {*} __
      */
     createTime: async (tag, _, __) =>
-      DateTime.fromISO(tag.createTime.toDate().toISOString())
-        .setZone('UTC+8')
-        .toString(),
+      tag.createTime
+        ? DateTime.fromISO(tag.createTime.toDate().toISOString())
+            .setZone('UTC+8')
+            .toString()
+        : null,
     /**
      * @param {RawTagDocumentFields} tag
      * @param {*} _
      * @param {*} __
      */
     lastUpdateTime: async (tag, _, __) =>
-      DateTime.fromISO(tag.createTime.toDate().toISOString())
-        .setZone('UTC+8')
-        .toString(),
+      tag.lastUpdateTime
+        ? DateTime.fromISO(tag.lastUpdateTime.toDate().toISOString())
+            .setZone('UTC+8')
+            .toString()
+        : null,
     createUser: async (tag, _, __) => ({
       uid: tag.createUserId,
     }),
@@ -49,11 +54,11 @@ const tagResolvers = {
       }),
     /**
      * @param {RawTagDocumentFields} tag
-     * @param {*} _
+     * @param {{pageParams: PageParams}} params
      * @param {ResolverArgsInfo} info
      */
-    statusHistory: async (tag, _, { dataSources }) =>
-      dataSources.tagDataSource.getStatusHistory({ tagId: tag.id }),
+    statusHistory: async (tag, { pageParams }, { dataSources }) =>
+      dataSources.tagDataSource.getStatusHistory({ tagId: tag.id, pageParams }),
   },
 };
 
@@ -81,23 +86,55 @@ const userResolvers = {
      * @param {ResolverArgsInfo} info
      */
     displayName: async ({ uid }, _, { dataSources }) =>
-      dataSources.authDataSource.getUserName({
-        uid,
-      }),
+      dataSources.authDataSource.getUserName({ uid }),
     /**
      * @param {{uid: string}} param
      * @param {*} _
      * @param {ResolverArgsInfo} info
      */
-    email: async ({ uid }, _, { dataSources }) =>
-      dataSources.authDataSource.getUserEmail({ uid }),
+    photoURL: async ({ uid }, _, { dataSources }) =>
+      dataSources.authDataSource.getUserPhotoURL({ uid }),
+    /**
+     * @param {{uid: string}} param
+     * @param {*} _
+     * @param {ResolverArgsInfo} info
+     */
+    email: async ({ uid }, __, { dataSources, userInfo }) => {
+      const { uid: logInUserUid, logIn } = userInfo;
+      return logIn && logInUserUid === uid
+        ? dataSources.authDataSource.getUserEmail({ uid })
+        : null;
+    },
+    /**
+     * @param {{uid: string}} param
+     * @param {*} _
+     * @param {ResolverArgsInfo} info
+     */
+    userAddTagNumber: async ({ uid }, _, { dataSources }) =>
+      dataSources.userDataSource.getUserAddTagNumber({ uid }),
   },
 };
 
 const coordinateResolvers = {
   Coordinate: {
-    latitude: async (coordinates, _, __) => coordinates.latitude.toString(),
-    longitude: async (coordinates, _, __) => coordinates.longitude.toString(),
+    latitude: async (coordinates, _, __) =>
+      coordinates ? coordinates.latitude.toString() : null,
+    longitude: async (coordinates, _, __) =>
+      coordinates ? coordinates.longitude.toString() : null,
+  },
+};
+
+const pageResolvers = {
+  Page: {
+    __resolveType(page, _, __) {
+      if (page.tags) {
+        return 'TagPage';
+      }
+      if (page.statusList) {
+        return 'StatusPage';
+      }
+      return null;
+    },
   },
 };
 
@@ -106,4 +143,5 @@ module.exports = {
   statusResolvers,
   userResolvers,
   coordinateResolvers,
+  pageResolvers,
 };
