@@ -37,6 +37,8 @@ credentials.csv
 
 # firebase caches, logs
 .firebase
+# But in this document, it say `.firebaserc` should be commit...
+# https://firebase.google.com/docs/cli#source_control_aliases
 .firebaserc
 emulator-data
 firestore-debug.log
