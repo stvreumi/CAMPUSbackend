@@ -171,7 +171,9 @@ function apolloServerGenerator({
       dataSources,
       contextInProduction(dataSources, admin.firestore()),
       introspection,
-      playground
+      playground,
+      // debug
+      true
     );
   };
   return productionServerGenerator;
