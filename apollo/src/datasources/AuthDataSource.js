@@ -30,7 +30,7 @@ class AuthDataSource extends DataSource {
       });
       notFound.forEach(notFoundUser => {
         const { uid } = notFoundUser;
-        userData[uid] = null;
+        userData[uid] = { uid, displayName: null, email: null, photoURL: null };
       });
       return uids.map(({ uid }) => userData[uid]);
     });
