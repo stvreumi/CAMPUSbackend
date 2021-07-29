@@ -89,8 +89,16 @@ function apolloServerInstanciator(
     dataSources,
     subscriptions,
     formatError: error => {
-      console.log(error);
+      console.log(JSON.stringify(error));
       if (debug) console.log(error.extensions.exception.stacktrace);
+
+      // mask error return to clients
+      // https://www.apollographql.com/docs/apollo-server/v2/data/errors/#masking-and-logging-errors
+      const maskError = new Error(error.message);
+      maskError.path = error.path;
+      maskError.extensions = {};
+      maskError.extensions.code = error.extensions.code;
+      return maskError;
     },
     // to show stacktrace
     // https://www.apollographql.com/docs/apollo-server/data/errors/#omitting-or-including-stacktrace
