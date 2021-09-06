@@ -1,4 +1,8 @@
 const { FieldValue } = require("firebase-admin").firestore;
+
+// require for logger
+// https://firebase.google.com/docs/functions/writing-and-viewing-logs
+const { logger } = require("firebase-functions");
 /**
  * @typedef {import('firebase-admin')} firebaseAdmin
  * @typedef {import('firebase-admin').firestore.QueryDocumentSnapshot} QueryDocumentSnapshot
@@ -17,7 +21,7 @@ async function deleteTagTrigger(admin, snap) {
 
   // Decrement userAddTagNumber
   userDocRef.update({ userAddTagNumber: FieldValue.increment(-1) });
-  console.log(`Delete tag ${tagId} and update user add tags history`);
+  logger.log(`Delete tag ${tagId} and update user add tags history`);
 
   // Delete related images
   // There may be more than 1 images related to 1 tag.
@@ -33,11 +37,11 @@ async function deleteTagTrigger(admin, snap) {
     ({ status }) => status === "rejected"
   );
   if (rejectedMessages.length > 0) {
-    console.log(`${tagId} images delete failed.`);
-    console.error(rejectedMessages);
+    logger.log(`${tagId} images delete failed.`);
+    logger.error(rejectedMessages);
     return;
   }
-  console.log(`${tagId} images delete successfully.`);
+  logger.log(`${tagId} images delete successfully.`);
 }
 
 module.exports = deleteTagTrigger;
