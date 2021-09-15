@@ -57,6 +57,7 @@ async function getLatestStatus(docRef) {
  * @param {string} action
  * @param {AddTagDataInput} data
  * @param {DecodedUserInfoFromAuthHeader} userInfo
+ * @returns {AddTagDataInput | UpdateTagDataInput}
  */
 function generateTagDataToStoreInFirestore(action, data, userInfo) {
   const { uid } = userInfo;
