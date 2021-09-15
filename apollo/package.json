@@ -6,7 +6,8 @@
     "gen_docs": "npx jsdoc2md -f ./src/* ./src/datasources/* localIndex.js > ../docs/graphql.md",
     "serve_docs": "npx docsify serve ../docs",
     "firestore": "firebase emulators:start --only firestore",
-    "test": "firebase emulators:exec \"jest --runInBand --watch\"  --only firestore,auth "
+    "test": "firebase emulators:exec \"jest --runInBand --watch\"  --only firestore,auth ",
+    "migrate_to_algolia": "node -r dotenv/config ./scripts/addExistedDataOnFirestoreToAlgolia.js dotenv_config_path=./scripts/algolia.env"
   },
   "engines": {
     "node": "14"

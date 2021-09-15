@@ -242,7 +242,7 @@ class TagDataSource extends DataSource {
       if (this.algoliaIndexClient) {
         const { locationName, category } = tagData;
         // https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/how-to/incremental-updates/?client=javascript#updating-a-subset-of-the-record
-        await this.algoliaIndexClient.partialUpdateObject([
+        await this.algoliaIndexClient.partialUpdateObjects([
           {
             objectID: tagId,
             ...(locationName ? { locationName } : {}),

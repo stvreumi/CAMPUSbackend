@@ -43,3 +43,6 @@ credentials.csv
 emulator-data
 firestore-debug.log
 ui-debug.log
+
+# local self test, don't commit
+self-test/*
