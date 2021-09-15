@@ -1,6 +1,6 @@
 const firebase = require('@firebase/rules-unit-testing');
 const axios = require('axios');
-const { v4: uuidv4 } = require('uuid');
+const { nanoid } = require('nanoid');
 const gql = require('graphql-tag');
 
 /**
@@ -70,8 +70,10 @@ function mockFirebaseAdmin(projectId) {
       [
         {
           metadata: {
+            // The tmp file name format is determined by the id genereator.
+            // Currently we use [nanoid](https://github.com/ai/nanoid)
             mediaLink: `https://storage.googleapis.com/download/storage/v1/b/smartcampus-1b31f.appspot.com/o/${
-              directory / uuidv4()
+              directory / nanoid()
             }/?generation=1607929899797089&alt=media"`,
           },
         },

@@ -1,4 +1,5 @@
-const { v4: uuidv4 } = require('uuid');
+// https://github.com/ai/nanoid
+const { nanoid } = require('nanoid');
 const { ForbiddenError } = require('apollo-server');
 
 const { GeoPoint, FieldValue } = require('firebase-admin').firestore;
@@ -8,8 +9,9 @@ const maxPageSize = 30;
 const defaultPageSize = 10;
 
 function generateFileName(imageNumber, tagID) {
+  // id generator: [nanoid](https://github.com/ai/nanoid)
   return [...new Array(imageNumber)].map(
-    () => `${tagID}/${uuidv4().substr(0, 8)}`
+    () => `${tagID}/${nanoid().substr(0, 8)}`
   );
 }
 
@@ -55,6 +57,7 @@ async function getLatestStatus(docRef) {
  * @param {string} action
  * @param {AddTagDataInput} data
  * @param {DecodedUserInfoFromAuthHeader} userInfo
+ * @returns {AddTagDataInput | UpdateTagDataInput}
  */
 function generateTagDataToStoreInFirestore(action, data, userInfo) {
   const { uid } = userInfo;

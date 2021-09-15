@@ -2,6 +2,8 @@
 const { DataSource } = require('apollo-datasource');
 const { FieldValue } = require('firebase-admin').firestore;
 
+const algoliasearch = require('algoliasearch');
+
 const {
   getIdWithDataFromDocSnap,
   getLatestStatus,
@@ -44,11 +46,22 @@ class TagDataSource extends DataSource {
     eventEmitter
   ) {
     super();
-
     this.tagDataCollectionReference = tagDataCollectionReference;
     this.archivedThreshold = archivedThreshold;
     this.firestore = firestore;
     this.eventEmitter = eventEmitter;
+    const { ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY, ALGOLIA_INDEX_NAME } =
+      process.env;
+    // https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
+    // If we want to test, we need to create new index
+    // https://www.algolia.com/doc/faq/accounts-billing/can-i-test-my-implementation-in-a-sandbox-environment/
+    if (ALGOLIA_APPLICATION_ID && ALGOLIA_API_KEY && ALGOLIA_INDEX_NAME) {
+      /** @type import('algoliasearch').SearchIndex */
+      this.algoliaIndexClient = algoliasearch(
+        ALGOLIA_APPLICATION_ID,
+        ALGOLIA_API_KEY
+      ).initIndex(ALGOLIA_INDEX_NAME);
+    }
   }
 
   /**
@@ -177,14 +190,28 @@ class TagDataSource extends DataSource {
     if (action === 'add') {
       // add tagData to server
       const refAfterTagAdd = await this.tagDataCollectionReference.add(tagData);
-
       const { id: newAddedTagId } = refAfterTagAdd;
+
       await this.updateTagStatus({
         tagId: newAddedTagId,
         statusName,
         description,
         userInfo,
       });
+
+      // send data to algolia index for searching
+      if (this.algoliaIndexClient) {
+        const { locationName, category } = tagData;
+        // https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/how-to/incremental-updates/?client=javascript#adding-records
+        await this.algoliaIndexClient.saveObjects([
+          {
+            objectID: newAddedTagId,
+            locationName,
+            category,
+            statusName,
+          },
+        ]);
+      }
 
       return getIdWithDataFromDocSnap(await refAfterTagAdd.get());
     }
@@ -203,13 +230,27 @@ class TagDataSource extends DataSource {
         await this.updateTagStatus({
           tagId,
           statusName,
-          description: '(修改任務內容)',
+          description: description || '(修改任務內容)',
           userInfo,
         });
       }
 
       // update tagData to server
       await refOfUpdateTag.update(tagData);
+
+      // send data to algolia index for searching
+      if (this.algoliaIndexClient) {
+        const { locationName, category } = tagData;
+        // https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/how-to/incremental-updates/?client=javascript#updating-a-subset-of-the-record
+        await this.algoliaIndexClient.partialUpdateObjects([
+          {
+            objectID: tagId,
+            ...(locationName ? { locationName } : {}),
+            ...(category ? { category } : {}),
+            statusName,
+          },
+        ]);
+      }
 
       return getIdWithDataFromDocSnap(await refOfUpdateTag.get());
     }
