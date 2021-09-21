@@ -11,9 +11,10 @@ const subscription = pubSubClient.subscription(subscriptionName);
  *
  * @param {import('firebase-admin').firestore.Firestore} firestore
  * @param {import('events').EventEmitter} eventEmitter
+ * @param {import('algoliasearch').SearchIndex} algoliaIndexClient
  * @returns
  */
-const PubSubHandlers = (firestore, eventEmitter) => ({
+const PubSubHandlers = (firestore, eventEmitter, algoliaIndexClient) => ({
   archivedThreshold_change: onMessage =>
     firestore
       .collection('setting')
@@ -64,9 +65,10 @@ const PubSubHandlers = (firestore, eventEmitter) => ({
         },
       });
 
-      // trigger algolia_object_delete event
-      // event emitted location: constructor in [CAMPUS-backend dir]/apollo/src/datasources/TagDataSource.js
-      eventEmitter.emit('algolia_object_delete', idWithResultData.id);
+      const { id } = idWithResultData;
+      // algolia_object_delete
+      // It's async function, but no need to await in this situation
+      algoliaIndexClient.deleteObject(id);
 
       // "Ack" (acknowledge receipt of) the message
       message.ack();

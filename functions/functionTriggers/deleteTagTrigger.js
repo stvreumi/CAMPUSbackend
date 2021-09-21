@@ -38,6 +38,7 @@ async function deleteTagTrigger(admin, snap) {
     logger.log(`publish ${tagId} delete event, message id: ${messageId}`);
   } catch (error) {
     logger.log(`publish ${tagId} delete event failed on topic ${topicName}`);
+    logger.log(error);
   }
 
   // Decrement userAddTagNumber

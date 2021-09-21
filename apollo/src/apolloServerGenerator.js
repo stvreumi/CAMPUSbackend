@@ -1,5 +1,6 @@
 const { ApolloServer } = require('apollo-server');
 const EventEmitter = require('events');
+const algoliasearch = require('algoliasearch');
 
 const typeDefs = require('./schema/schema');
 const resolvers = require('./resolvers/resolvers');
@@ -15,7 +16,22 @@ const UserDataSource = require('./datasources/UserDataSource');
  * @typedef {import('./types').DecodedUserInfoFromAuthHeader} DecodedUserInfoFromAuthHeader
  */
 
+// eventEmitter initialization
 const campusEventEmitter = new EventEmitter();
+
+// algolia client setting
+const { ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY, ALGOLIA_INDEX_NAME } =
+  process.env;
+// https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
+// If we want to test, we need to create new index
+// https://www.algolia.com/doc/faq/accounts-billing/can-i-test-my-implementation-in-a-sandbox-environment/
+const algoliaIndexClient =
+  ALGOLIA_APPLICATION_ID && ALGOLIA_API_KEY && ALGOLIA_INDEX_NAME
+    ? /** @type import('algoliasearch').SearchIndex */
+      algoliasearch(ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY).initIndex(
+        ALGOLIA_INDEX_NAME
+      )
+    : null;
 
 /**
  *
@@ -46,7 +62,8 @@ function dataSourcesGenerator(admin) {
       firebaseServiceReference.tagDataCollectionRef,
       archivedThreshold,
       firestore,
-      campusEventEmitter
+      campusEventEmitter,
+      algoliaIndexClient
     ),
     userDataSource: new UserDataSource(
       firebaseServiceReference.userCollectionRef
@@ -110,7 +127,11 @@ function apolloServerInstanciator(
 }
 
 function contextInProduction(dataSources, firestore) {
-  const pubsub = new CampusPubSub(firestore, campusEventEmitter);
+  const pubsub = new CampusPubSub(
+    firestore,
+    campusEventEmitter,
+    algoliaIndexClient
+  );
   return async ({ req, connection }) => {
     const contextReturn = {};
     if (connection) {
