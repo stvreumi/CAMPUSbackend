@@ -51,7 +51,7 @@ const PubSubHandlers = (firestore, eventEmitter, algoliaIndexClient) => ({
     // event name: `deleted`
     subscription.on('message', message => {
       console.log(`receive message id: ${message.id}`);
-      const { changeType, idWithResultData } = json.parse(message.data);
+      const { changeType, idWithResultData } = JSON.parse(message.data);
       // error, no changeType or the event name is not 'deleted'
       if (changeType !== 'deleted') {
         console.log('Error when receive pub/sub data. Received data: ');
