@@ -25,11 +25,12 @@ class CampusPubSub extends PubSubEngine {
    *
    * @param {Firestore} firestore
    * @param {import('events').EventEmitter} eventEmitter
+   * @param {import('algoliasearch').SearchIndex} algoliaIndexClient
    */
-  constructor(firestore, eventEmitter) {
+  constructor(firestore, eventEmitter, algoliaIndexClient) {
     super();
 
-    this.handlers = PubSubHandlers(firestore, eventEmitter);
+    this.handlers = PubSubHandlers(firestore, eventEmitter, algoliaIndexClient);
     this.nextSubscriptionId = 0;
     /** @type {Map<number, Unsubscribe>} */
     this.subscriptions = new Map();
