@@ -62,6 +62,13 @@ class TagDataSource extends DataSource {
         ALGOLIA_API_KEY
       ).initIndex(ALGOLIA_INDEX_NAME);
     }
+
+    // Register deleted event to delete corresponding object on algolia.
+    // It's ok to use aysnc in the callback function of eventemitter, https://stackoverflow.com/a/47448778
+    this.eventEmitter.on('algolia_object_delete', async tagId => {
+      // tagId is the corresponding objectID in the algolia index.
+      await this.algoliaIndexClient.deleteObject(tagId);
+    });
   }
 
   /**

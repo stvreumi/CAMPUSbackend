@@ -1,8 +1,11 @@
 const { FieldValue } = require("firebase-admin").firestore;
+const functions = require("firebase-functions");
 
 // require for logger
 // https://firebase.google.com/docs/functions/writing-and-viewing-logs
 const { logger } = require("firebase-functions");
+const { PubSub } = require("@google-cloud/pubsub");
+
 /**
  * @typedef {import('firebase-admin')} firebaseAdmin
  * @typedef {import('firebase-admin').firestore.QueryDocumentSnapshot} QueryDocumentSnapshot
@@ -14,10 +17,28 @@ const { logger } = require("firebase-functions");
  * @param {QueryDocumentSnapshot} snap 
  */
 async function deleteTagTrigger(admin, snap) {
+  // https://firebase.google.com/docs/functions/config-env#access_environment_configuration_in_a_function
+  const topicName = functions.config().campus.event_topic_name;
+  const pubSubClient = new PubSub();
+
   const tagId = snap.id;
   const { createUserId: uid } = snap.data();
   const storageRef = admin.storage().bucket();
   const userDocRef = admin.firestore().collection("user").doc(uid);
+
+  // publish delete event by Pub/Sub
+  // https://cloud.google.com/pubsub/docs/quickstart-client-libraries#publish_messages
+  try {
+    const messageId = await pubSubClient.topic(topicName).publish(
+      JSON.stringify({
+        changeType: "deleted",
+        tagContent: { id: tagId, ...snap.data() },
+      })
+    );
+    logger.log(`publish ${tagId} delete event, message id: ${messageId}`);
+  } catch (error) {
+    logger.log(`publish ${tagId} delete event failed on topic ${topicName}`);
+  }
 
   // Decrement userAddTagNumber
   userDocRef.update({ userAddTagNumber: FieldValue.increment(-1) });
