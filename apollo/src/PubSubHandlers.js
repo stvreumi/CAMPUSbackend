@@ -51,7 +51,7 @@ const PubSubHandlers = (firestore, eventEmitter, algoliaIndexClient) => ({
     // event name: `deleted`
     subscription.on('message', message => {
       console.log(`receive message id: ${message.id}`);
-      const { changeType, idWithResultData } = JSON.parse(message.data);
+      const { changeType, tagContent } = JSON.parse(message.data);
       // error, no changeType or the event name is not 'deleted'
       if (changeType !== 'deleted') {
         console.log('Error when receive pub/sub data. Received data: ');
@@ -61,11 +61,11 @@ const PubSubHandlers = (firestore, eventEmitter, algoliaIndexClient) => ({
       onMessage({
         tagChangeSubscription: {
           changeType,
-          tagContent: idWithResultData,
+          tagContent,
         },
       });
 
-      const { id } = idWithResultData;
+      const { id } = tagContent;
       // algolia_object_delete
       // It's async function, but no need to await in this situation
       algoliaIndexClient.deleteObject(id);
