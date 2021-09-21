@@ -6,8 +6,11 @@ const { createTestClient } = require('apollo-server-testing');
 const gql = require('graphql-tag');
 
 const apolloServer = require('./apolloTestServer');
-const { dataSourcesGenerator } = require('../apolloServerGenerator');
 const { getLatestStatus } = require('../datasources/firebaseUtils');
+
+// manual mock
+// https://jestjs.io/docs/manual-mocks#mocking-node-modules
+jest.mock('@google-cloud/pubsub');
 
 const {
   fakeTagData,
@@ -107,8 +110,6 @@ const testPaginate = async (
 };
 
 describe('test graphql query', () => {
-  /** @type {() => DataSources} */
-  let dataSources;
   let firestore;
   let fakeTagId;
   let graphQLQueryHelper;
@@ -120,7 +121,6 @@ describe('test graphql query', () => {
     const admin = mockFirebaseAdmin(testProjectId);
     const uid = await addTestAccountToAuthEmulator(admin.auth());
     userInfoAfterAccountCreated = { uid, logIn: true };
-    dataSources = dataSourcesGenerator(admin);
 
     // set up apollo server and test client
     const server = apolloServer({
@@ -389,14 +389,12 @@ describe('test graphql mutate and paginate function', () => {
   let graphQLQueryHelper;
   let graphQLMutationHelper;
   let firestore;
-  let dataSources;
   let userInfoAfterAccountCreated;
   let mutateClient;
   beforeAll(async () => {
     await clearAllAuthAccounts(testProjectId);
     // set up firebase admin
     const admin = mockFirebaseAdmin(testProjectId);
-    dataSources = dataSourcesGenerator(admin);
     const uid = await addTestAccountToAuthEmulator(admin.auth());
     userInfoAfterAccountCreated = { uid, logIn: true };
 
