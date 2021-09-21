@@ -2,7 +2,6 @@
 const { DataSource } = require('apollo-datasource');
 const { FieldValue } = require('firebase-admin').firestore;
 
-const algoliasearch = require('algoliasearch');
 
 const {
   getIdWithDataFromDocSnap,
@@ -38,37 +37,21 @@ class TagDataSource extends DataSource {
    * @param {number} archivedThreshold
    * @param {Firestore} firestore
    * @param {import('events').EventEmitter} eventEmitter
+   * @param {import('algoliasearch').SearchIndex} algoliaIndexClient
    */
   constructor(
     tagDataCollectionReference,
     archivedThreshold,
     firestore,
-    eventEmitter
+    eventEmitter,
+    algoliaIndexClient
   ) {
     super();
     this.tagDataCollectionReference = tagDataCollectionReference;
     this.archivedThreshold = archivedThreshold;
     this.firestore = firestore;
     this.eventEmitter = eventEmitter;
-    const { ALGOLIA_APPLICATION_ID, ALGOLIA_API_KEY, ALGOLIA_INDEX_NAME } =
-      process.env;
-    // https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
-    // If we want to test, we need to create new index
-    // https://www.algolia.com/doc/faq/accounts-billing/can-i-test-my-implementation-in-a-sandbox-environment/
-    if (ALGOLIA_APPLICATION_ID && ALGOLIA_API_KEY && ALGOLIA_INDEX_NAME) {
-      /** @type import('algoliasearch').SearchIndex */
-      this.algoliaIndexClient = algoliasearch(
-        ALGOLIA_APPLICATION_ID,
-        ALGOLIA_API_KEY
-      ).initIndex(ALGOLIA_INDEX_NAME);
-    }
-
-    // Register deleted event to delete corresponding object on algolia.
-    // It's ok to use aysnc in the callback function of eventemitter, https://stackoverflow.com/a/47448778
-    this.eventEmitter.on('algolia_object_delete', async tagId => {
-      // tagId is the corresponding objectID in the algolia index.
-      await this.algoliaIndexClient.deleteObject(tagId);
-    });
+    this.algoliaIndexClient = algoliaIndexClient;
   }
 
   /**
@@ -210,7 +193,7 @@ class TagDataSource extends DataSource {
       if (this.algoliaIndexClient) {
         const { locationName, category } = tagData;
         // https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/how-to/incremental-updates/?client=javascript#adding-records
-        await this.algoliaIndexClient.saveObjects([
+        const res = await this.algoliaIndexClient.saveObjects([
           {
             objectID: newAddedTagId,
             locationName,
@@ -218,6 +201,8 @@ class TagDataSource extends DataSource {
             statusName,
           },
         ]);
+        console.log('algolia add object result:');
+        console.dir(res);
       }
 
       return getIdWithDataFromDocSnap(await refAfterTagAdd.get());
@@ -249,7 +234,7 @@ class TagDataSource extends DataSource {
       if (this.algoliaIndexClient) {
         const { locationName, category } = tagData;
         // https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/how-to/incremental-updates/?client=javascript#updating-a-subset-of-the-record
-        await this.algoliaIndexClient.partialUpdateObjects([
+        const res = await this.algoliaIndexClient.partialUpdateObjects([
           {
             objectID: tagId,
             ...(locationName ? { locationName } : {}),
@@ -257,6 +242,8 @@ class TagDataSource extends DataSource {
             statusName,
           },
         ]);
+        console.log('algolia update object result:');
+        console.dir(res);
       }
 
       return getIdWithDataFromDocSnap(await refOfUpdateTag.get());
