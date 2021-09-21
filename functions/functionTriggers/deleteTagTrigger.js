@@ -29,12 +29,13 @@ async function deleteTagTrigger(admin, snap) {
   // publish delete event by Pub/Sub
   // https://cloud.google.com/pubsub/docs/quickstart-client-libraries#publish_messages
   try {
-    const messageId = await pubSubClient.topic(topicName).publish(
+    const dataBuffer = Buffer.from(
       JSON.stringify({
         changeType: "deleted",
         tagContent: { id: tagId, ...snap.data() },
       })
     );
+    const messageId = await pubSubClient.topic(topicName).publish(dataBuffer);
     logger.log(`publish ${tagId} delete event, message id: ${messageId}`);
   } catch (error) {
     logger.log(`publish ${tagId} delete event failed on topic ${topicName}`);
