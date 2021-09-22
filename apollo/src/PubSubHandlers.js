@@ -1,5 +1,4 @@
 const { PubSub } = require('@google-cloud/pubsub');
-const { json } = require('body-parser');
 
 // Creates a client; cache this for further use
 const pubSubClient = new PubSub();
