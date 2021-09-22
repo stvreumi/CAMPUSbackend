@@ -152,7 +152,7 @@ const coordinateResolvers = {
       console.log('error: the coordinate type or format may not correct');
       console.log(e);
     }
-    return { latitude: null, longitude: null };
+    return null;
   },
 };
 
