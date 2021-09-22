@@ -37,11 +37,12 @@ type StatusPage implements Page {
 
 type TagFieldsForSubscription {
   """
-  There are 3 types:
+  There are 4 types:
   * added: the tag just added to the database(firestore)
   * updated: the tag data or the status just be updated
   * archived: the tag just be archived because of number of upvote exceed the 
-      threshold.  
+      threshold.
+  * deleted: the tag is deleted in the firestore  
   """
   changeType: String!
   tagContent: Tag!
