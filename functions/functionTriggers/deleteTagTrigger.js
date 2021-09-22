@@ -29,10 +29,19 @@ async function deleteTagTrigger(admin, snap) {
   // publish delete event by Pub/Sub
   // https://cloud.google.com/pubsub/docs/quickstart-client-libraries#publish_messages
   try {
+    // these fields are firestore object, need to process before encode to JSON string
+    const { createTime, lastUpdateTime, coordinates } = snap.data();
+    const { latitude, longitude } = coordinates;
     const dataBuffer = Buffer.from(
       JSON.stringify({
         changeType: "deleted",
-        tagContent: { id: tagId, ...snap.data() },
+        tagContent: {
+          id: tagId,
+          createTime: createTime.toDate().toISOString(),
+          lastUpdateTime: lastUpdateTime.toDate().toISOString(),
+          coordinates: { latitude, longitude },
+          ...snap.data(),
+        },
       })
     );
     const messageId = await pubSubClient.topic(topicName).publish(dataBuffer);
