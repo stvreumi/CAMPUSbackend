@@ -4,7 +4,7 @@ ENV NODE_ENV=production
 
 # install java jre
 # from: https://github.com/seletskiy/firebase-emulator/blob/master/Dockerfile
-RUN apk --no-cache add openjdk8-jre
+RUN apk --update --no-cache add openjdk8-jre
 
 RUN npm install -g firebase-tools
 

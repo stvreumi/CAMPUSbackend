@@ -1,0 +1,12 @@
+FROM python:3.6
+
+WORKDIR /
+# clone wait-for-it script to wait other port are ready and run
+RUN git clone https://github.com/googleapis/python-pubsub.git --depth=1 \
+    && git clone https://github.com/vishnubob/wait-for-it.git --depth=1 \
+    && chmod +x /wait-for-it/wait-for-it.sh
+# https://cloud.google.com/pubsub/docs/emulator#using_the_emulator
+WORKDIR /python-pubsub/samples/snippets
+
+RUN pip install -r requirements.txt
+
