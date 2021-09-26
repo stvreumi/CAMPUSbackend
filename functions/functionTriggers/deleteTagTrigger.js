@@ -36,11 +36,14 @@ async function deleteTagTrigger(admin, snap) {
       JSON.stringify({
         changeType: "deleted",
         tagContent: {
+          ...snap.data(), // first destruct original objects
+          // * and then replace existed keys
+          // * don't reverse the order!!!(don't assign replaced values first and
+          //   then destruct)
           id: tagId,
           createTime: createTime.toDate().toISOString(),
           lastUpdateTime: lastUpdateTime.toDate().toISOString(),
           coordinates: { latitude, longitude },
-          ...snap.data(),
         },
       })
     );
