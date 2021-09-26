@@ -1,9 +1,10 @@
 name: apollo-graphql-deploy-to-gcp-cloud-run
 
 on:
-  push:
+  pull_request:
     branches: 
       - master
+    # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#onpushpull_requestpaths
     paths:
       - 'apollo/**'
       - '.github/workflows/apollo_graphql_deploy_to_run.yml'
@@ -54,6 +55,7 @@ jobs:
     - name: Redirect traffic to latest revision
       uses: google-github-actions/deploy-cloudrun@main
       with:
+        service: ${{ env.SERVICE }}
         # https://cloud.google.com/sdk/gcloud/reference/run/services/update-traffic#--to-latest
         # this need to be seperate step
         revision_traffic: LATEST=100
