@@ -26,4 +26,4 @@ COPY --chown=node:node . .
 EXPOSE 8080
 
 USER node
-CMD ["nodemon", "index.js"]
+CMD ["node", "index.js"]
