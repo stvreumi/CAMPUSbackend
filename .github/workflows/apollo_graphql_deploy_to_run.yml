@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - 'apollo/**'
+      - '.github/workflows/apollo_graphql_deploy_to_run.yml'
   workflow_dispatch:
     inputs:
       name:
@@ -50,7 +51,10 @@ jobs:
         service: ${{ env.SERVICE }}
         image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
         region: ${{ env.REGION }}
+    - name: Redirect traffic to latest revision
+      uses: google-github-actions/deploy-cloudrun@main
+      with:
         # https://cloud.google.com/sdk/gcloud/reference/run/services/update-traffic#--to-latest
-        # Redirect traffic to latest revision
+        # this need to be seperate step
         revision_traffic: LATEST=100
     
