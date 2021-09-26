@@ -1,6 +1,10 @@
 version: "3.9"
 services:
   emulator:
+    # set up functions emulator locally
+    # especially functions configuration
+    # we need to create `.runtimeconfig.json`
+    # https://firebase.google.com/docs/functions/local-emulator
     build: ./functions
     volumes:
       - .:/node_app/app
@@ -8,7 +12,12 @@ services:
       - ./functions/package-lock.json:/node_app/package-lock.json
       - no-used:/node_app/app/functions/node_modules
       # avoid emulators repeated download
+      # https://firebase.google.com/docs/emulator-suite/install_and_configure#running_containerized_emulator_suite_images
       - emulators:/home/node/.cache/firebase/emulators/
+    # used for pubsub emulator connection
+    environment:
+      - PUBSUB_EMULATOR_HOST=pubsub_emulator:8085
+      - PUBSUB_PROJECT_ID=${PUBSUB_PROJECT_ID:-test}
     ports:
       # need to specify host as 0.0.0.0 so that we can connect to the container
       # fron host
@@ -20,16 +29,56 @@ services:
       - "0.0.0.0:8080:8080"
     stdin_open: true
     tty: true
+  pubsub_emulator:
+    build:
+      context: ./
+      dockerfile: Dockerfile.pubsub.emulator
+    volumes:
+      - ./pubsub-emulator:/pubsub-emulator
+    # https://cloud.google.com/sdk/gcloud/reference/beta/emulators/pubsub/start
+    # default host port is localhost:8085
+    # use --quiet flag to accept default answers for all prompts
+    command: gcloud --quiet beta emulators pubsub start --data-dir=/pubsub-emulator --host-port=pubsub_emulator:8085
+  pubsub_clients_setting:
+    build:
+      context: ./
+      dockerfile: Dockerfile.python3.pubsub.clients
+    # used environment variable to set the compose variable
+    # https://docs.docker.com/compose/environment-variables/
+    environment:
+      - PUBSUB_EMULATOR_HOST=pubsub_emulator:8085
+      - PUBSUB_PROJECT_ID=${PUBSUB_PROJECT_ID:-test}
+    # https://cloud.google.com/pubsub/docs/emulator#using_the_emulator
+    # https://docs.docker.com/compose/compose-file/compose-file-v3/#variable-substitution
+    # a $$ allows you to refer to environment variables that you don’t want processed by Compose.
+    # https://docs.docker.com/engine/reference/builder/#cmd
+    # https://stackoverflow.com/questions/30063907/using-docker-compose-how-to-execute-multiple-commands
+    # use the shell form or execute a shell directly for shell processing
+    command: >
+      bash -c " /wait-for-it/wait-for-it.sh $${PUBSUB_EMULATOR_HOST} --
+      echo \"pubsub emulator ready($${PUBSUB_EMULATOR_HOST}), start pubsub setting...\"
+      && python publisher.py ${PUBSUB_PROJECT_ID:-test} create ${TOPIC_ID:-test-topic}
+      && python subscriber.py ${PUBSUB_PROJECT_ID:-test} create ${TOPIC_ID:-test-topic} ${SUBSCRIPTION_ID:-test-topic-sub}"
+    # https://docs.docker.com/compose/compose-file/compose-file-v3/#depends_on
+    # improvement direction: https://docs.docker.com/compose/startup-order/
+    # However, the python pubsub client would wait for port to run and 
+    #   set the pubsub topic and subscription
+    depends_on:
+      - pubsub_emulator
   apollo:
     build: 
       context: ./apollo
-      dockerfile: Dockerfile-testing
+      dockerfile: Dockerfile.test
     volumes: 
       - ./apollo:/node_app/app
       - ./apollo/package.json:/node_app/package.json
       - ./apollo/package-lock.json:/node_app/package-lock.json
       - no-used:/node_app/app/apollo/node_modules
     env_file: ./apollo/compose.env
+    # used for pubsub emulator connection
+    environment:
+      - PUBSUB_EMULATOR_HOST=pubsub_emulator:8085
+      - PUBSUB_PROJECT_ID=${PUBSUB_PROJECT_ID:-test}
     ports:
       - "8333:8080"
 volumes:
