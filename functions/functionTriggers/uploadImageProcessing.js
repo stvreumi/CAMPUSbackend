@@ -100,7 +100,7 @@ async function uploadImageProcessing(admin, object) {
      */
     await image.withMetadata().toFile(newFilePath);
   } catch (e) {
-    logger.log("sharp image process error:");
+    logger.error("sharp image process error:");
     logger.error(e);
     return;
   }

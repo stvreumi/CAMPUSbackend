@@ -44,16 +44,24 @@ const PubSubHandlers = (firestore, eventEmitter, algoliaIndexClient) => ({
     // event emitted location: `checkIfNeedArchived` from [CAMPUS-backend dir]/apollo/src/datasources/TagDataSource.js
     listenOnTagChangeEvents('archived');
 
-    // delete event from firebase function delete event trigger function
-    // event delivered by GCP Pub/Sub
-    // https://cloud.google.com/pubsub/docs/quickstart-client-libraries#receive_messages
-    // event name: `deleted`
-    subscription.on('message', message => {
+    // * delete event from firebase function delete event trigger function
+    // * event delivered by GCP Pub/Sub
+    // * event name: `deleted`
+    // * the pub/sub may deliver event multiple times, so the subscribe function
+    //   must be idempotent function.
+    //   https://stackoverflow.com/questions/53823366/google-pubsub-and-duplicated-messages-from-the-topic
+    // * https://cloud.google.com/pubsub/docs/quickstart-client-libraries#receive_messages
+    subscription.on('message', async message => {
       console.log(`receive message id: ${message.id}`);
       const { changeType, tagContent } = JSON.parse(message.data);
+
+      // "Ack" (acknowledge receipt of) the message
+      // (maybe) ack as soon as possible
+      message.ack();
+
       // error, no changeType or the event name is not 'deleted'
       if (changeType !== 'deleted') {
-        console.log('Error when receive pub/sub data. Received data: ');
+        console.error('Error when receive pub/sub data. Received data: ');
         console.dir(message.data);
         return;
       }
@@ -66,11 +74,9 @@ const PubSubHandlers = (firestore, eventEmitter, algoliaIndexClient) => ({
 
       const { id } = tagContent;
       // algolia_object_delete
-      // It's async function, but no need to await in this situation
-      algoliaIndexClient.deleteObject(id);
-
-      // "Ack" (acknowledge receipt of) the message
-      message.ack();
+      const res = await algoliaIndexClient.deleteObject(id);
+      console.log('algolia delete object result:');
+      console.dir(res);
     });
   },
 });

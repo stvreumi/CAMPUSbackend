@@ -50,8 +50,8 @@ async function deleteTagTrigger(admin, snap) {
     const messageId = await pubSubClient.topic(topicName).publish(dataBuffer);
     logger.log(`publish ${tagId} delete event, message id: ${messageId}`);
   } catch (error) {
-    logger.log(`publish ${tagId} delete event failed on topic ${topicName}`);
-    logger.log(error);
+    logger.error(`publish ${tagId} delete event failed on topic ${topicName}`);
+    logger.error(error);
   }
 
   // Decrement userAddTagNumber
