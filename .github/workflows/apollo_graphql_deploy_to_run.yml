@@ -1,7 +1,8 @@
 name: apollo-graphql-deploy-to-gcp-cloud-run
 
 on:
-  pull_request:
+  # use pull_request if you want to run this action when new PR is created
+  push:
     branches: 
       - master
     # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#onpushpull_requestpaths
@@ -25,12 +26,13 @@ jobs:
     steps:
     - name: Into the repo
       uses: actions/checkout@v2
-    # below steps reference from here
-    # https://github.com/google-github-actions/deploy-cloudrun/blob/main/.github/workflows/example-workflow.yaml
-    # https://cloud.google.com/community/tutorials/cicd-cloud-run-github-actions?hl=zh-tw
-
-    # setup cloud SDK is needed since it would need the credential to configure
-    # in the docker.
+    # * below steps reference from here
+    #   https://github.com/google-github-actions/deploy-cloudrun/blob/main/.github/workflows/example-workflow.yaml
+    #   https://cloud.google.com/community/tutorials/cicd-cloud-run-github-actions?hl=zh-tw
+    # * setup cloud SDK is needed since it would need the credential to configure
+    #   in the docker.
+    # * available inputs:
+    #   https://github.com/google-github-actions/deploy-cloudrun#inputs
     - name: Setup Cloud SDK
       uses: google-github-actions/setup-gcloud@v0.2.0
       with:
@@ -56,6 +58,7 @@ jobs:
       uses: google-github-actions/deploy-cloudrun@main
       with:
         service: ${{ env.SERVICE }}
+        region: ${{ env.REGION }}
         # https://cloud.google.com/sdk/gcloud/reference/run/services/update-traffic#--to-latest
         # this need to be seperate step
         revision_traffic: LATEST=100
