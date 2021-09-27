@@ -26,8 +26,8 @@ function transferTimestamp(timestamp) {
         .toString();
     }
   } catch (e) {
-    console.log('error: the timestamp type or format may not correct');
-    console.log(e);
+    console.error('error: the timestamp type or format may not correct');
+    console.error(e);
   }
   return null;
 }
@@ -149,8 +149,8 @@ const coordinateResolvers = {
         };
       }
     } catch (e) {
-      console.log('error: the coordinate type or format may not correct');
-      console.log(e);
+      console.error('error: the coordinate type or format may not correct');
+      console.error(e);
     }
     return null;
   },
