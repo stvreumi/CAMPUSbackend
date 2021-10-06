@@ -2,7 +2,6 @@
 const { DataSource } = require('apollo-datasource');
 const { FieldValue } = require('firebase-admin').firestore;
 
-
 const {
   getIdWithDataFromDocSnap,
   getLatestStatus,
@@ -193,14 +192,12 @@ class TagDataSource extends DataSource {
       if (this.algoliaIndexClient) {
         const { locationName, category } = tagData;
         // https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/how-to/incremental-updates/?client=javascript#adding-records
-        const res = await this.algoliaIndexClient.saveObjects([
-          {
-            objectID: newAddedTagId,
-            locationName,
-            category,
-            statusName,
-          },
-        ]);
+        const res = await this.algoliaIndexClient.saveObject({
+          objectID: newAddedTagId,
+          locationName,
+          category,
+          statusName,
+        });
         console.log('algolia add object result:');
         console.dir(res);
       }
@@ -234,14 +231,12 @@ class TagDataSource extends DataSource {
       if (this.algoliaIndexClient) {
         const { locationName, category } = tagData;
         // https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/how-to/incremental-updates/?client=javascript#updating-a-subset-of-the-record
-        const res = await this.algoliaIndexClient.partialUpdateObjects([
-          {
-            objectID: tagId,
-            ...(locationName ? { locationName } : {}),
-            ...(category ? { category } : {}),
-            statusName,
-          },
-        ]);
+        const res = await this.algoliaIndexClient.partialUpdateObject({
+          objectID: tagId,
+          ...(locationName ? { locationName } : {}),
+          ...(category ? { category } : {}),
+          statusName,
+        });
         console.log('algolia update object result:');
         console.dir(res);
       }
@@ -346,6 +341,12 @@ class TagDataSource extends DataSource {
       .doc(tagId)
       .update({ lastUpdateTime: FieldValue.serverTimestamp() });
 
+    // update status field in the record of algolia index
+    await this.algoliaIndexClient.partialUpdateObject({
+      objectID: tagId,
+      statusName,
+    });
+
     return (await docRef.get()).data();
   }
 
@@ -434,6 +435,9 @@ class TagDataSource extends DataSource {
       // event: archived
       const idWithResultData = getIdWithDataFromDocSnap(await docRef.get());
       await this.triggerEvent('archived', idWithResultData);
+
+      // after archiving, need to delete the record in the index of algolia
+      await this.algoliaIndexClient.deleteObject(tagId);
     }
   }
 
