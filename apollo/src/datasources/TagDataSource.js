@@ -16,6 +16,7 @@ const { upVoteActionName, cancelUpVoteActionName } = require('./constants');
 /**
  * @typedef {import('../types').RawTagDocumentFields} RawTagDocumentFields
  * @typedef {import('firebase-admin').firestore.CollectionReference<RawTagDocumentFields>} TagCollectionReference
+ * @typedef {import('firebase-admin').firestore.CollectionReference} CollectionReference
  * @typedef {import('firebase-admin').firestore.DocumentReference} DocumentReference
  * @typedef {import('firebase-admin').firestore.Firestore} Firestore
  * @typedef {import('../types').DecodedUserInfoFromAuthHeader} DecodedUserInfoFromAuthHeader
@@ -33,6 +34,7 @@ class TagDataSource extends DataSource {
   /**
    * Use admin to construct necessary entity of communication
    * @param {TagCollectionReference} tagDataCollectionReference
+   * @param {CollectionReference} userActivityCollectionReference
    * @param {number} archivedThreshold
    * @param {Firestore} firestore
    * @param {import('events').EventEmitter} eventEmitter
@@ -40,6 +42,7 @@ class TagDataSource extends DataSource {
    */
   constructor(
     tagDataCollectionReference,
+    userActivityCollectionReference,
     archivedThreshold,
     firestore,
     eventEmitter,
@@ -47,6 +50,7 @@ class TagDataSource extends DataSource {
   ) {
     super();
     this.tagDataCollectionReference = tagDataCollectionReference;
+    this.userActivityCollectionReference = userActivityCollectionReference;
     this.archivedThreshold = archivedThreshold;
     this.firestore = firestore;
     this.eventEmitter = eventEmitter;
@@ -491,6 +495,22 @@ class TagDataSource extends DataSource {
    */
   async triggerEvent(eventName, tagData) {
     this.eventEmitter.emit(eventName, tagData);
+  }
+
+  /**
+   * Record user activity(actions) on the tag.
+   * @param {string} action available actions: `add`, `update`, `view`
+   * @param {DecodedUserInfoFromAuthHeader} userInfo
+   * @param {string} tagId
+   */
+  async recordUserActivity(action, userInfo, tagId) {
+    const { uid: userId } = userInfo;
+    await this.userActivityCollectionReference.add({
+      action,
+      userId,
+      tagId,
+      createTime: FieldValue.serverTimestamp(),
+    });
   }
 } // class TagDataSource
 
