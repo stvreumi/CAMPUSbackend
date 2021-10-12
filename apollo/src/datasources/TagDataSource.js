@@ -346,10 +346,12 @@ class TagDataSource extends DataSource {
       .update({ lastUpdateTime: FieldValue.serverTimestamp() });
 
     // update status field in the record of algolia index
-    await this.algoliaIndexClient.partialUpdateObject({
-      objectID: tagId,
-      statusName,
-    });
+    if (this.algoliaIndexClient) {
+      await this.algoliaIndexClient.partialUpdateObject({
+        objectID: tagId,
+        statusName,
+      });
+    }
 
     return (await docRef.get()).data();
   }
