@@ -21,8 +21,8 @@ const queryResolvers = {
      * @param {{pageParams: PageParams}} params
      * @param {ResolverArgsInfo} info
      */
-    unarchivedTagList: async (_, { pageParams }, { dataSources }) =>
-      dataSources.tagDataSource.getAllUnarchivedTags(pageParams),
+    unarchivedTagList: async (_, { pageParams }, { dataSources, userInfo }) =>
+      dataSources.tagDataSource.getAllUnarchivedTags(pageParams, userInfo),
     /**
      * @param {*} _
      * @param {{tagId: string}} params
