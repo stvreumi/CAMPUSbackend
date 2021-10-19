@@ -70,9 +70,13 @@ class TagDataSource extends DataSource {
   /**
    * Return data list from collection `tagData`
    * @param {PageParams} pageParams
+   * @param {DecodedUserInfoFromAuthHeader} userInfo
    * @returns {Promise<TagPage>}
    */
-  async getAllUnarchivedTags(pageParams) {
+  async getAllUnarchivedTags(pageParams, userInfo) {
+    // Record user activity.
+    this.recordUserActivity('getTags', userInfo);
+
     const query = this.tagDataCollectionReference
       .where('archived', '==', false)
       .orderBy('lastUpdateTime', 'desc');
@@ -206,6 +210,9 @@ class TagDataSource extends DataSource {
         console.dir(res);
       }
 
+      // Record user activity.
+      this.recordUserActivity('addTag', userInfo, newAddedTagId);
+
       return getIdWithDataFromDocSnap(await refAfterTagAdd.get());
     }
     if (action === 'update') {
@@ -244,6 +251,9 @@ class TagDataSource extends DataSource {
         console.log('algolia update object result:');
         console.dir(res);
       }
+
+      // Record user activity.
+      this.recordUserActivity('updateTag', userInfo, tagId);
 
       return getIdWithDataFromDocSnap(await refOfUpdateTag.get());
     }
@@ -353,6 +363,10 @@ class TagDataSource extends DataSource {
       });
     }
 
+    // * Record user activity.
+    // * When user add tag, he/she also create `updateStatus` activity.
+    this.recordUserActivity('updateStatus', userInfo, tagId);
+
     return (await docRef.get()).data();
   }
 
@@ -389,23 +403,31 @@ class TagDataSource extends DataSource {
       }
       if (action === upVoteActionName && !tagStatusUpVoteUserSnap.exists) {
         t.update(tagStatusDocRef, {
-          numberOfUpVote: numberOfUpVote + 1,
+          numberOfUpVote: numberOfUpVote + 1, // <=== must add the same number
         });
         t.set(tagStatusUpVoteUserRef, { hasUpVote: true });
+
+        // Record user activity.
+        this.recordUserActivity('upVote', userInfo, tagId);
+
         return {
           tagId,
-          numberOfUpVote: numberOfUpVote + 1,
+          numberOfUpVote: numberOfUpVote + 1, // <=== must add the same number
           hasUpVote: true,
         };
       }
       if (action === cancelUpVoteActionName && tagStatusUpVoteUserSnap.exists) {
         t.update(tagStatusDocRef, {
-          numberOfUpVote: numberOfUpVote - 1,
+          numberOfUpVote: numberOfUpVote - 1, // <=== must subtract the same number
         });
         t.delete(tagStatusUpVoteUserRef);
+
+        // Record user activity.
+        this.recordUserActivity('cancelUpVote', userInfo, tagId);
+
         return {
           tagId,
-          numberOfUpVote: numberOfUpVote - 1,
+          numberOfUpVote: numberOfUpVote - 1, // <=== must subtract the same number
           hasUpVote: false,
         };
       }
@@ -467,6 +489,9 @@ class TagDataSource extends DataSource {
       // use this sentinel values to set viewCount without transaction.
       { viewCount: FieldValue.increment(1) }
     );
+
+    // Record user activity.
+    this.recordUserActivity('viewTag', userInfo, tagId);
     return true;
   }
 
@@ -501,11 +526,19 @@ class TagDataSource extends DataSource {
 
   /**
    * Record user activity(actions) on the tag.
-   * @param {string} action available actions: `add`, `update`, `view`
+   * It's OK not to await this function, the caller would not block on this function.
+   * @param {string} action available actions:
+   *  - 'addTag'
+   *  - 'updateTag'
+   *  - 'updateStatus'
+   *  - 'viewTag'
+   *  - 'upVote'
+   *  - 'cancelUpVote'
+   *  - 'getTags'(meaning: the first time open the web app and refresh the page)
    * @param {DecodedUserInfoFromAuthHeader} userInfo
-   * @param {string} tagId
+   * @param {string | null} tagId
    */
-  async recordUserActivity(action, userInfo, tagId) {
+  async recordUserActivity(action, userInfo, tagId = null) {
     const { uid: userId } = userInfo;
     await this.userActivityCollectionReference.add({
       action,
