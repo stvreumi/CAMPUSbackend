@@ -350,11 +350,6 @@ class TagDataSource extends DataSource {
       .collection('status')
       .add(statusData);
 
-    // also update the field `lastUpdateTime` in the tag
-    await this.tagDataCollectionReference
-      .doc(tagId)
-      .update({ lastUpdateTime: FieldValue.serverTimestamp() });
-
     // update status field in the record of algolia index
     if (this.algoliaIndexClient) {
       await this.algoliaIndexClient.partialUpdateObject({
