@@ -30,8 +30,7 @@ async function exportUserActivitiesToJson(firestore) {
       createTime: createTimeTaipeiZoneISOString,
     });
     // below is a promise, but no need to await
-    // uncomment after properly test
-    // userActivityRef.doc(doc.id).delete();
+    userActivityRef.doc(doc.id).delete();
   });
 
   // * store data locally
