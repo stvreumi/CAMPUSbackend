@@ -24,7 +24,11 @@ async function exportUserActivitiesToJson(firestore) {
     )
       .setZone("UTC+8")
       .toString();
-    exportData.push({ ...data, createTime: createTimeTaipeiZoneISOString });
+    exportData.push({
+      ...data,
+      id: doc.id,
+      createTime: createTimeTaipeiZoneISOString,
+    });
     // below is a promise, but no need to await
     // uncomment after properly test
     // userActivityRef.doc(doc.id).delete();
