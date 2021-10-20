@@ -51,6 +51,7 @@ services:
     # https://cloud.google.com/pubsub/docs/emulator#using_the_emulator
     # https://docs.docker.com/compose/compose-file/compose-file-v3/#variable-substitution
     # a $$ allows you to refer to environment variables that you don’t want processed by Compose.
+    
     # https://docs.docker.com/engine/reference/builder/#cmd
     # https://stackoverflow.com/questions/30063907/using-docker-compose-how-to-execute-multiple-commands
     # use the shell form or execute a shell directly for shell processing
