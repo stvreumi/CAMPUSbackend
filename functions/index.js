@@ -29,9 +29,11 @@ exports.deleteTagTrigger = functions.firestore
 // * firebase emulator doesn't support it currently
 //   https://github.com/firebase/firebase-tools/issues/2034
 
+const exportIntervalOfHours = 24 * 3; // 3 days
+
 exports.exportUserActivitiesToJson = functions
   .region("asia-east1") // set this function in Taiwan
-  .pubsub.schedule("every 36 hours") // 3 days
+  .pubsub.schedule(`every ${exportIntervalOfHours} hours`)
   .onRun(async () => {
     exportUserActivitiesToJsonImplementation(firestore);
   });
