@@ -29,8 +29,6 @@ async function exportUserActivitiesToJson(firestore) {
       id: doc.id,
       createTime: createTimeTaipeiZoneISOString,
     });
-    // below is a promise, but no need to await
-    userActivityRef.doc(doc.id).delete();
   });
 
   // * store data locally
@@ -53,6 +51,15 @@ async function exportUserActivitiesToJson(firestore) {
     .bucket(bucketName)
     .upload(localFilePath, { destination: filename });
   logger.log(`finish upload to bucket: ${bucketName}`);
+
+  // delete all exported docs
+
+  // ideas from: https://stackoverflow.com/questions/55067252/error-4-deadline-exceeded-deadline-exceeded-at-object-exports-createstatuserro
+  // push all delete action promises into one array, and delete it all after
+  // export data successfully.
+  await Promise.all(
+    exportData.map((data) => userActivityRef.doc(data.id).delete())
+  );
 }
 
 module.exports = exportUserActivitiesToJson;
