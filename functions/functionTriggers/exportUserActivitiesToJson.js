@@ -13,7 +13,7 @@ const { Storage } = require("@google-cloud/storage");
 async function exportUserActivitiesToJson(firestore) {
   const exportData = [];
   const userActivityRef = firestore.collection("userActivity");
-  const exportSanp = await userActivityRef.orderBy("createTime", "desc").get();
+  const exportSanp = await userActivityRef.get();
 
   // * prepare data
   exportSanp.forEach((doc) => {
