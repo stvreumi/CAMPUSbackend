@@ -8,10 +8,10 @@ const admin = require("firebase-admin");
 
 const uploadImageProcessingImplementation = require("./functionTriggers/uploadImageProcessing");
 const deleteTagTriggerImplementation = require("./functionTriggers/deleteTagTrigger");
-const exportUserActivitiesToJsonImplementation = require("./functionTriggers/exportUserActivitiesToJson");
+// const exportUserActivitiesToJsonImplementation = require("./functionTriggers/exportUserActivitiesToJson");
 
 admin.initializeApp();
-const firestore = admin.firestore();
+// const firestore = admin.firestore();
 
 exports.uploadImageProcessing = functions.storage
   .object()
@@ -29,6 +29,11 @@ exports.deleteTagTrigger = functions.firestore
 // * firebase emulator doesn't support it currently
 //   https://github.com/firebase/firebase-tools/issues/2034
 
+// Because this function always trigger with errors, we remove from firebase functions.
+// We run it locally if we need to collection and analyize data.
+// Maybe we can bring it back in the near future if it can run successfully.
+
+/*
 const exportIntervalOfHours = 24 * 3; // 3 days
 
 exports.exportUserActivitiesToJson = functions
@@ -37,6 +42,7 @@ exports.exportUserActivitiesToJson = functions
   .onRun(async () => {
     exportUserActivitiesToJsonImplementation(firestore);
   });
+*/
 
 // use below script to test
 // exports.test = functions.https.onRequest()
