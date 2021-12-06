@@ -1046,4 +1046,6 @@ describe('test graphql mutate and paginate function', () => {
       }
     );
   });
+  test('test delete tagData by create user', async () => {});
+  test('test delete tagData by user which not create the tag', async () => {});
 });
