@@ -479,7 +479,9 @@ class TagDataSource extends DataSource {
       await this.triggerEvent('archived', idWithResultData);
 
       // after archiving, need to delete the record in the index of algolia
-      await this.algoliaIndexClient.deleteObject(tagId);
+      if (this.algoliaIndexClient) {
+        await this.algoliaIndexClient.deleteObject(tagId);
+      }
     }
   }
 
