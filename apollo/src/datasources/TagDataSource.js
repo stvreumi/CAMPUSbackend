@@ -299,11 +299,11 @@ class TagDataSource extends DataSource {
    * @return {Promise<AddorUpdateTagResponse>} Updated tag data
    */
   async updateTagData({ tagId, data, userInfo }) {
-    // check user status
+    // check user login status
     const { logIn, uid } = userInfo;
     checkUserLogIn(logIn);
 
-    // check if the user is the creater of the tag
+    // check if the user is the create user of the tag
     const tagCreateUserId = (
       await this.tagDataCollectionReference.doc(tagId).get()
     ).data().createUserId;
@@ -363,6 +363,31 @@ class TagDataSource extends DataSource {
     this.recordUserActivity('updateStatus', userInfo, tagId);
 
     return (await docRef.get()).data();
+  }
+
+  /**
+   *
+   * @param {{ tagId: string, userInfo: DecodedUserInfoFromAuthHeader }} param
+   * @returns {boolean}
+   */
+  async deleteTagDataByCreateUser({ tagId, userInfo }) {
+    // the first part of this function is like `updateTagData`
+    // check user login status
+    const { logIn, uid } = userInfo;
+    checkUserLogIn(logIn);
+
+    // check if the user is the creater of the tag
+    const tagCreateUserId = (
+      await this.tagDataCollectionReference.doc(tagId).get()
+    ).data().createUserId;
+
+    if (tagCreateUserId !== uid) {
+      throw Error('This user can not delete this tag');
+    }
+
+    await this.tagDataCollectionReference.doc(tagId).delete();
+
+    return true;
   }
 
   /**
@@ -460,7 +485,9 @@ class TagDataSource extends DataSource {
       await this.triggerEvent('archived', idWithResultData);
 
       // after archiving, need to delete the record in the index of algolia
-      await this.algoliaIndexClient.deleteObject(tagId);
+      if (this.algoliaIndexClient) {
+        await this.algoliaIndexClient.deleteObject(tagId);
+      }
     }
   }
 

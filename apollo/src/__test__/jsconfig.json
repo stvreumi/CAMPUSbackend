@@ -1,0 +1,9 @@
+{
+  // add this in the test folder and install @types/jest to activate vscode intellisense function
+  // https://stackoverflow.com/questions/57874114/intellisense-for-jest-not-working-in-vs-code
+  "typeAcquisition":{
+      "include":[
+          "jest"
+      ]
+  }
+}
