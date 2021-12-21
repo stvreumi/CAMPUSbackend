@@ -365,6 +365,11 @@ class TagDataSource extends DataSource {
     return (await docRef.get()).data();
   }
 
+  /**
+   *
+   * @param {{ tagId: string, userInfo: DecodedUserInfoFromAuthHeader }} param
+   * @returns {boolean}
+   */
   async deleteTagDataByCreateUser({ tagId, userInfo }) {
     // the first part of this function is like `updateTagData`
     // check user login status
@@ -380,8 +385,9 @@ class TagDataSource extends DataSource {
       throw Error('This user can not delete this tag');
     }
 
-    const res = await this.tagDataCollectionReference.doc(tagId).delete();
-    console.log(res);
+    await this.tagDataCollectionReference.doc(tagId).delete();
+
+    return true;
   }
 
   /**

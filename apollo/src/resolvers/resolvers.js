@@ -157,17 +157,18 @@ const mutationResolvers = {
         userInfo,
       }),
     /**
-     * 
-     * @param {*} _ 
-     * @param {*} param1 
-     * @param {*} param2 
-     * @returns 
+     *
+     * @param {*} _
+     * @param {{tagId: string}} param
+     * @param {ResolverArgsInfo} info
+     * @returns
      */
     deleteTagDataByCreateUser: async (
       _,
       { tagId },
       { dataSources, userInfo }
-    ) => dataSources.,
+    ) =>
+      dataSources.tagDataSource.deleteTagDataByCreateUser({ tagId, userInfo }),
     /**
      *
      * @param {*} _

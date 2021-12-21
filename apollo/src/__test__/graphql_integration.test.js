@@ -8,6 +8,15 @@ const gql = require('graphql-tag');
 const apolloServer = require('./apolloTestServer');
 const { getLatestStatus } = require('../datasources/firebaseUtils');
 
+/**
+ * How to use available test function(for memory refresh)
+ * * Use `generateGraphQLHelper` to generate helper for graphql query or
+ *    mutation.
+ * * `addFakeDataToFirestore`: add fake data into firestore emulator
+ * * `addTestAccountToAuthEmulator`: register fake account into firebase auth
+ *    emulator.
+ */
+
 // manual mock
 // https://jestjs.io/docs/manual-mocks#mocking-node-modules
 jest.mock('@google-cloud/pubsub');
@@ -30,6 +39,12 @@ const testProjectId = 'smartcampus-1b31f-graphql-test';
 
 const timestampStringRegex = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}\+08:00/;
 
+/**
+ *
+ * @param {*} type
+ * @param {*} testClient
+ * @returns {mutationResponse: objct,mutationResult: object}
+ */
 function generateGraphQLHelper(type, testClient) {
   if (type === 'query') {
     return async (queryString, queryFieldName, variables = {}) => {
@@ -49,10 +64,15 @@ function generateGraphQLHelper(type, testClient) {
         mutation: mutateString,
         variables,
       });
-      return {
-        mutationResponse: mutateResult,
-        mutationResult: mutateResult.data[mutateFieldName],
-      };
+      try {
+        return {
+          mutationResponse: mutateResult,
+          mutationResult: mutateResult.data[mutateFieldName],
+        };
+      } catch (e) {
+        console.log(e);
+        return { mutationResponse: mutateResult };
+      }
     };
   }
   return undefined;
@@ -110,6 +130,7 @@ const testPaginate = async (
 };
 
 describe('test graphql query', () => {
+  /** @type {import('firebase-admin').firestore}*/
   let firestore;
   let fakeTagId;
   let graphQLQueryHelper;
@@ -385,9 +406,18 @@ describe('test graphql query', () => {
   });
 });
 
+/**
+ ***********************************************************
+ *
+ * test mutate and paginate function
+ *
+ ***********************************************************
+ */
+
 describe('test graphql mutate and paginate function', () => {
   let graphQLQueryHelper;
   let graphQLMutationHelper;
+  /** @type {import('firebase-admin').firestore.Firestore} */
   let firestore;
   let userInfoAfterAccountCreated;
   let mutateClient;
@@ -1046,6 +1076,57 @@ describe('test graphql mutate and paginate function', () => {
       }
     );
   });
-  test('test delete tagData by create user', async () => {});
-  test('test delete tagData by user which not create the tag', async () => {});
+  test('test delete tagData by create user', async () => {
+    const response = await addFakeDataToFirestore(mutateClient);
+    const testTagId = response.tag.id;
+
+    const mutate = gql`
+      mutation testDeleteTagDataByCreateUser($tagId: ID!) {
+        deleteTagDataByCreateUser(tagId: $tagId)
+      }
+    `;
+
+    const { mutationResult } = await graphQLMutationHelper(
+      mutate,
+      'deleteTagDataByCreateUser',
+      {
+        tagId: testTagId,
+      }
+    );
+
+    expect(mutationResult).toBeTruthy();
+
+    // test if the tag really be deleted
+    const tagSnap = await firestore.collection('tagData').doc(testTagId).get();
+
+    expect(tagSnap.exists).toBeFalsy();
+  });
+  test('test delete tagData by user which not create the tag', async () => {
+    const response = await addFakeDataToFirestore(mutateClient);
+    const testTagId = response.tag.id;
+
+    // directly modify createUser id in the firestore
+    await firestore
+      .collection('tagData')
+      .doc(testTagId)
+      .update({ createUserId: 'just-want-to-be-different' });
+
+    const mutate = gql`
+      mutation testDeleteTagDataByCreateUser($tagId: ID!) {
+        deleteTagDataByCreateUser(tagId: $tagId)
+      }
+    `;
+
+    const { mutationResponse } = await graphQLMutationHelper(
+      mutate,
+      'deleteTagDataByCreateUser',
+      {
+        tagId: testTagId,
+      }
+    );
+
+    expect(mutationResponse.errors[0].message).toBe(
+      'This user can not delete this tag'
+    );
+  });
 });
