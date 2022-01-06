@@ -1,3 +1,7 @@
+/**
+ * obsolete
+ * because firebase cloud function would always get errors when execute this function
+ */
 const path = require("path");
 const os = require("os");
 const fs = require("fs/promises");
