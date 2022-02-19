@@ -169,7 +169,7 @@ describe('test graphql query', () => {
     fakeTagId = response.tag.id;
   });
 
-  test('test query unarchivedTagList, but is not 問題任務', async () => {
+  test('test query unarchivedTagList, but is not 問題回報', async () => {
     const queryUnarchivedTagList = gql`
       query {
         unarchivedTagList {
@@ -282,7 +282,7 @@ describe('test graphql query', () => {
       viewCount: 0,
     });
   });
-  test('test query tag with 問題任務, which has information about numberOfUpVote and hasUpVote', async () => {
+  test('test query tag with 問題回報, which has information about numberOfUpVote and hasUpVote', async () => {
     const response = await addFakeDataToFirestore(mutateClient, true);
     const tagId = response.tag.id;
     const queryTag = gql`
@@ -524,7 +524,7 @@ describe('test graphql mutate and paginate function', () => {
     // change field
     const data = {
       category: {
-        missionName: '動態任務',
+        missionName: '動態回報',
       },
       statusName: '人少',
     };
@@ -884,7 +884,7 @@ describe('test graphql mutate and paginate function', () => {
       .doc('tag')
       .set({ archivedThreshold: testThreshold });
 
-    // add 問題任務 tag
+    // add 問題回報 tag
     const response = await addFakeDataToFirestore(mutateClient, true);
     const tagId = response.tag.id;
 

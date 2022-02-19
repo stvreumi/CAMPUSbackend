@@ -12,7 +12,7 @@ const gql = require('graphql-tag');
 const fakeDataId = 'test-fakedata-id';
 
 const fakeCategory = {
-  missionName: '設施任務',
+  missionName: '設施回報',
   subTypeName: '無障礙設施',
   targetName: '無障礙坡道',
 };
@@ -94,7 +94,7 @@ function mockFirebaseAdmin(projectId) {
  * Add fakeData to firestore
  * @param {Function} mutateClient
  * @param {Boolean} testNumberOfUpVote true if we want to add fake data to test
- *   numberOfUpVote, which is 問題任務
+ *   numberOfUpVote, which is 問題回報
  * @return {AddNewTagResponse} Contain the upload tag information, and image
  */
 async function addFakeDataToFirestore(
@@ -126,7 +126,7 @@ async function addFakeDataToFirestore(
     ...fakeTagData,
   };
   const hasNumberOfUpVoteCategory = {
-    missionName: '問題任務',
+    missionName: '問題回報',
     subTypeName: '',
     targetName: '',
   };

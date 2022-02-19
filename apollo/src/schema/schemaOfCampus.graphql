@@ -49,7 +49,7 @@ type TagFieldsForSubscription {
 }
 
 type Category {
-  "設施任務/問題任務/動態任務"
+  "設施回報/問題回報/動態回報"
   missionName: String!
   "**類型"
   subTypeName: String
@@ -63,10 +63,10 @@ type Status {
   createTime: String!
   createUser: User
   description: String
-  "Only available in 問題任務, otherwise null"
+  "Only available in 問題回報, otherwise null"
   numberOfUpVote: Int
   """
-  Only available in 問題任務, otherwise null. 
+  Only available in 問題回報, otherwise null. 
   In the \`statusHistory\` this field would also be null
   """
   hasUpVote: Boolean
@@ -146,7 +146,7 @@ input CoordinateInput {
 }
 
 input CategoryInput {
-  "設施任務/問題任務/動態任務"
+  "設施回報/問題回報/動態回報"
   missionName: String!
   "**類型"
   subTypeName: String
