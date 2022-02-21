@@ -156,7 +156,7 @@ class TagDataSource extends DataSource {
         .collection('UpVoteUser')
         .doc(uid);
       const tagStatusUpVoteUserSnap = await tagStatusUpVoteUserRef.get();
-      // if this task is not 問題任務, return `hasUpVote` with null
+      // if this task is not 問題回報, return `hasUpVote` with null
       const { numberOfUpVote } = latestStatusData;
       hasUpVote =
         numberOfUpVote !== null ? tagStatusUpVoteUserSnap.exists : null;
@@ -230,7 +230,7 @@ class TagDataSource extends DataSource {
         await this.updateTagStatus({
           tagId,
           statusName,
-          description: description || '(修改任務內容)',
+          description: description || '(修改回報內容)',
           userInfo,
         });
       }
@@ -473,7 +473,7 @@ class TagDataSource extends DataSource {
     const { missionName } = category;
 
     if (
-      missionName === '問題任務' &&
+      missionName === '問題回報' &&
       numberOfUpVote > (await this.archivedThreshold)
     ) {
       const docRef = this.tagDataCollectionReference.doc(tagId);
