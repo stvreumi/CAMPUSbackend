@@ -1,6 +1,10 @@
 # Overview
 - In the directory `functions/`
 
+## migration plan
+- Update `firebase` and `firebase-admin` SDK. Since there are some changes in the import method, we man need more time to update the package.
+  If it is possible, change the import method from CommonJS to ESM module.
+- Update `apollo-server` from 2 to 3. But it seems that v3 doesn't support subscription natively. So we may need some time to investigate how to make subscription function normally.
 ## Installation
 - First you need to install all the necessary packages. Run the following command in the directory `functions`:
   ```bash
