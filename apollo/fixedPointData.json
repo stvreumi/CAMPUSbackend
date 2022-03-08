@@ -1,5 +1,44 @@
 [
   {
+    "locationName": "圖書館",
+    "coordinates": {
+      "latitude": "24.786606833598242",
+      "longitude": "120.99820507103847"
+    },
+    "viewCount": 0,
+    "information": [
+      {
+        "type": "floor",
+        "floor": "2F"
+      },
+      {
+        "type": "floor",
+        "floor": "3F"
+      },
+      {
+        "type": "floor",
+        "floor": "4F"
+      },
+      {
+        "type": "floor",
+        "floor": "5F"
+      },
+      {
+        "type": "floor",
+        "floor": "6F"
+      },
+      {
+        "type": "floor",
+        "floor": "7F"
+      },
+      {
+        "type": "floor",
+        "name": "24K",
+        "floor": "B1"
+      }
+    ]
+  },
+  {
     "locationName": "第二餐廳",
     "coordinates": {
       "latitude": "24.789345225611136",
@@ -9,7 +48,276 @@
     "information": [
       {
         "type": "restaurant-store",
+        "name": "太祖魷魚羹",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
         "name": "姊妹便當",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "賈董的麵",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "男子漢鐵人火山丼",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "拉亞漢堡",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "茶壇 Tea Tank",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "7-11",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "Subway",
+        "floor": "1F"
+      },
+      {
+        "type": "floor",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "隆太郎金牌燒臘",
+        "floor": "2F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "素怡園",
+        "floor": "2F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "茗松美食",
+        "floor": "2F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "多多咖啡廳",
+        "floor": "2F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "果汁甜品吧",
+        "floor": "2F"
+      },
+      {
+        "type": "floor",
+        "floor": "2F"
+      }
+    ]
+  },
+  {
+    "locationName": "小木屋鬆餅",
+    "coordinates": {
+        "latitude": "24.787687190478",
+        "longitude": "120.99764017172566"
+    },
+    "viewCount": 0,
+    "information": [
+      {
+        "type": "floor",
+        "floor": "1F"
+      }
+    ]
+  },
+  {
+    "locationName": "第一餐廳",
+    "coordinates": {
+        "latitude": "24.786538076257727",
+        "longitude": "120.99939833724402"
+    },
+    "viewCount": 0,
+    "information": [
+      {
+        "type": "restaurant-store",
+        "name": "完顏南洋料理",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "月香壽司",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "亮亮朝食",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "湘之坊歐式自助吧",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "湘之坊歐式自助吧（炒飯、可麗餅）",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "軒韻手作茶飲",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "相信誠實商店",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "LALA Kitchen",
+        "floor": "1F"
+      },
+      {
+        "type": "floor",
+        "floor": "1F"
+      }
+    ]
+  }, 
+  {
+    "locationName": "女二餐廳",
+    "coordinates": {
+        "latitude": "24.789345225611136",
+        "longitude": "120.99719144686011"
+    },
+    "viewCount": 0,
+    "information": [
+      {
+        "type": "restaurant-store",
+        "name": "A華滷味",
+        "floor": "A棟"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "郁百分水果店",
+        "floor": "A棟"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "品嘉日式料理",
+        "floor": "A棟"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "比司多早午餐",
+        "floor": "A棟"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "極麵道",
+        "floor": "A棟"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "全美自助餐",
+        "floor": "A棟"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "路易莎咖啡",
+        "floor": "A棟"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "天晟燒臘",
+        "floor": "A棟"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "大聯大百貨",
+        "floor": "A棟"
+      },
+      {
+        "type": "floor",
+        "floor": "A棟"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "麥當勞",
+        "floor": "B棟"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "全家",
+        "floor": "B棟"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "鼎天麵食館",
+        "floor": "B棟"
+      },
+      {
+        "type": "floor",
+        "floor": "B棟"
+      }
+    ]
+  },
+  {
+    "locationName": "研三餐廳",
+    "coordinates": {
+        "latitude": "24.783807451368112",
+        "longitude": "120.9970736962237"
+    },
+    "viewCount": 0,
+    "information": [
+      {
+        "type": "restaurant-store",
+        "name": "全家",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "漢堡王",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "初韻",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "四海遊龍",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "黑貓潮滷味",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "李記小館",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "比司多",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "7-11",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "奶油廚房",
         "floor": "1F"
       },
       {
@@ -30,7 +338,238 @@
         "type": "sports",
         "name": "羽球場",
         "floor": "B1"
+      },
+      {
+        "type": "sports",
+        "name": "網球",
+        "floor": "1F"
+      },
+      {
+        "type": "sports",
+        "name": "桌球",
+        "floor": "1F"
+      }
+    ]
+  },
+  {
+    "locationName": "游泳館",
+    "coordinates": {
+        "latitude": "24.78994836636744",
+        "longitude": "120.99588582600177"
+    },
+    "viewCount": 0,
+    "information": [
+      {
+        "type": "sports",
+        "name": "游泳池",
+        "floor": "1F"
+      },
+      {
+        "type": "floor",
+        "floor": "1F"
+      },
+      {
+        "type": "sports",
+        "name": "健身中心",
+        "floor": "2F"
+      },
+      {
+        "type": "sports",
+        "name": "體適能教室",
+        "floor": "2F"
+      },
+      {
+        "type": "floor",
+        "floor": "2F"
+      }
+    ]
+  },
+  {
+    "locationName": "西區球場（籃球場）",
+    "coordinates": {
+        "latitude": "24.787529799424163",
+        "longitude": "120.99493029548856"
+    },
+    "viewCount": 0,
+    "information": [
+      {
+        "type": "sports",
+        "name": "籃球B",
+        "floor": "1F"
+      },
+      {
+        "type": "sports",
+        "name": "籃球C",
+        "floor": "1F"
+      },
+      {
+        "type": "sports",
+        "name": "籃球D",
+        "floor": "1F"
+      },
+      {
+        "type": "sports",
+        "name": "籃球E",
+        "floor": "1F"
+      },
+      {
+        "type": "sports",
+        "name": "籃球F",
+        "floor": "1F"
+      },
+      {
+        "type": "sports",
+        "name": "籃球G",
+        "floor": "1F"
+      },
+      {
+        "type": "sports",
+        "name": "籃球H",
+        "floor": "1F"
+      },
+      {
+        "type": "sports",
+        "name": "籃球I",
+        "floor": "1F"
+      }      
+    ]
+  },
+  {
+    "locationName": "西區球場（排球場）",
+    "coordinates": {
+        "latitude": "24.78795350500375",
+        "longitude": "120.9949437065332"
+    },
+    "viewCount": 0,
+    "information": [
+      {
+        "type": "sports",
+        "name": "排球二",
+        "floor": "1F"
+      },
+      {
+        "type": "sports",
+        "name": "排球三",
+        "floor": "1F"
+      },
+      {
+        "type": "sports",
+        "name": "排球四",
+        "floor": "1F"
+      },
+      {
+        "type": "sports",
+        "name": "排球五",
+        "floor": "1F"
+      },
+      {
+        "type": "sports",
+        "name": "排球六",
+        "floor": "1F"
+      },
+      {
+        "type": "sports",
+        "name": "排球七",
+        "floor": "1F"
+      } 
+    ]
+  },
+  {
+    "locationName": "西區球場（網球場）",
+    "coordinates": {
+        "latitude": "24.787286289815594",
+        "longitude": "120.99471840098307"
+    },
+    "viewCount": 0,
+    "information": [
+      {
+        "type": "sports",
+        "name": "網球A",
+        "floor": "1F"
+      },
+      {
+        "type": "sports",
+        "name": "網球B",
+        "floor": "1F"
+      },
+      {
+        "type": "sports",
+        "name": "網球C",
+        "floor": "1F"
+      }
+    ]
+  },
+  {
+    "locationName": "東區球場（羽球舊館）",
+    "coordinates": {
+        "latitude": "24.78712029314653",
+        "longitude": "121.00140408586178"
+    },
+    "viewCount": 0,
+    "information": [
+      {
+        "type": "sports",
+        "name": "羽球舊館",
+        "floor": "1F"
+      }
+    ]
+  },
+  {
+    "locationName": "東區球場（戶外網球場）",
+    "coordinates": {
+        "latitude": "24.78754101633732",
+        "longitude": "121.0014888461622"
+    },
+    "viewCount": 0,
+    "information": [
+      {
+        "type": "sports",
+        "name": "戶外網球場",
+        "floor": "1F"
+      }
+    ]
+  },
+  {
+    "locationName": "體育館",
+    "coordinates": {
+        "latitude": "24.788936658471613",
+        "longitude": "120.99577723048645"
+    },
+    "viewCount": 0,
+    "information": [
+      {
+        "type": "sports",
+        "name": "籃球場",
+        "floor": "1F"
+      },
+      {
+        "type": "sports",
+        "name": "排球場",
+        "floor": "1F"
+      },
+      {
+        "type": "floor",
+        "floor": "1F"
+      },
+      {
+        "type": "sports",
+        "name": "舊健身房",
+        "floor": "B1"
+      },
+      {
+        "type": "sports",
+        "name": "韻律教室",
+        "floor": "B1"
+      },
+      {
+        "type": "floor",
+        "floor": "B1"
       }
     ]
   }
+ 
+
+
+
+
 ]
