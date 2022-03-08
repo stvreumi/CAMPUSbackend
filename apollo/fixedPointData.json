@@ -1,0 +1,36 @@
+[
+  {
+    "locationName": "第二餐廳",
+    "coordinates": {
+      "latitude": "24.789345225611136",
+      "longitude": "120.99719144686011"
+    },
+    "viewCount": 0,
+    "information": [
+      {
+        "type": "restaurant-store",
+        "name": "姊妹便當",
+        "floor": "1F"
+      },
+      {
+        "type": "floor",
+        "floor": "1F"
+      }
+    ]
+  },
+  {
+    "locationName": "綜合球館",
+    "coordinates": {
+        "latitude": "24.78989676741009",
+        "longitude": "120.99505052315682"
+    },
+    "viewCount": 0,
+    "information": [
+      {
+        "type": "sports",
+        "name": "羽球場",
+        "floor": "B1"
+      }
+    ]
+  }
+]
