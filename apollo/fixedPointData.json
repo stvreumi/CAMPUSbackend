@@ -190,7 +190,7 @@
     ]
   }, 
   {
-    "locationName": "女二餐廳",
+    "locationName": "女二餐廳 - B棟",
     "coordinates": {
         "latitude": "24.784575202593278",
         "longitude": "120.99950190913825"
@@ -199,71 +199,84 @@
     "information": [
       {
         "type": "restaurant-store",
-        "name": "A華滷味",
-        "floor": "A棟"
-      },
-      {
-        "type": "restaurant-store",
-        "name": "郁百分水果店",
-        "floor": "A棟"
-      },
-      {
-        "type": "restaurant-store",
-        "name": "品嘉日式料理",
-        "floor": "A棟"
-      },
-      {
-        "type": "restaurant-store",
-        "name": "比司多早午餐",
-        "floor": "A棟"
-      },
-      {
-        "type": "restaurant-store",
-        "name": "極麵道",
-        "floor": "A棟"
-      },
-      {
-        "type": "restaurant-store",
-        "name": "全美自助餐",
-        "floor": "A棟"
-      },
-      {
-        "type": "restaurant-store",
-        "name": "路易莎咖啡",
-        "floor": "A棟"
-      },
-      {
-        "type": "restaurant-store",
-        "name": "天晟燒臘",
-        "floor": "A棟"
-      },
-      {
-        "type": "restaurant-store",
-        "name": "大聯大百貨",
-        "floor": "A棟"
-      },
-      {
-        "type": "floor",
-        "floor": "A棟"
-      },
-      {
-        "type": "restaurant-store",
         "name": "麥當勞",
-        "floor": "B棟"
+        "floor": "1F"
       },
       {
         "type": "restaurant-store",
         "name": "全家",
-        "floor": "B棟"
-      },
-      {
-        "type": "restaurant-store",
-        "name": "鼎天麵食館",
-        "floor": "B棟"
+        "floor": "1F"
       },
       {
         "type": "floor",
-        "floor": "B棟"
+        "floor": "1F"
+      }
+    ]
+  },
+  {
+    "locationName": "女二餐廳 - A棟",
+    "coordinates": {
+        "latitude": "24.78460447175565",
+        "longitude": "120.99913188952512"
+    },
+    "viewCount": 0,
+    "information": [
+      {
+        "type": "restaurant-store",
+        "name": "A華滷味",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "郁百分水果店",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "品嘉日式料理",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "比司多早午餐",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "極麵道",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "全美自助餐",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "路易莎咖啡",
+        "floor": "1F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "天晟燒臘",
+        "floor": "2F"
+      },
+      {
+        "type": "restaurant-store",
+        "name": "大聯大百貨",
+        "floor": "2F"
+      },
+      {
+        "type": "floor",
+        "floor": "2F"
+      },
+      {
+        "type": "floor",
+        "floor": "1F"
+      },
+      {
+        "type": "floor",
+        "floor": "2F"
       }
     ]
   },
