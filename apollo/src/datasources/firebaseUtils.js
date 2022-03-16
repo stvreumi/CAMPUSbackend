@@ -11,7 +11,7 @@ const defaultPageSize = 10;
 function generateFileName(imageNumber, tagID) {
   // id generator: [nanoid](https://github.com/ai/nanoid)
   return [...new Array(imageNumber)].map(
-    () => `${tagID}/${nanoid().substr(0, 8)}`
+    () => `${tagID}/${nanoid().substring(0, 8)}`
   );
 }
 
