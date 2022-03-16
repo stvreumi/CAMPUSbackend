@@ -1,4 +1,7 @@
 const admin = require('firebase-admin');
+const {
+  tagDataCollectionName,
+} = require('../src/datasources/firestoreCollections');
 
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
@@ -8,7 +11,7 @@ const firestore = admin.firestore();
 
 const main = async () => {
   const batch = firestore.batch();
-  const tagDataSnap = await firestore.collection('tagData').get();
+  const tagDataSnap = await firestore.collection(tagDataCollectionName).get();
   console.log('after get');
   // batch write?
   // replace

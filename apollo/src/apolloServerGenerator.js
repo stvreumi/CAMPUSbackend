@@ -10,6 +10,7 @@ const TagDataSource = require('./datasources/TagDataSource');
 const StorageDataSource = require('./datasources/StorageDataSource');
 const AuthDataSource = require('./datasources/AuthDataSource');
 const UserDataSource = require('./datasources/UserDataSource');
+const { tagDataCollectionName } = require('./datasources/firestoreCollections');
 
 /**
  * @typedef {import('firebase-admin')} firebaseAdmin
@@ -50,7 +51,7 @@ function dataSourcesGenerator(admin) {
       }
     });
   const firebaseServiceReference = {
-    tagDataCollectionRef: firestore.collection('tagData'),
+    tagDataCollectionRef: firestore.collection(tagDataCollectionName),
     userCollectionRef: firestore.collection('user'),
     userActivityCollectionRef: firestore.collection('userActivity'),
     auth: admin.auth(),

@@ -1,0 +1,35 @@
+name: firebase-test-when-pr-created
+
+on:
+  pull_request:
+    branches: 
+      - master
+    paths:
+      - 'apollo/**'
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Enter the name of this workflow trigger'
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Into the repo
+      uses: actions/checkout@v2
+    - name: Setup node environment
+      uses: actions/setup-node@v1
+      with:
+        node-version: '14'
+    - name: Install necessary npm packages in the functions 
+      run: npm ci
+      working-directory: ./apollo
+    - name: Install firebase CLI
+      run: npm install -g firebase-tools
+      # https://firebase.google.com/docs/cli#cli-ci-systems
+    - name: run test
+      run: firebase emulators:exec \"jest --runInBand --ci\"  --only firestore,auth 
+      working-directory: ./apollo
+    
