@@ -4,8 +4,10 @@ on:
   pull_request:
     branches: 
       - master
+      - dev
     paths:
       - 'apollo/**'
+      - '.github/workflows/firebase_test_pr.yml'
   workflow_dispatch:
     inputs:
       name:
@@ -13,7 +15,7 @@ on:
         required: true
 
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,6 +32,6 @@ jobs:
       run: npm install -g firebase-tools
       # https://firebase.google.com/docs/cli#cli-ci-systems
     - name: run test
-      run: firebase emulators:exec \"jest --runInBand --ci\"  --only firestore,auth 
+      run: firebase emulators:exec "npx jest --ci"  --only firestore,auth 
       working-directory: ./apollo
     
