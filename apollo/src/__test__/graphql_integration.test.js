@@ -8,6 +8,10 @@ const gql = require('graphql-tag');
 const apolloServer = require('./apolloTestServer');
 const { getLatestStatus } = require('../datasources/firebaseUtils');
 
+const {
+  tagDataCollectionName,
+} = require('../datasources/firestoreCollections');
+
 /**
  * How to use available test function(for memory refresh)
  * * Use `generateGraphQLHelper` to generate helper for graphql query or
@@ -890,7 +894,7 @@ describe('test graphql mutate and paginate function', () => {
 
     // set numberOfUpVote to 3
     const { statusDocRef } = await getLatestStatus(
-      firestore.collection('tagData').doc(tagId)
+      firestore.collection(tagDataCollectionName).doc(tagId)
     );
     await statusDocRef.update({ numberOfUpVote: testThreshold });
 
@@ -1097,7 +1101,10 @@ describe('test graphql mutate and paginate function', () => {
     expect(mutationResult).toBeTruthy();
 
     // test if the tag really be deleted
-    const tagSnap = await firestore.collection('tagData').doc(testTagId).get();
+    const tagSnap = await firestore
+      .collection(tagDataCollectionName)
+      .doc(testTagId)
+      .get();
 
     expect(tagSnap.exists).toBeFalsy();
   });
@@ -1107,7 +1114,7 @@ describe('test graphql mutate and paginate function', () => {
 
     // directly modify createUser id in the firestore
     await firestore
-      .collection('tagData')
+      .collection(tagDataCollectionName)
       .doc(testTagId)
       .update({ createUserId: 'just-want-to-be-different' });
 

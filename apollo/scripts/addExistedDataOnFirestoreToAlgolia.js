@@ -1,5 +1,8 @@
 const admin = require('firebase-admin');
 const algoliasearch = require('algoliasearch');
+const {
+  tagDataCollectionName,
+} = require('../src/datasources/firestoreCollections');
 
 // Please set google credential in the env when running
 admin.initializeApp({
@@ -19,7 +22,7 @@ const algoliaIndexClient = algoliasearch(
 
 const main = async () => {
   // prepared data for indexing
-  const tagDataSnap = await firestore.collection('tagData').get();
+  const tagDataSnap = await firestore.collection(tagDataCollectionName).get();
   const allExistedDataSendToAlgolia = [];
   await Promise.all(
     tagDataSnap.docs.map(async doc => {
@@ -27,7 +30,7 @@ const main = async () => {
 
       const [latestStatusDoc] = (
         await firestore
-          .collection('tagData')
+          .collection(tagDataCollectionName)
           .doc(doc.id)
           .collection('status')
           .orderBy('createTime', 'desc')
