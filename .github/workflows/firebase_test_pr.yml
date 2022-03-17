@@ -15,7 +15,7 @@ on:
         required: true
 
 jobs:
-  test:
+  firebase-emulator-test:
     runs-on: ubuntu-latest
 
     steps:
