@@ -2,6 +2,8 @@
  * @jest-environment node
  */
 const firebase = require('@firebase/rules-unit-testing');
+// used for test firestore timestamp instance
+const { Timestamp } = require('firebase-admin').firestore;
 const { createTestClient } = require('apollo-server-testing');
 const gql = require('graphql-tag');
 
@@ -505,6 +507,24 @@ describe('test graphql mutate and paginate function', () => {
     expect(mutationResult.imageUploadUrls.length).toEqual(
       data.imageUploadNumber
     );
+
+    // test user history record
+    const { uid } = userInfoAfterAccountCreated;
+    // console.log(mutationResult.tag.id);
+    const querySnapshot = await firestore
+      .collection('userActivity')
+      .where('userId', '==', uid)
+      .limit(1)
+      .get();
+    querySnapshot.forEach(doc => {
+      const docData = doc.data();
+      expect(docData).toMatchObject({
+        action: 'addTag',
+        userId: uid,
+        tagId: mutationResult.tag.id,
+        createTime: expect.any(Timestamp),
+      });
+    });
   });
 
   test('test update tag data', async () => {
@@ -937,6 +957,7 @@ describe('test graphql mutate and paginate function', () => {
     });
   });
   test('test incrementViewCount', async () => {
+    // There would be an `addTag` record when creating fake data.
     const response = await addFakeDataToFirestore(mutateClient);
     const fakeTagId = response.tag.id;
 
@@ -969,6 +990,23 @@ describe('test graphql mutate and paginate function', () => {
     });
 
     expect(queryResult).toMatchObject({ viewCount: 1 });
+
+    // test user history record
+    const { uid } = userInfoAfterAccountCreated;
+    const querySnapshot = await firestore
+      .collection('userActivity')
+      .where('action', '==', 'viewTag')
+      .limit(1)
+      .get();
+    querySnapshot.forEach(doc => {
+      const docData = doc.data();
+      expect(docData).toMatchObject({
+        action: 'viewTag',
+        userId: uid,
+        tagId: fakeTagId,
+        createTime: expect.any(Timestamp),
+      });
+    });
   });
   test('test unarchivedTagList with paginate function', async () => {
     // add many tag into firestore

@@ -21,8 +21,15 @@ const queryResolvers = {
      * @param {{pageParams: PageParams}} params
      * @param {ResolverArgsInfo} info
      */
-    unarchivedTagList: async (_, { pageParams }, { dataSources, userInfo }) =>
-      dataSources.tagDataSource.getAllUnarchivedTags(pageParams, userInfo),
+    unarchivedTagList: async (_, { pageParams }, { dataSources, userInfo }) => {
+      const data = await dataSources.tagDataSource.getAllUnarchivedTags(
+        pageParams
+      );
+      // Record user activity after the above function successfully return with
+      // no errors.
+      await dataSources.tagDataSource.recordUserActivity('getTags', userInfo);
+      return data;
+    },
     /**
      * @param {*} _
      * @param {{tagId: string}} params
@@ -87,6 +94,14 @@ const mutationResolvers = {
       });
       // event: added
       await dataSources.tagDataSource.triggerEvent('added', tag);
+
+      // Record user activity after the above function successfully return with
+      // no errors.
+      await dataSources.tagDataSource.recordUserActivity(
+        'addTag',
+        userInfo,
+        tag.id
+      );
       return { tag, imageUploadNumber, imageUploadUrls };
     },
     /**
@@ -104,6 +119,15 @@ const mutationResolvers = {
       });
       // event: updated
       await dataSources.tagDataSource.triggerEvent('updated', tag);
+
+      // Record user activity after the above function successfully return with
+      // no errors.
+      await dataSources.tagDataSource.recordUserActivity(
+        'updateTag',
+        userInfo,
+        tagId
+      );
+
       return {
         tag,
         imageUploadNumber,
@@ -138,6 +162,15 @@ const mutationResolvers = {
       // event: updated
       const tag = dataSources.tagDataSource.getTagData({ tagId });
       await dataSources.tagDataSource.triggerEvent('updated', tag);
+
+      // Record user activity after the above function successfully return with
+      // no errors.
+      await dataSources.tagDataSource.recordUserActivity(
+        'updateStatus',
+        userInfo,
+        tagId
+      );
+
       return updatedStatus;
     },
     /**
@@ -150,12 +183,23 @@ const mutationResolvers = {
       _,
       { tagId, action },
       { dataSources, userInfo }
-    ) =>
-      dataSources.tagDataSource.updateNumberOfUpVote({
+    ) => {
+      const data = await dataSources.tagDataSource.updateNumberOfUpVote({
         tagId,
         action,
         userInfo,
-      }),
+      });
+
+      // Record user activity after the above function successfully return with
+      // no errors.
+      await dataSources.tagDataSource.recordUserActivity(
+        action,
+        userInfo,
+        tagId
+      );
+      return data;
+    },
+
     /**
      *
      * @param {*} _
@@ -182,8 +226,22 @@ const mutationResolvers = {
      * @param {{tagId: string}} string
      * @param {ResolverArgsInfo} info
      */
-    incrementViewCount: async (_, { tagId }, { dataSources, userInfo }) =>
-      dataSources.tagDataSource.incrementTagViewCount(tagId, userInfo),
+    incrementViewCount: async (_, { tagId }, { dataSources, userInfo }) => {
+      const data = await dataSources.tagDataSource.incrementTagViewCount(
+        tagId,
+        userInfo
+      );
+
+      // Record user activity after the above function successfully return with
+      // no errors.
+      await dataSources.tagDataSource.recordUserActivity(
+        'viewTag',
+        userInfo,
+        tagId
+      );
+
+      return data;
+    },
   },
 };
 
