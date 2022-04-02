@@ -43,6 +43,7 @@ class TagDataSource extends DataSource {
   constructor(
     tagDataCollectionReference,
     userActivityCollectionReference,
+    fixedTagCollectionReference,
     archivedThreshold,
     firestore,
     eventEmitter,
@@ -51,6 +52,7 @@ class TagDataSource extends DataSource {
     super();
     this.tagDataCollectionReference = tagDataCollectionReference;
     this.userActivityCollectionReference = userActivityCollectionReference;
+    this.fixedTagCollectionReference = fixedTagCollectionReference;
     this.archivedThreshold = archivedThreshold;
     this.firestore = firestore;
     this.eventEmitter = eventEmitter;
@@ -82,6 +84,24 @@ class TagDataSource extends DataSource {
       this.tagDataCollectionReference
     );
     return { tags, ...pageInfo };
+  }
+
+  /**
+   * Return data list from collection `fixedTags`
+   * @param {PageParams} pageParams
+   * @returns {Promise<TagPage>}
+   */
+  async getAllFixedTags(pageParams) {
+    // explicitly ask query ordery by the doc id
+    // the orderby usage comes from here
+    // https://firebase.google.com/docs/firestore/manage-data/delete-data#collections
+    const query = this.fixedTagCollectionReference.orderBy('__name__');
+    const { data: fixedTags, pageInfo } = await getPage(
+      query,
+      pageParams,
+      this.fixedTagCollectionReference
+    );
+    return { fixedTags, ...pageInfo };
   }
 
   /**

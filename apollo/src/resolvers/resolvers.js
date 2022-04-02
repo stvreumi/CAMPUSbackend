@@ -4,6 +4,7 @@ const {
   userResolvers,
   coordinateResolvers,
   pageResolvers,
+  fixedTagInfoResolvers,
 } = require('./map_resolvers');
 
 /**
@@ -37,6 +38,15 @@ const queryResolvers = {
      */
     tag: async (_, { tagId }, { dataSources }) =>
       dataSources.tagDataSource.getTagData({ tagId }),
+    /**
+     *
+     * @param {*} _
+     * @param {{pageParams: PageParams}} params
+     * @param {ResolverArgsInfo} info
+     * @returns
+     */
+    fixedTagList: async (_, { pageParams }, { dataSources, userInfo }) =>
+      dataSources.tagDataSource.getAllFixedTags(pageParams, userInfo),
     /**
      * @param {*} _
      * @param {{uid: string, pageParams: PageParams}} params
@@ -274,6 +284,7 @@ const resolvers = {
   ...userResolvers,
   ...coordinateResolvers,
   ...pageResolvers,
+  ...fixedTagInfoResolvers,
 };
 
 module.exports = resolvers;

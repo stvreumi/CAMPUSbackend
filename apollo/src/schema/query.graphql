@@ -1,6 +1,7 @@
 type Query {
   unarchivedTagList(pageParams: PageParams): TagPage!
   tag(tagId: ID!): Tag
+  fixedTagList(pageParams: PageParams): FixedTagPage!
   userAddTagHistory(uid: ID!, pageParams: PageParams): TagPage!
   "true if the use have read the guide, need to add token in the header"
   hasReadGuide: Boolean!

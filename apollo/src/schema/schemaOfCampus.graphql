@@ -15,14 +15,54 @@ type Tag {
   viewCount: Int!
 }
 
+type FixedTag {
+  id: ID!
+  locationName: String!
+  coordinates: Coordinate!
+  viewCount: Int!
+  """
+  the return type is union
+  pay attention how to query this type
+  https://www.apollographql.com/docs/apollo-server/schema/unions-interfaces/#querying-a-union
+  """
+  information: [FixedTagInfo]!
+}
+
+union FixedTagInfo = FixedTagRestaurantStoreInfo | FixedTagFloorInfo
+
+type FixedTagRestaurantStoreInfo {
+  id: ID!
+  type: String!
+  floor: String
+  name: String
+  status: Status
+  statusHistory(pageParams: PageParams): StatusPage!
+}
+
+type FixedTagFloorInfo {
+  id: ID!
+  type: String!
+  floor: String
+  status: Status
+  statusHistory(pageParams: PageParams): StatusPage!
+}
+
 # https://www.apollographql.com/docs/tutorial/resolvers/#paginate-results
 interface Page {
+  "the number of milliseconds elapsed since January 1, 1970 00:00:00 UTC."
   cursor: String!
   empty: Boolean!
 }
 
 type TagPage implements Page {
   tags: [Tag]!
+  "the number of milliseconds elapsed since January 1, 1970 00:00:00 UTC."
+  cursor: String!
+  empty: Boolean!
+}
+
+type FixedTagPage implements Page {
+  fixedTags: [FixedTag]!
   "the number of milliseconds elapsed since January 1, 1970 00:00:00 UTC."
   cursor: String!
   empty: Boolean!
@@ -63,6 +103,7 @@ type Status {
   createTime: String!
   createUser: User
   description: String
+  imageUrl: [String]
   "Only available in 問題回報, otherwise null"
   numberOfUpVote: Int
   """

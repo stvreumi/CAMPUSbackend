@@ -156,6 +156,10 @@ const coordinateResolvers = {
   },
 };
 
+// https://www.apollographql.com/docs/apollo-server/schema/unions-interfaces/
+// in case there is type resolve using interface `Page`
+// If we have type implement interface but don't define resolvers
+// there would be warnings complain
 const pageResolvers = {
   Page: {
     __resolveType(page, _, __) {
@@ -165,10 +169,27 @@ const pageResolvers = {
       if (page.statusList) {
         return 'StatusPage';
       }
+      if (page.fixedTags) {
+        return 'FixedTagPage';
+      }
       return null;
     },
   },
 };
+
+const fixedTagInfoResolvers = {
+  FixedTagInfo: {
+    __resolveType(fixedTagInfo, _, __) {
+      if (fixedTagInfo.type === 'restaurant-store') {
+        return 'FixedTagRestaurantStoreInfo';
+      }
+      if (fixedTagInfo.type === 'floor') {
+        return 'FixedTagFloorInfo';
+      }
+      return null;
+    },
+  }
+}
 
 module.exports = {
   tagResolvers,
@@ -176,4 +197,5 @@ module.exports = {
   userResolvers,
   coordinateResolvers,
   pageResolvers,
+  fixedTagInfoResolvers,
 };

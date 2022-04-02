@@ -253,7 +253,46 @@ describe('test graphql query', () => {
       archived: false,
     });
   });
-
+  test('test query fix tag', async () => {
+    const querFixedTagList = gql`
+      query {
+        fixedTagList {
+          fixedTags {
+            id
+            locationName
+            coordinates {
+              latitude
+              longitude
+            }
+            viewCount
+            information {
+              __typename
+              ... on FixedTagRestaurantStoreInfo {
+                id
+                type
+                floor
+                name
+                status
+              }
+              ... on FixedTagFloorInfo {
+                id
+                type
+                floor
+                status
+              }
+            }
+          }
+          cursor
+          empty
+        }
+      }
+    `;
+    const { queryResult } = await graphQLQueryHelper(
+      querFixedTagList,
+      'fixedTagList'
+    );
+    console.log(queryResult.fixedTags);
+  });
   test('test query tag', async () => {
     const queryTag = gql`
       query testQueryTag($id: ID!) {

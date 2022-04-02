@@ -15,7 +15,7 @@ const firestore = admin.firestore();
 
 // read json file
 const fixPoints = JSON.parse(
-  readFileSync('../fixedPointData.json').toString('utf-8')
+  readFileSync('../fixedTagsData.json').toString('utf-8')
 );
 
 // convert geo related data to geo type, also have geo hash function and field
@@ -46,7 +46,7 @@ console.dir(fixPointsWithGeoPointsAndId.map(point => point.information));
 // uploatd to collection `fixPoints`
 Promise.all(
   fixPointsWithGeoPointsAndId.map(async point => {
-    await firestore.collection('fixPoints').add(point);
+    await firestore.collection('fixedTags').add(point);
   })
 ).catch(e => console.error(e));
 

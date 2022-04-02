@@ -142,8 +142,8 @@ function checkUserLogIn(logIn) {
 const queryOrdeyWithPageParams = async (
   query,
   dataHandleFunction,
-  pageParams = {},
-  collectionReference
+  collectionReference,
+  pageParams = {}
 ) => {
   const { pageSize = defaultPageSize, cursor = '' } = pageParams;
   const cursorRegex = /\w+/g;
@@ -186,8 +186,8 @@ const getPage = async (query, pageParams, collectionReference) => {
   const { data, empty } = await queryOrdeyWithPageParams(
     query,
     dataHandleFunction,
-    pageParams,
-    collectionReference
+    collectionReference,
+    pageParams
   );
 
   const { id: cursorId } = !empty ? data[data.length - 1] : {};
