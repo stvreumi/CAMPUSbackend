@@ -19,19 +19,21 @@ type FixedTag {
   id: ID!
   locationName: String!
   coordinates: Coordinate!
+  "right now not available"
   viewCount: Int!
   """
   the return type is union
   pay attention how to query this type
   https://www.apollographql.com/docs/apollo-server/schema/unions-interfaces/#querying-a-union
   """
-  information: [FixedTagInfo]!
+  fixedTagSubLocations: [FixedTagSubLocation]!
 }
 
-union FixedTagInfo = FixedTagRestaurantStoreInfo | FixedTagFloorInfo
+union FixedTagSubLocation = FixedTagRestaurantStore | FixedTagFloor
 
-type FixedTagRestaurantStoreInfo {
+type FixedTagRestaurantStore {
   id: ID!
+  fixedTagId: String!
   type: String!
   floor: String
   name: String
@@ -39,24 +41,24 @@ type FixedTagRestaurantStoreInfo {
   statusHistory(pageParams: PageParams): StatusPage!
 }
 
-type FixedTagFloorInfo {
+type FixedTagFloor {
   id: ID!
+  fixedTagId: String!
   type: String!
   floor: String
   status: Status
   statusHistory(pageParams: PageParams): StatusPage!
 }
 
+
 # https://www.apollographql.com/docs/tutorial/resolvers/#paginate-results
 interface Page {
-  "the number of milliseconds elapsed since January 1, 1970 00:00:00 UTC."
   cursor: String!
   empty: Boolean!
 }
 
 type TagPage implements Page {
   tags: [Tag]!
-  "the number of milliseconds elapsed since January 1, 1970 00:00:00 UTC."
   cursor: String!
   empty: Boolean!
 }

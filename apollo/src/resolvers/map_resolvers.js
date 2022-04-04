@@ -1,6 +1,8 @@
 //@ts-check
 const { DateTime } = require('luxon');
 
+const logger = require('pino-caller')(require('../../logger'));
+
 /**
  * @typedef {import('../types').ResolverArgsInfo} ResolverArgsInfo
  * @typedef {import('../types').RawTagDocumentFields} RawTagDocumentFields
@@ -112,7 +114,7 @@ const userResolvers = {
      * @param {*} _
      * @param {ResolverArgsInfo} info
      */
-    email: async ({ uid }, __, { dataSources, userInfo }) => {
+    email: async ({ uid }, _, { dataSources, userInfo }) => {
       const { uid: logInUserUid, logIn } = userInfo;
       return logIn && logInUserUid === uid
         ? dataSources.authDataSource.getUserEmail({ uid })
@@ -177,19 +179,67 @@ const pageResolvers = {
   },
 };
 
-const fixedTagInfoResolvers = {
-  FixedTagInfo: {
+const fixedTagResolver = {
+  FixedTag: {
+    /**
+     *
+     * @param {*} fixedTag
+     * @param {*} _
+     * @param {ResolverArgsInfo} info
+     */
+    fixedTagSubLocations: async (fixedTag, _, { dataSources }) => {
+      logger.debug('in resolver fixedTagSubLocations');
+      return dataSources.tagDataSource.getAllFixedTagsSubLocations(fixedTag.id);
+    },
+  },
+};
+
+// TODO: use tool to auto generate type from graphql schema
+const fixedTagSubLocationStatusResolver = {
+  /**
+   * @param {} subLocation
+   * @param {*} _
+   * @param {ResolverArgsInfo} info
+   */
+  status: async (subLocation, _, { dataSources }) => {
+    logger.debug('in resolver fixedTagSubLocationStatusResolver-> status');
+    const params = {
+      subLocationId: subLocation.id,
+    };
+    logger.debug(params);
+    return dataSources.tagDataSource.getFixedTagSubLocationLatestStatusData(params);
+  },
+  /**
+   * @param {} subLocation
+   * @param {{pageParams: PageParams}} params
+   * @param {ResolverArgsInfo} info
+   */
+  statusHistory: async (subLocation, { pageParams }, { dataSources }) =>
+    dataSources.tagDataSource.getFixedTagSubLocationStatusHistory({
+      subLocationId: subLocation.id,
+      pageParams,
+    }),
+};
+
+const fixedTagSubLocationResolvers = {
+  FixedTagSubLocation: {
     __resolveType(fixedTagInfo, _, __) {
       if (fixedTagInfo.type === 'restaurant-store') {
-        return 'FixedTagRestaurantStoreInfo';
+        return 'FixedTagRestaurantStore';
       }
       if (fixedTagInfo.type === 'floor') {
-        return 'FixedTagFloorInfo';
+        return 'FixedTagFloor';
       }
       return null;
     },
-  }
-}
+  },
+  FixedTagRestaurantStore: {
+    ...fixedTagSubLocationStatusResolver,
+  },
+  FixedTagFloor: {
+    ...fixedTagSubLocationStatusResolver,
+  },
+};
 
 module.exports = {
   tagResolvers,
@@ -197,5 +247,6 @@ module.exports = {
   userResolvers,
   coordinateResolvers,
   pageResolvers,
-  fixedTagInfoResolvers,
+  fixedTagResolver,
+  fixedTagSubLocationResolvers,
 };

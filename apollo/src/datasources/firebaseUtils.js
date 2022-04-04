@@ -26,13 +26,12 @@ function generateFileName(imageNumber, tagID) {
 
 /**
  * Get latest status of current tag document `status` collection
- * @param {import("firebase-admin").firestore.DocumentReference} docRef
+ * @param {import("firebase-admin").firestore.CollectionReference} collectionRef
  *  The document we want to get the latest status
  * @returns {Promise<StatusWithDocumentReference>}
  */
-async function getLatestStatus(docRef) {
-  const statusDocSnap = await docRef
-    .collection('status')
+async function getLatestStatus(collectionRef) {
+  const statusDocSnap = await collectionRef
     .orderBy('createTime', 'desc')
     .limit(1)
     .get();
@@ -137,7 +136,7 @@ function checkUserLogIn(logIn) {
  * @param {Query} query
  * @param {(doc: QueryDocumentSnapshot) => object} dataHandleFunction
  * @param {PageParams} pageParams
- * @param {TagCollectionReference} collectionReference
+ * @param {TagCollectionReference} collectionReference used for getting cursor document
  */
 const queryOrdeyWithPageParams = async (
   query,

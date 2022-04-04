@@ -2,6 +2,8 @@ const { ApolloServer } = require('apollo-server');
 const EventEmitter = require('events');
 const algoliasearch = require('algoliasearch');
 
+const logger = require('pino-caller')(require('../logger'));
+
 const typeDefs = require('./schema/schema');
 const resolvers = require('./resolvers/resolvers');
 const CampusPubSub = require('./CampusPubSub');
@@ -53,6 +55,9 @@ function dataSourcesGenerator(admin) {
   const firebaseServiceReference = {
     tagDataCollectionRef: firestore.collection(tagDataCollectionName),
     fixedTagCollectionRef: firestore.collection('fixedTag'),
+    fixedTagsSubLocationsCollectionRef: firestore.collection(
+      'fixedTagsSubLocations'
+    ),
     userCollectionRef: firestore.collection('user'),
     userActivityCollectionRef: firestore.collection('userActivity'),
     auth: admin.auth(),
@@ -65,6 +70,7 @@ function dataSourcesGenerator(admin) {
       firebaseServiceReference.tagDataCollectionRef,
       firebaseServiceReference.userActivityCollectionRef,
       firebaseServiceReference.fixedTagCollectionRef,
+      firebaseServiceReference.fixedTagsSubLocationsCollectionRef,
       archivedThreshold,
       firestore,
       campusEventEmitter,
@@ -111,8 +117,9 @@ function apolloServerInstanciator(
     dataSources,
     subscriptions,
     formatError: error => {
-      console.log(JSON.stringify(error));
-      if (debug) console.log(error.extensions.exception.stacktrace);
+      const { message, path } = error;
+      logger.error({ message, path });
+      if (debug) logger.debug(error.extensions.exception.stacktrace);
 
       // mask error return to clients
       // https://www.apollographql.com/docs/apollo-server/v2/data/errors/#masking-and-logging-errors

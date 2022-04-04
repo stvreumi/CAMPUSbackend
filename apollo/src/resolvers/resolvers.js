@@ -4,7 +4,8 @@ const {
   userResolvers,
   coordinateResolvers,
   pageResolvers,
-  fixedTagInfoResolvers,
+  fixedTagResolver,
+  fixedTagSubLocationResolvers,
 } = require('./map_resolvers');
 
 /**
@@ -284,7 +285,8 @@ const resolvers = {
   ...userResolvers,
   ...coordinateResolvers,
   ...pageResolvers,
-  ...fixedTagInfoResolvers,
+  ...fixedTagResolver,
+  ...fixedTagSubLocationResolvers,
 };
 
 module.exports = resolvers;
