@@ -49,6 +49,15 @@ const queryResolvers = {
     fixedTagList: async (_, { pageParams }, { dataSources, userInfo }) =>
       dataSources.tagDataSource.getAllFixedTags(pageParams, userInfo),
     /**
+     *
+     * @param {*} _
+     * @param {{fixedTagTd: string}} params
+     * @param {ResolverArgsInfo} info
+     * @returns
+     */
+    fixedTag: async (_, { fixedTagId }, { dataSources }) =>
+      dataSources.tagDataSource.getFixedTagData({ fixedTagId }),
+    /**
      * @param {*} _
      * @param {{uid: string, pageParams: PageParams}} params
      * @param {ResolverArgsInfo} info

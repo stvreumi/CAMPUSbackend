@@ -7,6 +7,7 @@ const { Timestamp, FieldValue } = require('firebase-admin').firestore;
 const { createTestClient } = require('apollo-server-testing');
 const gql = require('graphql-tag');
 
+/** @type {import('pino').Logger} */
 const logger = require('pino-caller')(require('../../logger'));
 
 const apolloServer = require('./apolloTestServer');
@@ -78,7 +79,7 @@ function generateGraphQLHelper(type, testClient) {
           mutationResult: mutateResult.data[mutateFieldName],
         };
       } catch (e) {
-        console.log(e);
+        logger.error(e);
         return { mutationResponse: mutateResult };
       }
     };
@@ -394,6 +395,27 @@ describe('test graphql query', () => {
       statusHistory: {
         statusList: [statusExpectData],
       },
+    });
+
+    // also test one fixed tag query
+    const queryFiexdTag = gql`
+      query testQueryFixedTag($id: ID!) {
+        fixedTag(fixedTagId: $id) {
+          id
+          locationName
+        }
+      }
+    `;
+    const { queryResult: queryOneFixedTagResult } = await graphQLQueryHelper(
+      queryFiexdTag,
+      'fixedTag',
+      { id: docRef.id }
+    );
+
+    logger.debug(queryOneFixedTagResult);
+    expect(queryOneFixedTagResult).toMatchObject({
+      id: docRef.id,
+      locationName: docData.locationName,
     });
   });
   test('test query tag', async () => {
@@ -796,7 +818,7 @@ describe('test graphql mutate and paginate function', () => {
     expect(queryResult.tags[0].statusHistory.statusList).toHaveLength(2);
     expect(queryResult.tags[0].status.statusName).toEqual(testStatusName);
   });
-  test.only('test update fixed tag subLocation status', async () => {
+  test('test update fixed tag subLocation status', async () => {
     const defaultStatus = {
       statusName: '非常不壅擠',
       description: '',

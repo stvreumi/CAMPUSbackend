@@ -150,6 +150,20 @@ class TagDataSource extends DataSource {
   }
 
   /**
+   *
+   * @param {object} param
+   * @param {string} param.fixedTagId
+   * @returns
+   */
+  async getFixedTagData({ fixedTagId }) {
+    const doc = await this.fixedTagCollectionRef.doc(fixedTagId).get();
+    if (!doc.exists) {
+      return null;
+    }
+    return getIdWithDataFromDocSnap(doc);
+  }
+
+  /**
    * Get status history of current tag document `status` collection
    * @param {object} param
    * @param {string} param.tagId The tadId of the document we want to get the latest
@@ -460,7 +474,7 @@ class TagDataSource extends DataSource {
     statusName,
     description,
     userInfo,
-  }){
+  }) {
     const { logIn, uid } = userInfo;
     checkUserLogIn(logIn);
 
