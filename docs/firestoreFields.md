@@ -47,6 +47,32 @@ erDiagram
         String statusName
     }
 ```
+
+## fixedTag: collection
+```mermaid
+erDiagram
+    fixedTag ||--|{ status : subcollection
+    fixedTag {
+        String locationName
+        GeoPoint coordinates
+        Integer viewCount
+    }
+
+    fixedTagsSubLocations {
+        String type
+        String fixedTagId
+        String name
+        String floor
+    }
+
+    status {
+        Timestamp createTime
+        String createUserId
+        String description
+        Null numberOfUpVote
+        String statusName
+    }
+```
 ## userActivity: collection
 ```mermaid
 erDiagram
