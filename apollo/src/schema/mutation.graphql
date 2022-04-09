@@ -8,8 +8,14 @@ type Mutation {
     tagId: ID!
     statusName: String!
     description: String
+    "deprecated: not used, if no one pass to this parameter it will be removed"
     hasNumberOfUpVote: Boolean
   ): Status!
+  updateFixedTagSubLocationStatus(
+    fixedTagSubLocationId: ID!
+    statusName: String!
+    description: String
+  ): Status
   updateUpVoteStatus(
     tagId: ID!
     action: updateUpVoteAction!

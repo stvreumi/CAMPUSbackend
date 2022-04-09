@@ -353,7 +353,7 @@ describe('test graphql query', () => {
     );
     const statusExpectData = {
       statusName: '非常不壅擠',
-      createTime: expect.any(String),
+      createTime: expect.stringMatching(timestampStringRegex),
     };
     logger.debug(queryResult.fixedTags);
 
@@ -796,6 +796,74 @@ describe('test graphql mutate and paginate function', () => {
     expect(queryResult.tags[0].statusHistory.statusList).toHaveLength(2);
     expect(queryResult.tags[0].status.statusName).toEqual(testStatusName);
   });
+  test.only('test update fixed tag subLocation status', async () => {
+    const defaultStatus = {
+      statusName: '非常不壅擠',
+      description: '',
+      createTime: FieldValue.serverTimestamp(),
+      createUserId: 'admin',
+      numberOfUpVote: null,
+    };
+    // add fix tag data to firestore
+    const docData = {
+      locationName: '第二餐廳',
+      coordinates: {
+        latitude: '24.789345225611136',
+        longitude: '120.99719144686011',
+      },
+      viewCount: 0,
+    };
+    const docRef = await firestore.collection('fixedTag').add(docData);
+
+    const collectionRef = firestore.collection('fixedTagsSubLocations');
+    const storeData = {
+      type: 'restaurant-store',
+      name: 'Subway',
+      floor: '1F',
+      fixedTagId: docRef.id,
+    };
+    const storeDocRef = await collectionRef.add(storeData);
+    await storeDocRef.collection('status').add(defaultStatus);
+
+    const mutateTag = gql`
+      mutation statusUpdateTest(
+        $fixedTagSubLocationId: ID!
+        $statusName: String!
+        $description: String
+      ) {
+        updateFixedTagSubLocationStatus(
+          fixedTagSubLocationId: $fixedTagSubLocationId
+          statusName: $statusName
+          description: $description
+        ) {
+          statusName
+          createTime
+          description
+          numberOfUpVote
+        }
+      }
+    `;
+
+    const testStatusName = '普通';
+    const { mutationResult } = await graphQLMutationHelper(
+      mutateTag,
+      'updateFixedTagSubLocationStatus',
+      {
+        fixedTagSubLocationId: storeDocRef.id,
+        statusName: testStatusName,
+        description: 'test update status',
+      }
+    );
+    logger.debug(mutationResult);
+
+    expect(mutationResult).toMatchObject({
+      statusName: testStatusName,
+      createTime: expect.stringMatching(timestampStringRegex),
+      description: 'test update status',
+      numberOfUpVote: null,
+    });
+  });
+
   test('test `updateUpVoteStatus` and upvote related query', async () => {
     const response = await addFakeDataToFirestore(mutateClient, true);
 

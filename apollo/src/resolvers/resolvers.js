@@ -154,13 +154,13 @@ const mutationResolvers = {
     /**
      *
      * @param {*} _
-     * @param {{tagId: string, statusName: string, description: string, hasNumberOfUpVote: string}} param
+     * @param {{tagId: string, statusName: string, description: string }} param
      * @param {ResolverArgsInfo} info
      * @returns
      */
     updateTagStatus: async (
       _,
-      { tagId, statusName, description, hasNumberOfUpVote = false },
+      { tagId, statusName, description },
       { dataSources, userInfo }
     ) => {
       const updatedStatus = dataSources.tagDataSource.updateTagStatus({
@@ -168,7 +168,6 @@ const mutationResolvers = {
         statusName,
         description,
         userInfo,
-        hasNumberOfUpVote,
       });
       // event: updated
       const tag = dataSources.tagDataSource.getTagData({ tagId });
@@ -180,6 +179,36 @@ const mutationResolvers = {
         'updateStatus',
         userInfo,
         tagId
+      );
+
+      return updatedStatus;
+    },
+    /**
+     *
+     * @param {*} _
+     * @param {{tagId: string, statusName: string, description: string, hasNumberOfUpVote: string}} param
+     * @param {ResolverArgsInfo} info
+     * @returns
+     */
+    updateFixedTagSubLocationStatus: async (
+      _,
+      { fixedTagSubLocationId, statusName, description },
+      { dataSources, userInfo }
+    ) => {
+      const updatedStatus =
+        dataSources.tagDataSource.updateFixedTagSubLocationStatus({
+          FixedTagSubLocationId: fixedTagSubLocationId,
+          statusName,
+          description,
+          userInfo,
+        });
+
+      // Record user activity after the above function successfully return with
+      // no errors.
+      await dataSources.tagDataSource.recordUserActivity(
+        'updateFixedTagStatus',
+        userInfo,
+        fixedTagSubLocationId
       );
 
       return updatedStatus;

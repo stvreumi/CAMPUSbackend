@@ -455,6 +455,38 @@ class TagDataSource extends DataSource {
     return (await docRef.get()).data();
   }
 
+  async updateFixedTagSubLocationStatus({
+    FixedTagSubLocationId,
+    statusName,
+    description,
+    userInfo,
+  }){
+    const { logIn, uid } = userInfo;
+    checkUserLogIn(logIn);
+
+    const statusData = {
+      statusName,
+      description,
+      createTime: FieldValue.serverTimestamp(),
+      createUserId: uid,
+    };
+    const docRef = await this.fixedTagsSubLocationsCollectionRef
+      .doc(FixedTagSubLocationId)
+      .collection('status')
+      .add(statusData);
+
+    // update status field in the record of algolia index
+    /*
+    if (this.algoliaIndexClient) {
+      await this.algoliaIndexClient.partialUpdateObject({
+        objectID: tagId,
+        statusName,
+      });
+    }
+    */
+    return (await docRef.get()).data();
+  }
+
   /**
    *
    * @param {{ tagId: string, userInfo: DecodedUserInfoFromAuthHeader }} param
