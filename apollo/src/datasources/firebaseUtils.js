@@ -8,10 +8,16 @@ const { geohashForLocation } = require('geofire-common');
 const maxPageSize = 30;
 const defaultPageSize = 10;
 
-function generateFileName(imageNumber, tagID) {
+/**
+ *
+ * @param {number} imageNumber
+ * @param {string} prefix
+ * @returns
+ */
+function generateFileName(imageNumber, prefix) {
   // id generator: [nanoid](https://github.com/ai/nanoid)
   return [...new Array(imageNumber)].map(
-    () => `${tagID}/${nanoid().substring(0, 8)}`
+    () => `${prefix}/${nanoid().substring(0, 8)}`
   );
 }
 

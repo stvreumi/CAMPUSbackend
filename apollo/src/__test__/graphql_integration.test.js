@@ -285,7 +285,6 @@ describe('test graphql query', () => {
     const storeDocRef = await collectionRef.add(storeData);
     await storeDocRef.collection('status').add(defaultStatus);
     const floorData = {
-      id: 'e25c9252',
       type: 'floor',
       floor: '1F',
       fixedTagId: docRef.id,
@@ -315,11 +314,13 @@ describe('test graphql query', () => {
                 status {
                   statusName
                   createTime
+                  type
                 }
                 statusHistory {
                   statusList {
                     statusName
                     createTime
+                    type
                   }
                   empty
                 }
@@ -332,11 +333,13 @@ describe('test graphql query', () => {
                 status {
                   statusName
                   createTime
+                  type
                 }
                 statusHistory {
                   statusList {
                     statusName
                     createTime
+                    type
                   }
                   empty
                 }
@@ -355,6 +358,7 @@ describe('test graphql query', () => {
     const statusExpectData = {
       statusName: '非常不壅擠',
       createTime: expect.stringMatching(timestampStringRegex),
+      type: 'fixedTagSubLocation',
     };
     logger.debug(queryResult.fixedTags);
 
@@ -470,6 +474,7 @@ describe('test graphql query', () => {
               createTime
               numberOfUpVote
               hasUpVote
+              type
             }
             cursor
             empty
@@ -489,6 +494,7 @@ describe('test graphql query', () => {
     });
     expect(queryResult.statusHistory.statusList[0]).toMatchObject({
       statusName: expect.any(String),
+      type: 'tag',
       createTime: expect.stringMatching(timestampStringRegex),
       numberOfUpVote: expect.any(Number),
       hasUpVote: null,
@@ -634,6 +640,7 @@ describe('test graphql mutate and paginate function', () => {
             floor
             status {
               statusName
+              type
             }
           }
           imageUploadNumber
@@ -663,6 +670,7 @@ describe('test graphql mutate and paginate function', () => {
         floor: expect.any(Number),
         status: {
           statusName: data.statusName,
+          type: 'tag',
         },
       },
       imageUploadNumber: data.imageUploadNumber,
@@ -761,6 +769,7 @@ describe('test graphql mutate and paginate function', () => {
           description: $description
         ) {
           statusName
+          type
           createTime
           description
           numberOfUpVote
@@ -781,6 +790,7 @@ describe('test graphql mutate and paginate function', () => {
     // console.log(responseData);
     expect(mutationResult).toMatchObject({
       statusName: testStatusName,
+      type: 'tag',
       createTime: expect.stringMatching(timestampStringRegex),
       description: 'test update status',
       numberOfUpVote: null,
@@ -837,14 +847,15 @@ describe('test graphql mutate and paginate function', () => {
     };
     const docRef = await firestore.collection('fixedTag').add(docData);
 
-    const collectionRef = firestore.collection('fixedTagsSubLocations');
     const storeData = {
       type: 'restaurant-store',
       name: 'Subway',
       floor: '1F',
       fixedTagId: docRef.id,
     };
-    const storeDocRef = await collectionRef.add(storeData);
+    const storeDocRef = await firestore
+      .collection('fixedTagsSubLocations')
+      .add(storeData);
     await storeDocRef.collection('status').add(defaultStatus);
 
     const mutateTag = gql`
@@ -858,10 +869,13 @@ describe('test graphql mutate and paginate function', () => {
           statusName: $statusName
           description: $description
         ) {
-          statusName
-          createTime
-          description
-          numberOfUpVote
+          status {
+            statusName
+            createTime
+            description
+            numberOfUpVote
+            type
+          }
         }
       }
     `;
@@ -878,11 +892,12 @@ describe('test graphql mutate and paginate function', () => {
     );
     logger.debug(mutationResult);
 
-    expect(mutationResult).toMatchObject({
+    expect(mutationResult.status).toMatchObject({
       statusName: testStatusName,
       createTime: expect.stringMatching(timestampStringRegex),
       description: 'test update status',
       numberOfUpVote: null,
+      type: 'fixedTagSubLocation',
     });
   });
 
@@ -1011,6 +1026,7 @@ describe('test graphql mutate and paginate function', () => {
           createTime
           description
           numberOfUpVote
+          type
         }
       }
     `;
@@ -1032,6 +1048,7 @@ describe('test graphql mutate and paginate function', () => {
       createTime: expect.stringMatching(timestampStringRegex),
       description: 'test update status',
       numberOfUpVote: 0,
+      type: 'tag',
     });
 
     // upvote

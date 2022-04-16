@@ -101,10 +101,13 @@ type Category {
 
 type Status {
   id: ID!
+  "this status is attached to tag or fixedTagSubLocation"
+  type: String
   statusName: String!
   createTime: String!
   createUser: User
   description: String
+  "possible return value: null or []"
   imageUrl: [String]
   "Only available in 問題回報, otherwise null"
   numberOfUpVote: Int
@@ -154,6 +157,12 @@ type AddorUpdateTagResponse {
   imageUploadNumber: Int!
   imageUploadUrls: [String]!
   imageDeleteStatus: Boolean
+}
+
+type updateStatusResponse {
+  status: Status!
+  imageUploadNumber: Int!
+  imageUploadUrls: [String]!
 }
 
 input PageParams {

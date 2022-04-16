@@ -85,8 +85,18 @@ const statusResolvers = {
     /**
      * @param {RawStatusDocumentFields} status
      * @param {*} _
-     * @param {*} __
+     * @param {ResolverArgsInfo} info
      */
+    // TODO add imageurl resolver here to get the image url
+    imageUrl: async (status, _, { dataSources }) => {
+      const { id, type } = status;
+      if (type === 'fixedTagSubLocation') {
+        return dataSources.storageDataSource.getFixedTagSubLocationImageUrls({
+          subLocationId: id,
+        });
+      }
+      return null;
+    },
     createTime: async (status, _, __) => transferTimestamp(status.createTime),
     createUser: async (status, _, __) => ({ uid: status.createUserId }),
   },
@@ -203,11 +213,10 @@ const fixedTagSubLocationStatusResolver = {
    */
   status: async (subLocation, _, { dataSources }) => {
     logger.debug('in resolver fixedTagSubLocationStatusResolver-> status');
-    const params = {
+
+    return dataSources.tagDataSource.getFixedTagSubLocationLatestStatusData({
       subLocationId: subLocation.id,
-    };
-    logger.debug(params);
-    return dataSources.tagDataSource.getFixedTagSubLocationLatestStatusData(params);
+    });
   },
   /**
    * @param {} subLocation

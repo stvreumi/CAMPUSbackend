@@ -102,7 +102,7 @@ const mutationResolvers = {
       const imageUploadUrls = Promise.all(
         dataSources.storageDataSource.getImageUploadUrls({
           imageUploadNumber,
-          tagId: tag.id,
+          prefix: tag.id,
         })
       );
 
@@ -152,7 +152,7 @@ const mutationResolvers = {
         tag,
         imageUploadNumber,
         imageUploadUrls: await dataSources.storageDataSource.getImageUploadUrls(
-          { imageUploadNumber, tagId }
+          { imageUploadNumber, prefix: tagId }
         ),
         imageDeleteStatus: await dataSources.storageDataSource.doImageDelete(
           tagId,
@@ -201,7 +201,7 @@ const mutationResolvers = {
      */
     updateFixedTagSubLocationStatus: async (
       _,
-      { fixedTagSubLocationId, statusName, description },
+      { fixedTagSubLocationId, statusName, description, imageUploadNumber },
       { dataSources, userInfo }
     ) => {
       const updatedStatus =
@@ -212,6 +212,13 @@ const mutationResolvers = {
           userInfo,
         });
 
+      const imageUploadUrls = Promise.all(
+        dataSources.storageDataSource.getImageUploadUrls({
+          imageUploadNumber,
+          prefix: `fixedTagSubLocationStatus/${updatedStatus.id}`,
+        })
+      );
+
       // Record user activity after the above function successfully return with
       // no errors.
       await dataSources.tagDataSource.recordUserActivity(
@@ -220,7 +227,7 @@ const mutationResolvers = {
         fixedTagSubLocationId
       );
 
-      return updatedStatus;
+      return { status: updatedStatus, imageUploadNumber, imageUploadUrls };
     },
     /**
      *

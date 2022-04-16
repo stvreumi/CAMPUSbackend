@@ -2,6 +2,7 @@
 const { DataSource } = require('apollo-datasource');
 const { FieldValue } = require('firebase-admin').firestore;
 
+/** @type {import('pino').Logger} */
 const logger = require('pino-caller')(require('../../logger'));
 
 const {
@@ -178,11 +179,12 @@ class TagDataSource extends DataSource {
       .collection('status')
       .orderBy('createTime', 'desc');
 
-    const { data: statusList, pageInfo } = await getPage(
+    const { data, pageInfo } = await getPage(
       query,
       pageParams,
       docRef.collection('status')
     );
+    const statusList = data.map(status => ({ ...status, type: 'tag' }));
 
     return { statusList, ...pageInfo };
   }
@@ -227,6 +229,7 @@ class TagDataSource extends DataSource {
     return {
       ...latestStatusData,
       hasUpVote,
+      type: 'tag',
     };
   }
 
@@ -245,11 +248,16 @@ class TagDataSource extends DataSource {
 
     const query = await statusCollectionRef.orderBy('createTime', 'desc');
 
-    const { data: statusList, pageInfo } = await getPage(
+    const { data, pageInfo } = await getPage(
       query,
       pageParams,
       statusCollectionRef
     );
+
+    const statusList = data.map(status => ({
+      ...status,
+      type: 'fixedTagSubLocation',
+    }));
 
     return { statusList, ...pageInfo };
   }
@@ -257,10 +265,8 @@ class TagDataSource extends DataSource {
   /**
    * Get user's latest upvote status to specific tag.
    * @param {object} param
-   * @param {string} param.tagId the id of the tag document we want to update
+   * @param {string} param.subLocationId the id of the tag document we want to update
    *  status
-   * @param {DecodedUserInfoFromAuthHeader} param.userInfo used
-   *  to check user login status
    * @return {Promise<Status>} the latest status data
    */
   async getFixedTagSubLocationLatestStatusData({ subLocationId }) {
@@ -280,6 +286,7 @@ class TagDataSource extends DataSource {
     return {
       ...latestStatusData,
       hasUpVote: null,
+      type: 'fixedTagSubLocation',
     };
   }
 
@@ -466,7 +473,7 @@ class TagDataSource extends DataSource {
         statusName,
       });
     }
-    return (await docRef.get()).data();
+    return { ...getIdWithDataFromDocSnap(await docRef.get()), type: 'tag' };
   }
 
   async updateFixedTagSubLocationStatus({
@@ -498,7 +505,10 @@ class TagDataSource extends DataSource {
       });
     }
     */
-    return (await docRef.get()).data();
+    return {
+      ...getIdWithDataFromDocSnap(await docRef.get()),
+      type: 'fixedTagSubLocation',
+    };
   }
 
   /**

@@ -15,7 +15,8 @@ type Mutation {
     fixedTagSubLocationId: ID!
     statusName: String!
     description: String
-  ): Status
+    imageUploadNumber: Int
+  ): updateStatusResponse
   updateUpVoteStatus(
     tagId: ID!
     action: updateUpVoteAction!
