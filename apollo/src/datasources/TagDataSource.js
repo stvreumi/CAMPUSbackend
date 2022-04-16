@@ -39,7 +39,7 @@ class TagDataSource extends DataSource {
    * @param {TagCollectionReference} tagDataCollectionRef
    * @param {CollectionReference} userActivityCollectionRef
    * @param {CollectionReference} fixedTagCollectionRef
-   * @param {CollectionReference} fixedTagsSubLocationsCollectionRef
+   * @param {CollectionReference} fixedTagSubLocationCollectionRef
    * @param {number} archivedThreshold
    * @param {Firestore} firestore
    * @param {import('events').EventEmitter} eventEmitter
@@ -49,7 +49,7 @@ class TagDataSource extends DataSource {
     tagDataCollectionRef,
     userActivityCollectionRef,
     fixedTagCollectionRef,
-    fixedTagsSubLocationsCollectionRef,
+    fixedTagSubLocationCollectionRef,
     archivedThreshold,
     firestore,
     eventEmitter,
@@ -59,8 +59,8 @@ class TagDataSource extends DataSource {
     this.tagDataCollectionRef = tagDataCollectionRef;
     this.userActivityCollectionRef = userActivityCollectionRef;
     this.fixedTagCollectionRef = fixedTagCollectionRef;
-    this.fixedTagsSubLocationsCollectionRef =
-      fixedTagsSubLocationsCollectionRef;
+    this.fixedTagSubLocationCollectionRef =
+      fixedTagSubLocationCollectionRef;
     this.archivedThreshold = archivedThreshold;
     this.firestore = firestore;
     this.eventEmitter = eventEmitter;
@@ -117,13 +117,13 @@ class TagDataSource extends DataSource {
    * @param {string} fixedTagId
    * @returns
    */
-  async getAllFixedTagsSubLocations(fixedTagId) {
-    logger.debug('getAllFixedTagsSubLocations');
+  async getAllfixedTagSubLocation(fixedTagId) {
+    logger.debug('getAllfixedTagSubLocation');
     logger.debug({ fixedTagId });
     // explicitly ask query ordery by the doc id
     // the orderby usage comes from here
     // https://firebase.google.com/docs/firestore/manage-data/delete-data#collections
-    const query = this.fixedTagsSubLocationsCollectionRef.where(
+    const query = this.fixedTagSubLocationCollectionRef.where(
       'fixedTagId',
       '==',
       fixedTagId
@@ -242,7 +242,7 @@ class TagDataSource extends DataSource {
    * @returns {Promise<StatusPage>} The status data list from new to old
    */
   async getFixedTagSubLocationStatusHistory({ subLocationId, pageParams }) {
-    const statusCollectionRef = this.fixedTagsSubLocationsCollectionRef
+    const statusCollectionRef = this.fixedTagSubLocationCollectionRef
       .doc(subLocationId)
       .collection('status');
 
@@ -271,7 +271,7 @@ class TagDataSource extends DataSource {
    */
   async getFixedTagSubLocationLatestStatusData({ subLocationId }) {
     logger.debug({ subLocationId });
-    const statusCollectionRef = this.fixedTagsSubLocationsCollectionRef
+    const statusCollectionRef = this.fixedTagSubLocationCollectionRef
       .doc(subLocationId)
       .collection('status');
     const { statusDocRef, ...latestStatusData } = await getLatestStatus(
@@ -491,7 +491,7 @@ class TagDataSource extends DataSource {
       createTime: FieldValue.serverTimestamp(),
       createUserId: uid,
     };
-    const docRef = await this.fixedTagsSubLocationsCollectionRef
+    const docRef = await this.fixedTagSubLocationCollectionRef
       .doc(FixedTagSubLocationId)
       .collection('status')
       .add(statusData);

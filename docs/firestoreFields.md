@@ -58,7 +58,7 @@ erDiagram
         Integer viewCount
     }
 
-    fixedTagsSubLocations {
+    fixedTagSubLocation {
         String type
         String fixedTagId
         String name

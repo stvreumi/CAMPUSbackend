@@ -199,7 +199,7 @@ const fixedTagResolver = {
      */
     fixedTagSubLocations: async (fixedTag, _, { dataSources }) => {
       logger.debug('in resolver fixedTagSubLocations');
-      return dataSources.tagDataSource.getAllFixedTagsSubLocations(fixedTag.id);
+      return dataSources.tagDataSource.getAllfixedTagSubLocation(fixedTag.id);
     },
   },
 };

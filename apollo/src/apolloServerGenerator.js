@@ -55,8 +55,8 @@ function dataSourcesGenerator(admin) {
   const firebaseServiceReference = {
     tagDataCollectionRef: firestore.collection(tagDataCollectionName),
     fixedTagCollectionRef: firestore.collection('fixedTag'),
-    fixedTagsSubLocationsCollectionRef: firestore.collection(
-      'fixedTagsSubLocations'
+    fixedTagSubLocationCollectionRef: firestore.collection(
+      'fixedTagSubLocation'
     ),
     userCollectionRef: firestore.collection('user'),
     userActivityCollectionRef: firestore.collection('userActivity'),
@@ -70,7 +70,7 @@ function dataSourcesGenerator(admin) {
       firebaseServiceReference.tagDataCollectionRef,
       firebaseServiceReference.userActivityCollectionRef,
       firebaseServiceReference.fixedTagCollectionRef,
-      firebaseServiceReference.fixedTagsSubLocationsCollectionRef,
+      firebaseServiceReference.fixedTagSubLocationCollectionRef,
       archivedThreshold,
       firestore,
       campusEventEmitter,

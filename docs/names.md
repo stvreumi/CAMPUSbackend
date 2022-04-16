@@ -13,6 +13,7 @@ doc for future reference. <br/>
 - use hyphen(`-`) in the 
     - branch name.
     - in the collection name template with difference in the tagID, e.g. `status-{tagId}`
+- try to use plural noun for the array type or schema.
 - `tag`: related to POI, point on the map
 - `id`:
     - in the schema: `id`

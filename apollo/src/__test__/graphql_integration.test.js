@@ -275,7 +275,7 @@ describe('test graphql query', () => {
     };
     const docRef = await firestore.collection('fixedTag').add(docData);
 
-    const collectionRef = firestore.collection('fixedTagsSubLocations');
+    const collectionRef = firestore.collection('fixedTagSubLocation');
     const storeData = {
       type: 'restaurant-store',
       name: 'Subway',
@@ -854,7 +854,7 @@ describe('test graphql mutate and paginate function', () => {
       fixedTagId: docRef.id,
     };
     const storeDocRef = await firestore
-      .collection('fixedTagsSubLocations')
+      .collection('fixedTagSubLocation')
       .add(storeData);
     await storeDocRef.collection('status').add(defaultStatus);
 
