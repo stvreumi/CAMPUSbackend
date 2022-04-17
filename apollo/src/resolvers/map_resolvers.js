@@ -232,17 +232,21 @@ const fixedTagSubLocationStatusResolver = {
 
 const fixedTagSubLocationResolvers = {
   FixedTagSubLocation: {
-    __resolveType(fixedTagInfo, _, __) {
-      if (fixedTagInfo.type === 'restaurant-store') {
-        return 'FixedTagRestaurantStore';
+    __resolveType(subLocation, _, __) {
+      console.log(subLocation);
+      if (
+        subLocation.type === 'restaurant-store' ||
+        subLocation.type === 'sports'
+      ) {
+        return 'FixedTagPlace';
       }
-      if (fixedTagInfo.type === 'floor') {
+      if (subLocation.type === 'floor') {
         return 'FixedTagFloor';
       }
       return null;
     },
   },
-  FixedTagRestaurantStore: {
+  FixedTagPlace: {
     ...fixedTagSubLocationStatusResolver,
   },
   FixedTagFloor: {

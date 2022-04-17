@@ -37,7 +37,7 @@ Promise.all(
   fixPointsWithGeoPointsAndId.map(async point => {
     const { locationName, coordinates, viewCount, information } = point;
     const tagData = { locationName, coordinates, viewCount };
-    const tagRef = await firestore.collection('fixedTags').add(tagData);
+    const tagRef = await firestore.collection('fixedTag').add(tagData);
     return Promise.all(
       information.map(async info => {
         const subLocationData = { ...info, fixedTagId: tagRef.id };

@@ -305,7 +305,7 @@ describe('test graphql query', () => {
             viewCount
             fixedTagSubLocations {
               __typename
-              ... on FixedTagRestaurantStore {
+              ... on FixedTagPlace {
                 id
                 fixedTagId
                 type
@@ -383,7 +383,7 @@ describe('test graphql query', () => {
     expect(fixedTagSubLocationsResult[storeDocRef.id]).toMatchObject({
       ...storeData,
       id: storeDocRef.id,
-      __typename: 'FixedTagRestaurantStore',
+      __typename: 'FixedTagPlace',
       fixedTagId: docRef.id,
       status: statusExpectData,
       statusHistory: {

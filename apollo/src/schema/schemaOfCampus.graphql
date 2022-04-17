@@ -29,9 +29,9 @@ type FixedTag {
   fixedTagSubLocations: [FixedTagSubLocation]!
 }
 
-union FixedTagSubLocation = FixedTagRestaurantStore | FixedTagFloor
+union FixedTagSubLocation = FixedTagPlace | FixedTagFloor
 
-type FixedTagRestaurantStore {
+type FixedTagPlace {
   id: ID!
   fixedTagId: String!
   type: String!
