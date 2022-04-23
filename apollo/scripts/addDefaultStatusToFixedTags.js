@@ -9,7 +9,7 @@ admin.initializeApp({
 const firestore = admin.firestore();
 
 const defaultStatus = {
-  statusName: '非常不壅擠',
+  statusName: '非常不擁擠',
   description: '',
   createTime: FieldValue.serverTimestamp(),
   createUserId: 'admin',
