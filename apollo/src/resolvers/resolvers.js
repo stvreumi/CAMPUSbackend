@@ -4,6 +4,8 @@ const {
   userResolvers,
   coordinateResolvers,
   pageResolvers,
+  fixedTagResolver,
+  fixedTagSubLocationResolvers,
 } = require('./map_resolvers');
 
 /**
@@ -37,6 +39,24 @@ const queryResolvers = {
      */
     tag: async (_, { tagId }, { dataSources }) =>
       dataSources.tagDataSource.getTagData({ tagId }),
+    /**
+     *
+     * @param {*} _
+     * @param {{pageParams: PageParams}} params
+     * @param {ResolverArgsInfo} info
+     * @returns
+     */
+    fixedTagList: async (_, { pageParams }, { dataSources, userInfo }) =>
+      dataSources.tagDataSource.getAllFixedTags(pageParams, userInfo),
+    /**
+     *
+     * @param {*} _
+     * @param {{fixedTagTd: string}} params
+     * @param {ResolverArgsInfo} info
+     * @returns
+     */
+    fixedTag: async (_, { fixedTagId }, { dataSources }) =>
+      dataSources.tagDataSource.getFixedTagData({ fixedTagId }),
     /**
      * @param {*} _
      * @param {{uid: string, pageParams: PageParams}} params
@@ -82,7 +102,7 @@ const mutationResolvers = {
       const imageUploadUrls = Promise.all(
         dataSources.storageDataSource.getImageUploadUrls({
           imageUploadNumber,
-          tagId: tag.id,
+          prefix: tag.id,
         })
       );
 
@@ -132,7 +152,7 @@ const mutationResolvers = {
         tag,
         imageUploadNumber,
         imageUploadUrls: await dataSources.storageDataSource.getImageUploadUrls(
-          { imageUploadNumber, tagId }
+          { imageUploadNumber, prefix: tagId }
         ),
         imageDeleteStatus: await dataSources.storageDataSource.doImageDelete(
           tagId,
@@ -143,13 +163,13 @@ const mutationResolvers = {
     /**
      *
      * @param {*} _
-     * @param {{tagId: string, statusName: string, description: string, hasNumberOfUpVote: string}} param
+     * @param {{tagId: string, statusName: string, description: string }} param
      * @param {ResolverArgsInfo} info
      * @returns
      */
     updateTagStatus: async (
       _,
-      { tagId, statusName, description, hasNumberOfUpVote = false },
+      { tagId, statusName, description },
       { dataSources, userInfo }
     ) => {
       const updatedStatus = dataSources.tagDataSource.updateTagStatus({
@@ -157,7 +177,6 @@ const mutationResolvers = {
         statusName,
         description,
         userInfo,
-        hasNumberOfUpVote,
       });
       // event: updated
       const tag = dataSources.tagDataSource.getTagData({ tagId });
@@ -172,6 +191,43 @@ const mutationResolvers = {
       );
 
       return updatedStatus;
+    },
+    /**
+     *
+     * @param {*} _
+     * @param {{tagId: string, statusName: string, description: string, hasNumberOfUpVote: string}} param
+     * @param {ResolverArgsInfo} info
+     * @returns
+     */
+    updateFixedTagSubLocationStatus: async (
+      _,
+      { fixedTagSubLocationId, statusName, description, imageUploadNumber },
+      { dataSources, userInfo }
+    ) => {
+      const updatedStatus =
+        dataSources.tagDataSource.updateFixedTagSubLocationStatus({
+          FixedTagSubLocationId: fixedTagSubLocationId,
+          statusName,
+          description,
+          userInfo,
+        });
+
+      const imageUploadUrls = Promise.all(
+        dataSources.storageDataSource.getImageUploadUrls({
+          imageUploadNumber,
+          prefix: `fixedTagSubLocationStatus/${updatedStatus.id}`,
+        })
+      );
+
+      // Record user activity after the above function successfully return with
+      // no errors.
+      await dataSources.tagDataSource.recordUserActivity(
+        'updateFixedTagStatus',
+        userInfo,
+        fixedTagSubLocationId
+      );
+
+      return { status: updatedStatus, imageUploadNumber, imageUploadUrls };
     },
     /**
      *
@@ -274,6 +330,8 @@ const resolvers = {
   ...userResolvers,
   ...coordinateResolvers,
   ...pageResolvers,
+  ...fixedTagResolver,
+  ...fixedTagSubLocationResolvers,
 };
 
 module.exports = resolvers;

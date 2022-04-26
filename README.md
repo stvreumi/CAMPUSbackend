@@ -61,3 +61,7 @@
 
 ### firebase
 - [official documentation](https://firebase.google.com/docs)
+
+# Document
+- [firestore fields description](docs/firestoreFields.md)
+- [naming convention](docs/names.md)

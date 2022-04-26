@@ -1,6 +1,8 @@
 //@ts-check
 const { DateTime } = require('luxon');
 
+const logger = require('pino-caller')(require('../../logger'));
+
 /**
  * @typedef {import('../types').ResolverArgsInfo} ResolverArgsInfo
  * @typedef {import('../types').RawTagDocumentFields} RawTagDocumentFields
@@ -83,8 +85,18 @@ const statusResolvers = {
     /**
      * @param {RawStatusDocumentFields} status
      * @param {*} _
-     * @param {*} __
+     * @param {ResolverArgsInfo} info
      */
+    // TODO add imageurl resolver here to get the image url
+    imageUrl: async (status, _, { dataSources }) => {
+      const { id, type } = status;
+      if (type === 'fixedTagSubLocation') {
+        return dataSources.storageDataSource.getFixedTagSubLocationImageUrls({
+          subLocationId: id,
+        });
+      }
+      return null;
+    },
     createTime: async (status, _, __) => transferTimestamp(status.createTime),
     createUser: async (status, _, __) => ({ uid: status.createUserId }),
   },
@@ -112,7 +124,7 @@ const userResolvers = {
      * @param {*} _
      * @param {ResolverArgsInfo} info
      */
-    email: async ({ uid }, __, { dataSources, userInfo }) => {
+    email: async ({ uid }, _, { dataSources, userInfo }) => {
       const { uid: logInUserUid, logIn } = userInfo;
       return logIn && logInUserUid === uid
         ? dataSources.authDataSource.getUserEmail({ uid })
@@ -156,6 +168,10 @@ const coordinateResolvers = {
   },
 };
 
+// https://www.apollographql.com/docs/apollo-server/schema/unions-interfaces/
+// in case there is type resolve using interface `Page`
+// If we have type implement interface but don't define resolvers
+// there would be warnings complain
 const pageResolvers = {
   Page: {
     __resolveType(page, _, __) {
@@ -165,8 +181,76 @@ const pageResolvers = {
       if (page.statusList) {
         return 'StatusPage';
       }
+      if (page.fixedTags) {
+        return 'FixedTagPage';
+      }
       return null;
     },
+  },
+};
+
+const fixedTagResolver = {
+  FixedTag: {
+    /**
+     *
+     * @param {*} fixedTag
+     * @param {*} _
+     * @param {ResolverArgsInfo} info
+     */
+    fixedTagSubLocations: async (fixedTag, _, { dataSources }) => {
+      logger.debug('in resolver fixedTagSubLocations');
+      return dataSources.tagDataSource.getAllfixedTagSubLocation(fixedTag.id);
+    },
+  },
+};
+
+// TODO: use tool to auto generate type from graphql schema
+const fixedTagSubLocationStatusResolver = {
+  /**
+   * @param {} subLocation
+   * @param {*} _
+   * @param {ResolverArgsInfo} info
+   */
+  status: async (subLocation, _, { dataSources }) => {
+    logger.debug('in resolver fixedTagSubLocationStatusResolver-> status');
+
+    return dataSources.tagDataSource.getFixedTagSubLocationLatestStatusData({
+      subLocationId: subLocation.id,
+    });
+  },
+  /**
+   * @param {} subLocation
+   * @param {{pageParams: PageParams}} params
+   * @param {ResolverArgsInfo} info
+   */
+  statusHistory: async (subLocation, { pageParams }, { dataSources }) =>
+    dataSources.tagDataSource.getFixedTagSubLocationStatusHistory({
+      subLocationId: subLocation.id,
+      pageParams,
+    }),
+};
+
+const fixedTagSubLocationResolvers = {
+  FixedTagSubLocation: {
+    __resolveType(subLocation, _, __) {
+      console.log(subLocation);
+      if (
+        subLocation.type === 'restaurant-store' ||
+        subLocation.type === 'sports'
+      ) {
+        return 'FixedTagPlace';
+      }
+      if (subLocation.type === 'floor') {
+        return 'FixedTagFloor';
+      }
+      return null;
+    },
+  },
+  FixedTagPlace: {
+    ...fixedTagSubLocationStatusResolver,
+  },
+  FixedTagFloor: {
+    ...fixedTagSubLocationStatusResolver,
   },
 };
 
@@ -176,4 +260,6 @@ module.exports = {
   userResolvers,
   coordinateResolvers,
   pageResolvers,
+  fixedTagResolver,
+  fixedTagSubLocationResolvers,
 };

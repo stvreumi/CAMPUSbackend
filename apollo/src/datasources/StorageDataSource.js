@@ -48,6 +48,21 @@ class StorageDataSource extends DataSource {
   }
 
   /**
+   *
+   * @param {object} param
+   * @param {string} param.subLocationId
+   * @returns
+   */
+  async getFixedTagSubLocationImageUrls({ subLocationId }) {
+    const options = {
+      prefix: `fixedTagSubLocationStatus/${subLocationId}`,
+    };
+    const [files] = await this.bucket.getFiles(options);
+
+    return files.map(file => file.metadata.mediaLink);
+  }
+
+  /**
    * Generate Signed URL to let front end upload images in a tag to firebase storage
    * The file name on the storage will looks like: `tagID/(8 digits uuid)`
    * reference from: https://github.com/googleapis/nodejs-storage/blob/master/samples/generateV4UploadSignedUrl.js
@@ -56,10 +71,10 @@ class StorageDataSource extends DataSource {
    * would have a new name and another permenent URL for downloading.
    * @param {object} param
    * @param {number} param.imageUploadNumber
-   * @param {string} param.tagId
+   * @param {string} param.prefix
    * @returns {Promise<string>[]} an array contain singed urls with length `imageNumber`
    */
-  getImageUploadUrls({ imageUploadNumber, tagId }) {
+  getImageUploadUrls({ imageUploadNumber, prefix }) {
     if (imageUploadNumber > 0) {
       // These options will allow temporary uploading of the file with outgoing
       // Content-Type: application/octet-stream header.
@@ -70,7 +85,7 @@ class StorageDataSource extends DataSource {
         contentType: 'application/octet-stream',
       };
 
-      const fileNameArray = generateFileName(imageUploadNumber, tagId);
+      const fileNameArray = generateFileName(imageUploadNumber, prefix);
 
       return fileNameArray.map(async name => {
         const [url] = await this.bucket.file(name).getSignedUrl(options);

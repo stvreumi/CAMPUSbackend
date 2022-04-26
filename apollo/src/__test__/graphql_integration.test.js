@@ -3,9 +3,12 @@
  */
 const firebase = require('@firebase/rules-unit-testing');
 // used for test firestore timestamp instance
-const { Timestamp } = require('firebase-admin').firestore;
+const { Timestamp, FieldValue } = require('firebase-admin').firestore;
 const { createTestClient } = require('apollo-server-testing');
 const gql = require('graphql-tag');
+
+/** @type {import('pino').Logger} */
+const logger = require('pino-caller')(require('../../logger'));
 
 const apolloServer = require('./apolloTestServer');
 const { getLatestStatus } = require('../datasources/firebaseUtils');
@@ -76,7 +79,7 @@ function generateGraphQLHelper(type, testClient) {
           mutationResult: mutateResult.data[mutateFieldName],
         };
       } catch (e) {
-        console.log(e);
+        logger.error(e);
         return { mutationResponse: mutateResult };
       }
     };
@@ -136,7 +139,7 @@ const testPaginate = async (
 };
 
 describe('test graphql query', () => {
-  /** @type {import('firebase-admin').firestore}*/
+  /** @type {import('firebase-admin').firestore.Firestore}*/
   let firestore;
   let fakeTagId;
   let graphQLQueryHelper;
@@ -253,7 +256,172 @@ describe('test graphql query', () => {
       archived: false,
     });
   });
+  test('test query fix tag', async () => {
+    const defaultStatus = {
+      statusName: '非常不壅擠',
+      description: '',
+      createTime: FieldValue.serverTimestamp(),
+      createUserId: 'admin',
+      numberOfUpVote: null,
+    };
+    // add fix tag data to firestore
+    const docData = {
+      locationName: '第二餐廳',
+      coordinates: {
+        latitude: '24.789345225611136',
+        longitude: '120.99719144686011',
+      },
+      viewCount: 0,
+    };
+    const docRef = await firestore.collection('fixedTag').add(docData);
 
+    const collectionRef = firestore.collection('fixedTagSubLocation');
+    const storeData = {
+      type: 'restaurant-store',
+      name: 'Subway',
+      floor: '1F',
+      fixedTagId: docRef.id,
+    };
+    const storeDocRef = await collectionRef.add(storeData);
+    await storeDocRef.collection('status').add(defaultStatus);
+    const floorData = {
+      type: 'floor',
+      floor: '1F',
+      fixedTagId: docRef.id,
+    };
+    const floorDocRef = await collectionRef.add(floorData);
+    await floorDocRef.collection('status').add(defaultStatus);
+
+    const querFixedTagList = gql`
+      query {
+        fixedTagList {
+          fixedTags {
+            id
+            locationName
+            coordinates {
+              latitude
+              longitude
+            }
+            viewCount
+            fixedTagSubLocations {
+              __typename
+              ... on FixedTagPlace {
+                id
+                fixedTagId
+                type
+                floor
+                name
+                status {
+                  statusName
+                  createTime
+                  type
+                }
+                statusHistory {
+                  statusList {
+                    statusName
+                    createTime
+                    type
+                  }
+                  empty
+                }
+              }
+              ... on FixedTagFloor {
+                id
+                fixedTagId
+                type
+                floor
+                status {
+                  statusName
+                  createTime
+                  type
+                }
+                statusHistory {
+                  statusList {
+                    statusName
+                    createTime
+                    type
+                  }
+                  empty
+                }
+              }
+            }
+          }
+          cursor
+          empty
+        }
+      }
+    `;
+    const { queryResult } = await graphQLQueryHelper(
+      querFixedTagList,
+      'fixedTagList'
+    );
+    const statusExpectData = {
+      statusName: '非常不壅擠',
+      createTime: expect.stringMatching(timestampStringRegex),
+      type: 'fixedTagSubLocation',
+    };
+    logger.debug(queryResult.fixedTags);
+
+    // test
+    expect(queryResult.fixedTags[0]).toHaveProperty('id', docRef.id);
+    expect(queryResult.fixedTags[0]).toHaveProperty(
+      'locationName',
+      docData.locationName
+    );
+    expect(queryResult.fixedTags[0]).toHaveProperty(
+      'coordinates',
+      docData.coordinates
+    );
+    expect(queryResult.fixedTags[0]).toHaveProperty(
+      'viewCount',
+      docData.viewCount
+    );
+    const fixedTagSubLocationsResult = {};
+    queryResult.fixedTags[0].fixedTagSubLocations.forEach(location => {
+      fixedTagSubLocationsResult[location.id] = location;
+    });
+    expect(fixedTagSubLocationsResult[storeDocRef.id]).toMatchObject({
+      ...storeData,
+      id: storeDocRef.id,
+      __typename: 'FixedTagPlace',
+      fixedTagId: docRef.id,
+      status: statusExpectData,
+      statusHistory: {
+        statusList: [statusExpectData],
+      },
+    });
+    expect(fixedTagSubLocationsResult[floorDocRef.id]).toMatchObject({
+      ...floorData,
+      id: floorDocRef.id,
+      __typename: 'FixedTagFloor',
+      fixedTagId: docRef.id,
+      status: statusExpectData,
+      statusHistory: {
+        statusList: [statusExpectData],
+      },
+    });
+
+    // also test one fixed tag query
+    const queryFiexdTag = gql`
+      query testQueryFixedTag($id: ID!) {
+        fixedTag(fixedTagId: $id) {
+          id
+          locationName
+        }
+      }
+    `;
+    const { queryResult: queryOneFixedTagResult } = await graphQLQueryHelper(
+      queryFiexdTag,
+      'fixedTag',
+      { id: docRef.id }
+    );
+
+    logger.debug(queryOneFixedTagResult);
+    expect(queryOneFixedTagResult).toMatchObject({
+      id: docRef.id,
+      locationName: docData.locationName,
+    });
+  });
   test('test query tag', async () => {
     const queryTag = gql`
       query testQueryTag($id: ID!) {
@@ -306,6 +474,7 @@ describe('test graphql query', () => {
               createTime
               numberOfUpVote
               hasUpVote
+              type
             }
             cursor
             empty
@@ -325,6 +494,7 @@ describe('test graphql query', () => {
     });
     expect(queryResult.statusHistory.statusList[0]).toMatchObject({
       statusName: expect.any(String),
+      type: 'tag',
       createTime: expect.stringMatching(timestampStringRegex),
       numberOfUpVote: expect.any(Number),
       hasUpVote: null,
@@ -423,7 +593,7 @@ describe('test graphql query', () => {
 describe('test graphql mutate and paginate function', () => {
   let graphQLQueryHelper;
   let graphQLMutationHelper;
-  /** @type {import('firebase-admin').firestore.Firestore} */
+  /** @type {import('firebase-admin').firestore} */
   let firestore;
   let userInfoAfterAccountCreated;
   let mutateClient;
@@ -470,6 +640,7 @@ describe('test graphql mutate and paginate function', () => {
             floor
             status {
               statusName
+              type
             }
           }
           imageUploadNumber
@@ -499,6 +670,7 @@ describe('test graphql mutate and paginate function', () => {
         floor: expect.any(Number),
         status: {
           statusName: data.statusName,
+          type: 'tag',
         },
       },
       imageUploadNumber: data.imageUploadNumber,
@@ -597,6 +769,7 @@ describe('test graphql mutate and paginate function', () => {
           description: $description
         ) {
           statusName
+          type
           createTime
           description
           numberOfUpVote
@@ -617,6 +790,7 @@ describe('test graphql mutate and paginate function', () => {
     // console.log(responseData);
     expect(mutationResult).toMatchObject({
       statusName: testStatusName,
+      type: 'tag',
       createTime: expect.stringMatching(timestampStringRegex),
       description: 'test update status',
       numberOfUpVote: null,
@@ -654,6 +828,79 @@ describe('test graphql mutate and paginate function', () => {
     expect(queryResult.tags[0].statusHistory.statusList).toHaveLength(2);
     expect(queryResult.tags[0].status.statusName).toEqual(testStatusName);
   });
+  test('test update fixed tag subLocation status', async () => {
+    const defaultStatus = {
+      statusName: '非常不壅擠',
+      description: '',
+      createTime: FieldValue.serverTimestamp(),
+      createUserId: 'admin',
+      numberOfUpVote: null,
+    };
+    // add fix tag data to firestore
+    const docData = {
+      locationName: '第二餐廳',
+      coordinates: {
+        latitude: '24.789345225611136',
+        longitude: '120.99719144686011',
+      },
+      viewCount: 0,
+    };
+    const docRef = await firestore.collection('fixedTag').add(docData);
+
+    const storeData = {
+      type: 'restaurant-store',
+      name: 'Subway',
+      floor: '1F',
+      fixedTagId: docRef.id,
+    };
+    const storeDocRef = await firestore
+      .collection('fixedTagSubLocation')
+      .add(storeData);
+    await storeDocRef.collection('status').add(defaultStatus);
+
+    const mutateTag = gql`
+      mutation statusUpdateTest(
+        $fixedTagSubLocationId: ID!
+        $statusName: String!
+        $description: String
+      ) {
+        updateFixedTagSubLocationStatus(
+          fixedTagSubLocationId: $fixedTagSubLocationId
+          statusName: $statusName
+          description: $description
+        ) {
+          status {
+            statusName
+            createTime
+            description
+            numberOfUpVote
+            type
+          }
+        }
+      }
+    `;
+
+    const testStatusName = '普通';
+    const { mutationResult } = await graphQLMutationHelper(
+      mutateTag,
+      'updateFixedTagSubLocationStatus',
+      {
+        fixedTagSubLocationId: storeDocRef.id,
+        statusName: testStatusName,
+        description: 'test update status',
+      }
+    );
+    logger.debug(mutationResult);
+
+    expect(mutationResult.status).toMatchObject({
+      statusName: testStatusName,
+      createTime: expect.stringMatching(timestampStringRegex),
+      description: 'test update status',
+      numberOfUpVote: null,
+      type: 'fixedTagSubLocation',
+    });
+  });
+
   test('test `updateUpVoteStatus` and upvote related query', async () => {
     const response = await addFakeDataToFirestore(mutateClient, true);
 
@@ -779,6 +1026,7 @@ describe('test graphql mutate and paginate function', () => {
           createTime
           description
           numberOfUpVote
+          type
         }
       }
     `;
@@ -800,6 +1048,7 @@ describe('test graphql mutate and paginate function', () => {
       createTime: expect.stringMatching(timestampStringRegex),
       description: 'test update status',
       numberOfUpVote: 0,
+      type: 'tag',
     });
 
     // upvote
@@ -914,7 +1163,10 @@ describe('test graphql mutate and paginate function', () => {
 
     // set numberOfUpVote to 3
     const { statusDocRef } = await getLatestStatus(
-      firestore.collection(tagDataCollectionName).doc(tagId)
+      firestore
+        .collection(tagDataCollectionName)
+        .doc(tagId)
+        .collection('status')
     );
     await statusDocRef.update({ numberOfUpVote: testThreshold });
 
