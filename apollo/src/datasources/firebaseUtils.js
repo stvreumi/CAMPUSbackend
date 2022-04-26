@@ -8,10 +8,16 @@ const { geohashForLocation } = require('geofire-common');
 const maxPageSize = 30;
 const defaultPageSize = 10;
 
-function generateFileName(imageNumber, tagID) {
+/**
+ *
+ * @param {number} imageNumber
+ * @param {string} prefix
+ * @returns
+ */
+function generateFileName(imageNumber, prefix) {
   // id generator: [nanoid](https://github.com/ai/nanoid)
   return [...new Array(imageNumber)].map(
-    () => `${tagID}/${nanoid().substring(0, 8)}`
+    () => `${prefix}/${nanoid().substring(0, 8)}`
   );
 }
 
@@ -26,13 +32,12 @@ function generateFileName(imageNumber, tagID) {
 
 /**
  * Get latest status of current tag document `status` collection
- * @param {import("firebase-admin").firestore.DocumentReference} docRef
+ * @param {import("firebase-admin").firestore.CollectionReference} collectionRef
  *  The document we want to get the latest status
  * @returns {Promise<StatusWithDocumentReference>}
  */
-async function getLatestStatus(docRef) {
-  const statusDocSnap = await docRef
-    .collection('status')
+async function getLatestStatus(collectionRef) {
+  const statusDocSnap = await collectionRef
     .orderBy('createTime', 'desc')
     .limit(1)
     .get();
@@ -137,13 +142,13 @@ function checkUserLogIn(logIn) {
  * @param {Query} query
  * @param {(doc: QueryDocumentSnapshot) => object} dataHandleFunction
  * @param {PageParams} pageParams
- * @param {TagCollectionReference} collectionReference
+ * @param {TagCollectionReference} collectionReference used for getting cursor document
  */
 const queryOrdeyWithPageParams = async (
   query,
   dataHandleFunction,
-  pageParams = {},
-  collectionReference
+  collectionReference,
+  pageParams = {}
 ) => {
   const { pageSize = defaultPageSize, cursor = '' } = pageParams;
   const cursorRegex = /\w+/g;
@@ -186,8 +191,8 @@ const getPage = async (query, pageParams, collectionReference) => {
   const { data, empty } = await queryOrdeyWithPageParams(
     query,
     dataHandleFunction,
-    pageParams,
-    collectionReference
+    collectionReference,
+    pageParams
   );
 
   const { id: cursorId } = !empty ? data[data.length - 1] : {};

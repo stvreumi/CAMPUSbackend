@@ -2,6 +2,9 @@
 const { DataSource } = require('apollo-datasource');
 const { FieldValue } = require('firebase-admin').firestore;
 
+/** @type {import('pino').Logger} */
+const logger = require('pino-caller')(require('../../logger'));
+
 const {
   getIdWithDataFromDocSnap,
   getLatestStatus,
@@ -33,24 +36,31 @@ const { upVoteActionName, cancelUpVoteActionName } = require('./constants');
 class TagDataSource extends DataSource {
   /**
    * Use admin to construct necessary entity of communication
-   * @param {TagCollectionReference} tagDataCollectionReference
-   * @param {CollectionReference} userActivityCollectionReference
+   * @param {TagCollectionReference} tagDataCollectionRef
+   * @param {CollectionReference} userActivityCollectionRef
+   * @param {CollectionReference} fixedTagCollectionRef
+   * @param {CollectionReference} fixedTagSubLocationCollectionRef
    * @param {number} archivedThreshold
    * @param {Firestore} firestore
    * @param {import('events').EventEmitter} eventEmitter
    * @param {import('algoliasearch').SearchIndex} algoliaIndexClient
    */
   constructor(
-    tagDataCollectionReference,
-    userActivityCollectionReference,
+    tagDataCollectionRef,
+    userActivityCollectionRef,
+    fixedTagCollectionRef,
+    fixedTagSubLocationCollectionRef,
     archivedThreshold,
     firestore,
     eventEmitter,
     algoliaIndexClient
   ) {
     super();
-    this.tagDataCollectionReference = tagDataCollectionReference;
-    this.userActivityCollectionReference = userActivityCollectionReference;
+    this.tagDataCollectionRef = tagDataCollectionRef;
+    this.userActivityCollectionRef = userActivityCollectionRef;
+    this.fixedTagCollectionRef = fixedTagCollectionRef;
+    this.fixedTagSubLocationCollectionRef =
+      fixedTagSubLocationCollectionRef;
     this.archivedThreshold = archivedThreshold;
     this.firestore = firestore;
     this.eventEmitter = eventEmitter;
@@ -73,15 +83,56 @@ class TagDataSource extends DataSource {
    * @returns {Promise<TagPage>}
    */
   async getAllUnarchivedTags(pageParams) {
-    const query = this.tagDataCollectionReference
+    const query = this.tagDataCollectionRef
       .where('archived', '==', false)
       .orderBy('lastUpdateTime', 'desc');
     const { data: tags, pageInfo } = await getPage(
       query,
       pageParams,
-      this.tagDataCollectionReference
+      this.tagDataCollectionRef
     );
     return { tags, ...pageInfo };
+  }
+
+  /**
+   * Return data list from collection `fixedTags`
+   * @param {PageParams} pageParams
+   * @returns {Promise<TagPage>}
+   */
+  async getAllFixedTags(pageParams) {
+    // explicitly ask query ordery by the doc id
+    // the orderby usage comes from here
+    // https://firebase.google.com/docs/firestore/manage-data/delete-data#collections
+    const query = this.fixedTagCollectionRef.orderBy('__name__');
+    const { data: fixedTags, pageInfo } = await getPage(
+      query,
+      pageParams,
+      this.fixedTagCollectionRef
+    );
+    return { fixedTags, ...pageInfo };
+  }
+
+  /**
+   *
+   * @param {string} fixedTagId
+   * @returns
+   */
+  async getAllfixedTagSubLocation(fixedTagId) {
+    logger.debug('getAllfixedTagSubLocation');
+    logger.debug({ fixedTagId });
+    // explicitly ask query ordery by the doc id
+    // the orderby usage comes from here
+    // https://firebase.google.com/docs/firestore/manage-data/delete-data#collections
+    const query = this.fixedTagSubLocationCollectionRef.where(
+      'fixedTagId',
+      '==',
+      fixedTagId
+    );
+
+    const snapshot = await query.get();
+    const subLocations = [];
+    snapshot.forEach(doc => subLocations.push({ ...doc.data(), id: doc.id }));
+    return subLocations;
   }
 
   /**
@@ -92,7 +143,21 @@ class TagDataSource extends DataSource {
    * @returns {Promise<RawTagDocumentFields>|null}
    */
   async getTagData({ tagId }) {
-    const doc = await this.tagDataCollectionReference.doc(tagId).get();
+    const doc = await this.tagDataCollectionRef.doc(tagId).get();
+    if (!doc.exists) {
+      return null;
+    }
+    return getIdWithDataFromDocSnap(doc);
+  }
+
+  /**
+   *
+   * @param {object} param
+   * @param {string} param.fixedTagId
+   * @returns
+   */
+  async getFixedTagData({ fixedTagId }) {
+    const doc = await this.fixedTagCollectionRef.doc(fixedTagId).get();
     if (!doc.exists) {
       return null;
     }
@@ -108,17 +173,18 @@ class TagDataSource extends DataSource {
    * @returns {Promise<StatusPage>} The status data list from new to old
    */
   async getStatusHistory({ tagId, pageParams }) {
-    const docRef = this.tagDataCollectionReference.doc(tagId);
+    const docRef = this.tagDataCollectionRef.doc(tagId);
 
     const query = await docRef
       .collection('status')
       .orderBy('createTime', 'desc');
 
-    const { data: statusList, pageInfo } = await getPage(
+    const { data, pageInfo } = await getPage(
       query,
       pageParams,
       docRef.collection('status')
     );
+    const statusList = data.map(status => ({ ...status, type: 'tag' }));
 
     return { statusList, ...pageInfo };
   }
@@ -133,10 +199,12 @@ class TagDataSource extends DataSource {
    * @return {Promise<Status>} the latest status data
    */
   async getLatestStatusData({ tagId, userInfo }) {
-    const tagDocRef = this.tagDataCollectionReference.doc(tagId);
+    const statusCollectionRef = this.tagDataCollectionRef
+      .doc(tagId)
+      .collection('status');
 
     const { statusDocRef, ...latestStatusData } = await getLatestStatus(
-      tagDocRef
+      statusCollectionRef
     );
 
     // if there is no status or the numberOfUpVote is null, raise error
@@ -161,6 +229,64 @@ class TagDataSource extends DataSource {
     return {
       ...latestStatusData,
       hasUpVote,
+      type: 'tag',
+    };
+  }
+
+  /**
+   * Get status history of current tag document `status` collection
+   * @param {object} param
+   * @param {string} param.subLocationId The tadId of the document we want to get the latest
+   *   status
+   * @param {PageParams} param.pageParams
+   * @returns {Promise<StatusPage>} The status data list from new to old
+   */
+  async getFixedTagSubLocationStatusHistory({ subLocationId, pageParams }) {
+    const statusCollectionRef = this.fixedTagSubLocationCollectionRef
+      .doc(subLocationId)
+      .collection('status');
+
+    const query = await statusCollectionRef.orderBy('createTime', 'desc');
+
+    const { data, pageInfo } = await getPage(
+      query,
+      pageParams,
+      statusCollectionRef
+    );
+
+    const statusList = data.map(status => ({
+      ...status,
+      type: 'fixedTagSubLocation',
+    }));
+
+    return { statusList, ...pageInfo };
+  }
+
+  /**
+   * Get user's latest upvote status to specific tag.
+   * @param {object} param
+   * @param {string} param.subLocationId the id of the tag document we want to update
+   *  status
+   * @return {Promise<Status>} the latest status data
+   */
+  async getFixedTagSubLocationLatestStatusData({ subLocationId }) {
+    logger.debug({ subLocationId });
+    const statusCollectionRef = this.fixedTagSubLocationCollectionRef
+      .doc(subLocationId)
+      .collection('status');
+    const { statusDocRef, ...latestStatusData } = await getLatestStatus(
+      statusCollectionRef
+    );
+
+    // if there is no status or the numberOfUpVote is null, raise error
+    if (!statusDocRef) {
+      throw Error('No status in this tag.');
+    }
+
+    return {
+      ...latestStatusData,
+      hasUpVote: null,
+      type: 'fixedTagSubLocation',
     };
   }
 
@@ -182,7 +308,7 @@ class TagDataSource extends DataSource {
 
     if (action === 'add') {
       // add tagData to server
-      const refAfterTagAdd = await this.tagDataCollectionReference.add(tagData);
+      const refAfterTagAdd = await this.tagDataCollectionRef.add(tagData);
       const { id: newAddedTagId } = refAfterTagAdd;
 
       await this.updateTagStatus({
@@ -209,7 +335,7 @@ class TagDataSource extends DataSource {
       return getIdWithDataFromDocSnap(await refAfterTagAdd.get());
     }
     if (action === 'update') {
-      const refOfUpdateTag = this.tagDataCollectionReference.doc(tagId);
+      const refOfUpdateTag = this.tagDataCollectionRef.doc(tagId);
 
       // the category has changed, need to push new status data to status history
       // TODO: consider if this section is needed.
@@ -295,7 +421,7 @@ class TagDataSource extends DataSource {
 
     // check if the user is the create user of the tag
     const tagCreateUserId = (
-      await this.tagDataCollectionReference.doc(tagId).get()
+      await this.tagDataCollectionRef.doc(tagId).get()
     ).data().createUserId;
 
     if (tagCreateUserId !== uid) {
@@ -335,7 +461,7 @@ class TagDataSource extends DataSource {
       createUserId: uid,
       numberOfUpVote: hasNumberOfUpVote ? 0 : null,
     };
-    const docRef = await this.tagDataCollectionReference
+    const docRef = await this.tagDataCollectionRef
       .doc(tagId)
       .collection('status')
       .add(statusData);
@@ -347,7 +473,42 @@ class TagDataSource extends DataSource {
         statusName,
       });
     }
-    return (await docRef.get()).data();
+    return { ...getIdWithDataFromDocSnap(await docRef.get()), type: 'tag' };
+  }
+
+  async updateFixedTagSubLocationStatus({
+    FixedTagSubLocationId,
+    statusName,
+    description,
+    userInfo,
+  }) {
+    const { logIn, uid } = userInfo;
+    checkUserLogIn(logIn);
+
+    const statusData = {
+      statusName,
+      description,
+      createTime: FieldValue.serverTimestamp(),
+      createUserId: uid,
+    };
+    const docRef = await this.fixedTagSubLocationCollectionRef
+      .doc(FixedTagSubLocationId)
+      .collection('status')
+      .add(statusData);
+
+    // update status field in the record of algolia index
+    /*
+    if (this.algoliaIndexClient) {
+      await this.algoliaIndexClient.partialUpdateObject({
+        objectID: tagId,
+        statusName,
+      });
+    }
+    */
+    return {
+      ...getIdWithDataFromDocSnap(await docRef.get()),
+      type: 'fixedTagSubLocation',
+    };
   }
 
   /**
@@ -363,14 +524,14 @@ class TagDataSource extends DataSource {
 
     // check if the user is the creater of the tag
     const tagCreateUserId = (
-      await this.tagDataCollectionReference.doc(tagId).get()
+      await this.tagDataCollectionRef.doc(tagId).get()
     ).data().createUserId;
 
     if (tagCreateUserId !== uid) {
       throw Error('This user can not delete this tag');
     }
 
-    await this.tagDataCollectionReference.doc(tagId).delete();
+    await this.tagDataCollectionRef.doc(tagId).delete();
 
     return true;
   }
@@ -388,9 +549,13 @@ class TagDataSource extends DataSource {
   async updateNumberOfUpVote({ tagId, action, userInfo }) {
     const { logIn, uid } = userInfo;
     checkUserLogIn(logIn);
-    const tagDocRef = this.tagDataCollectionReference.doc(tagId);
+    const statusCollectionRef = this.tagDataCollectionRef
+      .doc(tagId)
+      .collection('status');
 
-    const { statusDocRef: tagStatusDocRef } = await getLatestStatus(tagDocRef);
+    const { statusDocRef: tagStatusDocRef } = await getLatestStatus(
+      statusCollectionRef
+    );
     // if there is no status or the numberOfUpVote is null, raise error
     if (!tagStatusDocRef) {
       throw Error('No status in this tag.');
@@ -455,7 +620,7 @@ class TagDataSource extends DataSource {
       missionName === '問題回報' &&
       numberOfUpVote > (await this.archivedThreshold)
     ) {
-      const docRef = this.tagDataCollectionReference.doc(tagId);
+      const docRef = this.tagDataCollectionRef.doc(tagId);
       // archived tag
       await docRef.update({ archived: true });
 
@@ -482,7 +647,7 @@ class TagDataSource extends DataSource {
     const { logIn } = userInfo;
     checkUserLogIn(logIn);
 
-    const tagDocRef = this.tagDataCollectionReference.doc(tagId);
+    const tagDocRef = this.tagDataCollectionRef.doc(tagId);
 
     // if the increment action speed is slow, try use "distributed counter"
     // https://firebase.google.com/docs/firestore/solutions/counters
@@ -501,13 +666,13 @@ class TagDataSource extends DataSource {
    * @returns {Promise<TagPage>}
    */
   async getUserAddTagHistory({ uid, pageParams }) {
-    const query = this.tagDataCollectionReference
+    const query = this.tagDataCollectionRef
       .where('createUserId', '==', uid)
       .orderBy('createTime', 'desc');
     const { data: tags, pageInfo } = await getPage(
       query,
       pageParams,
-      this.tagDataCollectionReference
+      this.tagDataCollectionRef
     );
 
     return { tags, ...pageInfo };
@@ -538,7 +703,7 @@ class TagDataSource extends DataSource {
    */
   async recordUserActivity(action, userInfo, tagId = null) {
     const { uid: userId } = userInfo;
-    await this.userActivityCollectionReference.add({
+    await this.userActivityCollectionRef.add({
       action,
       userId,
       tagId,
