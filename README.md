@@ -17,13 +17,6 @@
   ```bash
   npm run localstart
   ```
-- local server開啟後可以做測試
-- playground: http://localhost:4001/graphql
-  - 查看schema
-  - 手動送出query/mutation做測試
-- voyager: http://localhost:4001/voyager
-  - 查看shcema的關係
-
 ## Running in the docker
 - Prequiste: You need to have `docker` + `docker-compose` to be installed. 
 - In the directory, run the following command:
@@ -31,12 +24,10 @@
   docker compose up
   ``` 
 - We don't push the image to Dockerhub, so the image would be built locally.
-- After the container is up, you can send GraphQL request to the following link to test new feature. <br/>
-  http://0.0.0.0:5001/smartcampus-1b31f/us-central1/graphql
 - The firestore emulator data would be store in the directory `./emulator-data` when you exit. And it would be import to the firestore emulator when you start the container next time. If you want to empty the firestore emulator, just delete the content in the directory.
   - You must have `./emulator-data` directory before set up container, or the container would crash.
 - If you want to test the auth functionality, you can see [here](https://firebase.google.com/docs/emulator-suite/connect_auth). The port(9099) already be exposed. Make sure you connect to the auth service using `0.0.0.0:9099` rather than `localhost:9099`
-- **Connect to the service by `0.0.0.0:<port>` rather than `localhost:<port>`**
+- **Connect to the service by `0.0.0.0:<port>` rather than `localhost:<port>`**(It depends on Windows or Mac)
 
 ## Deployment
 - 在最一開始想先安裝firebase-tools和initialize，參考[get started](https://firebase.google.com/docs/functions/get-started) step 2 and 3
@@ -46,11 +37,10 @@
   ```
 
 ## Tools
-- Programming language: node.js
-- API framework: Express + Apollo graphql server
-- API schema visualizer: GraphQL voyager
+- Programming language: node.js v14
+- API framework: Apollo graphql server
 - Database: firebase firestore + firebase Admin SDK
-- Deploy on: firebase cloud function
+- Deploy on: GCP cloud run
 
 ## reference
 
