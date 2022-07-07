@@ -1,3 +1,5 @@
+const logger = require('pino-caller')(require('../../logger'));
+
 const {
   tagResolvers,
   statusResolvers,
@@ -117,7 +119,8 @@ const mutationResolvers = {
       const imageUploadUrls = Promise.all(
         dataSources.storageDataSource.getImageUploadUrls({
           imageUploadNumber,
-          prefix: tag.id,
+          // Deprecate in the future. This is for the old version support.
+          firestorePath: tag.id,
         })
       );
 
@@ -167,7 +170,8 @@ const mutationResolvers = {
         tag,
         imageUploadNumber,
         imageUploadUrls: await dataSources.storageDataSource.getImageUploadUrls(
-          { imageUploadNumber, prefix: tagId }
+          // Deprecate in the future. This is for the old version support.
+          { imageUploadNumber, firestorePath: tagId }
         ),
         imageDeleteStatus: await dataSources.storageDataSource.doImageDelete(
           tagId,
@@ -230,11 +234,11 @@ const mutationResolvers = {
       let imageUploadUrls;
       try {
         imageUploadUrls = await Promise.all(
-        dataSources.storageDataSource.getImageUploadUrls({
-          imageUploadNumber,
+          dataSources.storageDataSource.getImageUploadUrls({
+            imageUploadNumber,
             firestorePath: updatedStatus.docPath,
-        })
-      );
+          })
+        );
       } catch (error) {
         logger.error('error when create signed url');
         logger.error(error);
