@@ -117,11 +117,12 @@ function generateTagDataToStoreInFirestore(action, data, userInfo) {
 
 /**
  * Extract data from tag document reference
- * @param {import('firebase-admin').firestore.QueryDocumentSnapshot} docRef The document we want to get the data
+ * @param {import('firebase-admin').firestore.QueryDocumentSnapshot} docSnap The document we want to get the data
  */
 function getIdWithDataFromDocSnap(docSnap) {
   const data = {
     id: docSnap.id,
+    docPath: docSnap.ref.path,
     ...docSnap.data(),
   };
   return data;
