@@ -164,6 +164,20 @@ class TagDataSource extends DataSource {
   }
 
   /**
+   * @param {object} param
+   * @param {string} param.fixedTagSubLocationId
+   */
+  async getFixedTagSubLocationData({ fixedTagSubLocationId }) {
+    const doc = await this.fixedTagSubLocationCollectionRef
+      .doc(fixedTagSubLocationId)
+      .get();
+    if (!doc.exists) {
+      return null;
+    }
+    return getIdWithDataFromDocSnap(doc);
+  }
+
+  /**
    * Get status history of current tag document `status` collection
    * @param {object} param
    * @param {string} param.tagId The tadId of the document we want to get the latest

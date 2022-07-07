@@ -3,6 +3,7 @@ type Query {
   tag(tagId: ID!): Tag
   fixedTagList(pageParams: PageParams): FixedTagPage!
   fixedTag(fixedTagId: ID!): FixedTag
+  fixedTagSubLocation(fixedTagSubLocationId: ID!): FixedTagSubLocation
   userAddTagHistory(uid: ID!, pageParams: PageParams): TagPage!
   "true if the use have read the guide, need to add token in the header"
   hasReadGuide: Boolean!
