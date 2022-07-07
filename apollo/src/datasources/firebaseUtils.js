@@ -1,6 +1,7 @@
 // https://github.com/ai/nanoid
 const { nanoid } = require('nanoid');
 const { ForbiddenError } = require('apollo-server');
+const path = require('path');
 
 const { GeoPoint, FieldValue } = require('firebase-admin').firestore;
 const { geohashForLocation } = require('geofire-common');
@@ -16,8 +17,8 @@ const defaultPageSize = 10;
  */
 function generateFileName(imageNumber, prefix) {
   // id generator: [nanoid](https://github.com/ai/nanoid)
-  return [...new Array(imageNumber)].map(
-    () => `${prefix}/${nanoid().substring(0, 8)}`
+  return [...new Array(imageNumber)].map(() =>
+    path.join(prefix, nanoid().substring(0, 8))
   );
 }
 
