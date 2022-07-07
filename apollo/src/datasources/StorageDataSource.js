@@ -1,3 +1,4 @@
+const path = require('path');
 /** @module StorageDataSource */
 const { DataSource } = require('apollo-datasource');
 /** @type {import('pino').Logger} */
@@ -42,9 +43,12 @@ class StorageDataSource extends DataSource {
    */
   async getImageUrls({ tagId }) {
     // https://github.com/googleapis/nodejs-storage/blob/main/samples/listFilesByPrefix.js#L44
+    // * use delimiter to only get the files in the directory, not in the subdirectory
+    // * the prefix need to add '/' in the end when there is delimiter with '/',
+    //   or it will return nothing.
     const options = {
       delimiter: '/',
-      prefix: tagId,
+      prefix: path.join(tagId, '/'),
     };
     logger.info(options);
     const [files] = await this.bucket.getFiles(options);
@@ -61,10 +65,12 @@ class StorageDataSource extends DataSource {
   async getFixedTagSubLocationImageUrls({ docPath }) {
     logger.info(docPath);
     // https://github.com/googleapis/nodejs-storage/blob/main/samples/listFilesByPrefix.js#L44
-    // use delimiter to only get the files in the directory, not in the subdirectory
+    // * use delimiter to only get the files in the directory, not in the subdirectory
+    // * the prefix need to add '/' in the end when there is delimiter with '/',
+    //   or it will return nothing.
     const options = {
       delimiter: '/',
-      prefix: docPath,
+      prefix: path.join(docPath, '/'),
     };
     const [files] = await this.bucket.getFiles(options);
 
