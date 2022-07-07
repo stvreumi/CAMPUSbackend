@@ -46,6 +46,7 @@ class StorageDataSource extends DataSource {
       delimiter: '/',
       prefix: tagId,
     };
+    logger.info(options);
     const [files] = await this.bucket.getFiles(options);
 
     return files.map(file => file.metadata.mediaLink);
