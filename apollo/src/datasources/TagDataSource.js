@@ -59,8 +59,7 @@ class TagDataSource extends DataSource {
     this.tagDataCollectionRef = tagDataCollectionRef;
     this.userActivityCollectionRef = userActivityCollectionRef;
     this.fixedTagCollectionRef = fixedTagCollectionRef;
-    this.fixedTagSubLocationCollectionRef =
-      fixedTagSubLocationCollectionRef;
+    this.fixedTagSubLocationCollectionRef = fixedTagSubLocationCollectionRef;
     this.archivedThreshold = archivedThreshold;
     this.firestore = firestore;
     this.eventEmitter = eventEmitter;
@@ -476,6 +475,11 @@ class TagDataSource extends DataSource {
     return { ...getIdWithDataFromDocSnap(await docRef.get()), type: 'tag' };
   }
 
+  /**
+   *
+   * @param {object} param
+   * @returns {Promise<{type: string, docPath: string}>}
+   */
   async updateFixedTagSubLocationStatus({
     FixedTagSubLocationId,
     statusName,
