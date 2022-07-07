@@ -1,5 +1,7 @@
 /** @module StorageDataSource */
 const { DataSource } = require('apollo-datasource');
+/** @type {import('pino').Logger} */
+const logger = require('pino-caller')(require('../../logger'));
 
 // firebaseUtil
 const { generateFileName } = require('./firebaseUtils');
@@ -39,7 +41,9 @@ class StorageDataSource extends DataSource {
    * @returns {Promise<string>[]} the image links of the current tag
    */
   async getImageUrls({ tagId }) {
+    // https://github.com/googleapis/nodejs-storage/blob/main/samples/listFilesByPrefix.js#L44
     const options = {
+      delimiter: '/',
       prefix: tagId,
     };
     const [files] = await this.bucket.getFiles(options);
@@ -50,12 +54,16 @@ class StorageDataSource extends DataSource {
   /**
    *
    * @param {object} param
-   * @param {string} param.subLocationId
+   * @param {string} param.docPath
    * @returns
    */
-  async getFixedTagSubLocationImageUrls({ subLocationId }) {
+  async getFixedTagSubLocationImageUrls({ docPath }) {
+    logger.info(docPath);
+    // https://github.com/googleapis/nodejs-storage/blob/main/samples/listFilesByPrefix.js#L44
+    // use delimiter to only get the files in the directory, not in the subdirectory
     const options = {
-      prefix: `fixedTagSubLocationStatus/${subLocationId}`,
+      delimiter: '/',
+      prefix: docPath,
     };
     const [files] = await this.bucket.getFiles(options);
 
@@ -71,10 +79,10 @@ class StorageDataSource extends DataSource {
    * would have a new name and another permenent URL for downloading.
    * @param {object} param
    * @param {number} param.imageUploadNumber
-   * @param {string} param.prefix
+   * @param {string} param.firestorePath
    * @returns {Promise<string>[]} an array contain singed urls with length `imageNumber`
    */
-  getImageUploadUrls({ imageUploadNumber, prefix }) {
+  getImageUploadUrls({ imageUploadNumber, firestorePath }) {
     if (imageUploadNumber > 0) {
       // These options will allow temporary uploading of the file with outgoing
       // Content-Type: application/octet-stream header.
@@ -85,7 +93,10 @@ class StorageDataSource extends DataSource {
         contentType: 'application/octet-stream',
       };
 
-      const fileNameArray = generateFileName(imageUploadNumber, prefix);
+      const fileNameArray = generateFileName(imageUploadNumber, firestorePath);
+
+      // for local test only
+      // return fileNameArray;
 
       return fileNameArray.map(async name => {
         const [url] = await this.bucket.file(name).getSignedUrl(options);
