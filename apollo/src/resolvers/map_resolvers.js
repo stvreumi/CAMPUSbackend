@@ -1,4 +1,3 @@
-//@ts-check
 const { DateTime } = require('luxon');
 
 const logger = require('pino-caller')(require('../../logger'));
@@ -233,7 +232,7 @@ const fixedTagSubLocationStatusResolver = {
 const fixedTagSubLocationResolvers = {
   FixedTagSubLocation: {
     __resolveType(subLocation, _, __) {
-      console.log(subLocation);
+      logger.debug(subLocation);
       if (
         subLocation.type === 'restaurant-store' ||
         subLocation.type === 'sports'
