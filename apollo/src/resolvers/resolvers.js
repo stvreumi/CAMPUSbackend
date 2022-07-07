@@ -1,3 +1,5 @@
+const logger = require('pino-caller')(require('../../logger'));
+
 const {
   tagResolvers,
   statusResolvers,
@@ -58,6 +60,21 @@ const queryResolvers = {
     fixedTag: async (_, { fixedTagId }, { dataSources }) =>
       dataSources.tagDataSource.getFixedTagData({ fixedTagId }),
     /**
+     *
+     * @param {*} _
+     * @param {{fixedTagSubLocationId: string}} params
+     * @param {ResolverArgsInfo} info
+     * @returns
+     */
+    fixedTagSubLocation: async (
+      _,
+      { fixedTagSubLocationId },
+      { dataSources }
+    ) =>
+      dataSources.tagDataSource.getFixedTagSubLocationData({
+        fixedTagSubLocationId,
+      }),
+    /**
      * @param {*} _
      * @param {{uid: string, pageParams: PageParams}} params
      * @param {ResolverArgsInfo} info
@@ -102,7 +119,8 @@ const mutationResolvers = {
       const imageUploadUrls = Promise.all(
         dataSources.storageDataSource.getImageUploadUrls({
           imageUploadNumber,
-          prefix: tag.id,
+          // Deprecate in the future. This is for the old version support.
+          firestorePath: tag.id,
         })
       );
 
@@ -152,7 +170,8 @@ const mutationResolvers = {
         tag,
         imageUploadNumber,
         imageUploadUrls: await dataSources.storageDataSource.getImageUploadUrls(
-          { imageUploadNumber, prefix: tagId }
+          // Deprecate in the future. This is for the old version support.
+          { imageUploadNumber, firestorePath: tagId }
         ),
         imageDeleteStatus: await dataSources.storageDataSource.doImageDelete(
           tagId,
@@ -205,19 +224,25 @@ const mutationResolvers = {
       { dataSources, userInfo }
     ) => {
       const updatedStatus =
-        dataSources.tagDataSource.updateFixedTagSubLocationStatus({
+        await dataSources.tagDataSource.updateFixedTagSubLocationStatus({
           FixedTagSubLocationId: fixedTagSubLocationId,
           statusName,
           description,
           userInfo,
         });
 
-      const imageUploadUrls = Promise.all(
-        dataSources.storageDataSource.getImageUploadUrls({
-          imageUploadNumber,
-          prefix: `fixedTagSubLocationStatus/${updatedStatus.id}`,
-        })
-      );
+      let imageUploadUrls;
+      try {
+        imageUploadUrls = await Promise.all(
+          dataSources.storageDataSource.getImageUploadUrls({
+            imageUploadNumber,
+            firestorePath: updatedStatus.docPath,
+          })
+        );
+      } catch (error) {
+        logger.error('error when create signed url');
+        logger.error(error);
+      }
 
       // Record user activity after the above function successfully return with
       // no errors.

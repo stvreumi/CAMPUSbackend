@@ -59,8 +59,7 @@ class TagDataSource extends DataSource {
     this.tagDataCollectionRef = tagDataCollectionRef;
     this.userActivityCollectionRef = userActivityCollectionRef;
     this.fixedTagCollectionRef = fixedTagCollectionRef;
-    this.fixedTagSubLocationCollectionRef =
-      fixedTagSubLocationCollectionRef;
+    this.fixedTagSubLocationCollectionRef = fixedTagSubLocationCollectionRef;
     this.archivedThreshold = archivedThreshold;
     this.firestore = firestore;
     this.eventEmitter = eventEmitter;
@@ -158,6 +157,20 @@ class TagDataSource extends DataSource {
    */
   async getFixedTagData({ fixedTagId }) {
     const doc = await this.fixedTagCollectionRef.doc(fixedTagId).get();
+    if (!doc.exists) {
+      return null;
+    }
+    return getIdWithDataFromDocSnap(doc);
+  }
+
+  /**
+   * @param {object} param
+   * @param {string} param.fixedTagSubLocationId
+   */
+  async getFixedTagSubLocationData({ fixedTagSubLocationId }) {
+    const doc = await this.fixedTagSubLocationCollectionRef
+      .doc(fixedTagSubLocationId)
+      .get();
     if (!doc.exists) {
       return null;
     }
@@ -285,6 +298,7 @@ class TagDataSource extends DataSource {
 
     return {
       ...latestStatusData,
+      docPath: statusDocRef.path,
       hasUpVote: null,
       type: 'fixedTagSubLocation',
     };
@@ -476,6 +490,11 @@ class TagDataSource extends DataSource {
     return { ...getIdWithDataFromDocSnap(await docRef.get()), type: 'tag' };
   }
 
+  /**
+   *
+   * @param {object} param
+   * @returns {Promise<{type: string, docPath: string}>}
+   */
   async updateFixedTagSubLocationStatus({
     FixedTagSubLocationId,
     statusName,
@@ -508,6 +527,7 @@ class TagDataSource extends DataSource {
     return {
       ...getIdWithDataFromDocSnap(await docRef.get()),
       type: 'fixedTagSubLocation',
+      docPath: docRef.path,
     };
   }
 

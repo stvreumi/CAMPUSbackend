@@ -36,12 +36,13 @@ async function uploadImageProcessing(admin, object) {
 
   // generate necessary data
   const fileName = path.basename(filePath);
-  const tagId = path.dirname(filePath);
+  // firestorePath, the firestore path of the images attached to
+  const firestorePath = path.dirname(filePath);
   const tempFilePath = path.join(os.tmpdir(), fileName);
   const newFileMetadata = {
     contentType: "image/jpeg",
     metadata: {
-      tagId,
+      firestorePath,
       // * need to be set so that firebase console can preview the image
       // * must be uuidv4 format
       // https://stackoverflow.com/a/60750194
@@ -107,7 +108,7 @@ async function uploadImageProcessing(admin, object) {
 
   // upload converted file
   const [uploadFileRef] = await bucket.upload(newFilePath, {
-    destination: path.join(tagId, newFileName),
+    destination: path.join(firestorePath, newFileName),
     metadata: newFileMetadata,
   });
 

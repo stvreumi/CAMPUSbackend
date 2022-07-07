@@ -34,6 +34,8 @@ export interface Status {
 
 export interface RawStatusDocumentFields extends Status {
   createTime: firestore.Timestamp;
+  docPath: string;
+  type: string;
 }
 
 export interface StatusWithDocumentReference extends Status {
