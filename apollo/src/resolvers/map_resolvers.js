@@ -89,10 +89,10 @@ const statusResolvers = {
      */
     // TODO add imageurl resolver here to get the image url
     imageUrl: async (status, _, { dataSources }) => {
-      const { id, type } = status;
+      const { docPath, type } = status;
       if (type === 'fixedTagSubLocation') {
         return dataSources.storageDataSource.getFixedTagSubLocationImageUrls({
-          subLocationId: id,
+          docPath,
         });
       }
       return null;

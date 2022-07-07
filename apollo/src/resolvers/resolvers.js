@@ -220,19 +220,25 @@ const mutationResolvers = {
       { dataSources, userInfo }
     ) => {
       const updatedStatus =
-        dataSources.tagDataSource.updateFixedTagSubLocationStatus({
+        await dataSources.tagDataSource.updateFixedTagSubLocationStatus({
           FixedTagSubLocationId: fixedTagSubLocationId,
           statusName,
           description,
           userInfo,
         });
 
-      const imageUploadUrls = Promise.all(
+      let imageUploadUrls;
+      try {
+        imageUploadUrls = await Promise.all(
         dataSources.storageDataSource.getImageUploadUrls({
           imageUploadNumber,
-          prefix: `fixedTagSubLocationStatus/${updatedStatus.id}`,
+            firestorePath: updatedStatus.docPath,
         })
       );
+      } catch (error) {
+        logger.error('error when create signed url');
+        logger.error(error);
+      }
 
       // Record user activity after the above function successfully return with
       // no errors.

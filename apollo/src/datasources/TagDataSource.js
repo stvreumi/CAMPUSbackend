@@ -298,6 +298,7 @@ class TagDataSource extends DataSource {
 
     return {
       ...latestStatusData,
+      docPath: statusDocRef.path,
       hasUpVote: null,
       type: 'fixedTagSubLocation',
     };
@@ -526,6 +527,7 @@ class TagDataSource extends DataSource {
     return {
       ...getIdWithDataFromDocSnap(await docRef.get()),
       type: 'fixedTagSubLocation',
+      docPath: docRef.path,
     };
   }
 
