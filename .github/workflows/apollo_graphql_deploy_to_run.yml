@@ -4,7 +4,7 @@ on:
   # use pull_request if you want to run this action when new PR is created
   push:
     branches: 
-      - master
+      - tagdata-110-1
     # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#onpushpull_requestpaths
     paths:
       - 'apollo/**'
@@ -45,15 +45,19 @@ jobs:
       # https://yaml-multiline.info/
       # Keep newlines (literal), No newline at end (strip)
       run: |-
-        docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} apollo/
-        docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
+        docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE }}:110-1-${{  github.sha }} apollo/
+        docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE }}:110-1-${{  github.sha }}
+    # deploy a revision with tag and no traffic to it
+    # https://cloud.google.com/run/docs/rollouts-rollbacks-traffic-migration#tags
     - name: Deploy to Cloud Run
       id: deploy
       uses: google-github-actions/deploy-cloudrun@main
       with:
         service: ${{ env.SERVICE }}
-        image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
+        image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE }}:110-1-${{  github.sha }}
         region: ${{ env.REGION }}
+        tag: collection-tagData-110-1
+        no_traffic: true
     - name: Redirect traffic to latest revision
       uses: google-github-actions/deploy-cloudrun@main
       with:
