@@ -60,12 +60,4 @@ jobs:
         region: ${{ env.REGION }}
         tag: tagdata-110-1
         no_traffic: true
-    - name: Redirect traffic to latest revision
-      uses: google-github-actions/deploy-cloudrun@main
-      with:
-        service: ${{ env.SERVICE }}
-        region: ${{ env.REGION }}
-        # https://cloud.google.com/sdk/gcloud/reference/run/services/update-traffic#--to-latest
-        # this need to be seperate step
-        revision_traffic: LATEST=100
     
