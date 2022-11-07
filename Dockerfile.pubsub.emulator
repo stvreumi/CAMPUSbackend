@@ -3,7 +3,7 @@ FROM gcr.io/google.com/cloudsdktool/cloud-sdk:alpine
 
 # install java jre
 # from: https://github.com/seletskiy/firebase-emulator/blob/master/Dockerfile
-RUN apk --update --no-cache add openjdk8-jre
+RUN apk --update --no-cache add openjdk11-jre
 
 # https://cloud.google.com/pubsub/docs/emulator#using_the_emulator
 RUN gcloud components install pubsub-emulator && gcloud components update
