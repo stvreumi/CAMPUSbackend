@@ -110,7 +110,8 @@ const userResolvers = {
      * @param {ResolverArgsInfo} info
      */
     displayName: async ({ uid }, _, { dataSources }) =>
-      dataSources.authDataSource.getUserName({ uid }),
+      "X", // for cscw demo purpose, hide actual user's name
+      // dataSources.authDataSource.getUserName({ uid }),
     /**
      * @param {{uid: string}} param
      * @param {*} _
