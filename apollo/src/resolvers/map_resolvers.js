@@ -118,7 +118,8 @@ const userResolvers = {
      * @param {ResolverArgsInfo} info
      */
     photoURL: async ({ uid }, _, { dataSources }) =>
-      dataSources.authDataSource.getUserPhotoURL({ uid }),
+      "https://raw.githubusercontent.com/CAMPUS-NYCU/SmartCampus/9d3bb7096bf3f09c40c6f70850f57e14f7c471ff/public/Campus_Logo_512x.png", // for cscw demo purpose, hide actual user's photo
+      // dataSources.authDataSource.getUserPhotoURL({ uid }),
     /**
      * @param {{uid: string}} param
      * @param {*} _
