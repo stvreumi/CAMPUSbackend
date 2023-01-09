@@ -30,7 +30,7 @@
     "graphql-subscriptions": "^2.0.0",
     "graphql-tools": "^8.2.0",
     "graphql-voyager": "^1.0.0-rc.29",
-    "luxon": "^2.3.0",
+    "luxon": "^2.5.2",
     "nanoid": "^3.1.25",
     "pino": "^7.9.2",
     "pino-caller": "^3.2.0",
