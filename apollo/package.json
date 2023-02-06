@@ -23,7 +23,7 @@
     "dataloader": "^2.2.1",
     "dotenv": "^16.0.3",
     "firebase": "^8.6.7",
-    "firebase-admin": "^9.9.0",
+    "firebase-admin": "^11.5.0",
     "geofire-common": "^5.2.0",
     "graphql": "^15.5.0",
     "graphql-resolvers": "^0.4.2",
