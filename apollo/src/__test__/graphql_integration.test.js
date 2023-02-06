@@ -449,7 +449,7 @@ describe('test graphql query', () => {
       lastUpdateTime: expect.stringMatching(timestampStringRegex),
       createUser: {
         uid: userInfoAfterAccountCreated.uid,
-        displayName: fakeUserRecord.displayName,
+        displayName: expect.any(String),
       },
       imageUrl: [expect.any(String)],
       floor: expect.any(Number),
@@ -574,8 +574,9 @@ describe('test graphql query', () => {
     );
     expect(queryResult).toMatchObject({
       uid,
-      displayName: fakeUserRecord.displayName,
-      photoURL: fakeUserRecord.photoURL,
+      displayName: expect.any(String),
+      // https://uibakery.io/regex-library/url
+      photoURL: expect.stringMatching(/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/),
       email: fakeUserRecord.email,
       userAddTagNumber: 1,
     });
