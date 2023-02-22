@@ -1,3 +1,8 @@
+# Platform Architecture
+![Platform Architecture](docs/Platform_architecture_compressed.png)
+<br/>
+*(make by YU-CHENG WANG)*
+
 # Overview
 - In the directory `functions/`
 
