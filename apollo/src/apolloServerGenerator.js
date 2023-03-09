@@ -1,18 +1,22 @@
-const { ApolloServer } = require('apollo-server');
-const EventEmitter = require('events');
-const algoliasearch = require('algoliasearch');
+import { ApolloServer } from 'apollo-server';
+import EventEmitter from 'events';
+import algoliasearch from 'algoliasearch';
+import loggerFactory from 'pino-caller';
+import * as rootLogger from '../logger.js';
 
-const logger = require('pino-caller')(require('../logger'));
+import typeDefs from './schema/schema.js';
+import resolvers from './resolvers/resolvers.js';
+import CampusPubSub from './CampusPubSub.js';
 
-const typeDefs = require('./schema/schema');
-const resolvers = require('./resolvers/resolvers');
-const CampusPubSub = require('./CampusPubSub');
 /** dataSources */
-const TagDataSource = require('./datasources/TagDataSource');
-const StorageDataSource = require('./datasources/StorageDataSource');
-const AuthDataSource = require('./datasources/AuthDataSource');
-const UserDataSource = require('./datasources/UserDataSource');
-const { tagDataCollectionName } = require('./datasources/firestoreCollections');
+import TagDataSource from './datasources/TagDataSource.js';
+
+import StorageDataSource from './datasources/StorageDataSource.js';
+import AuthDataSource from './datasources/AuthDataSource.js';
+import UserDataSource from './datasources/UserDataSource.js';
+import tagDataCollectionName from './datasources/firestoreCollections.js';
+
+const logger = loggerFactory(rootLogger);
 
 /**
  * @typedef {import('firebase-admin')} firebaseAdmin
@@ -132,7 +136,7 @@ function apolloServerInstanciator(
     // to show stacktrace
     // https://www.apollographql.com/docs/apollo-server/data/errors/#omitting-or-including-stacktrace
     debug,
-    context,
+    context, // what context available in the this option in v3?
     introspection,
     playground,
   });
@@ -220,4 +224,4 @@ function apolloServerGenerator({
   return productionServerGenerator;
 }
 
-module.exports = { apolloServerGenerator, dataSourcesGenerator };
+export default { apolloServerGenerator, dataSourcesGenerator };
