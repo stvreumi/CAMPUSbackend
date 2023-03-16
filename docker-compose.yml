@@ -32,8 +32,18 @@ services:
     tty: true
   pubsub_emulator:
     build:
-      context: ./
-      dockerfile: Dockerfile.pubsub.emulator
+      # https://github.com/GoogleCloudPlatform/cloud-sdk-docker
+      # https://docs.docker.com/engine/reference/commandline/build/#git-repositories
+      # https://docs.docker.com/build/building/context/#url-context
+      # {branch}/{dir}
+      # WARNING: currently could not use remote git source
+      # related to buildkit
+      # https://github.com/docker/compose-cli/issues/1958
+      # context: https://github.com/GoogleCloudPlatform/cloud-sdk-docker.git#master:debian_slim
+      # WORKAROUND: manually clone repo to local from https://github.com/GoogleCloudPlatform/cloud-sdk-docker
+      context: ./cloud-sdk-docker/debian_slim
+      args:
+        - INSTALL_COMPONENTS=google-cloud-cli-app-engine-java google-cloud-cli-pubsub-emulator openjdk-17-jre
     volumes:
       - ./pubsub-emulator:/pubsub-emulator
     # https://cloud.google.com/sdk/gcloud/reference/beta/emulators/pubsub/start
