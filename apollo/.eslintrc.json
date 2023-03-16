@@ -11,7 +11,10 @@
   },
   "rules": {
     // https://github.com/prettier/eslint-plugin-prettier#installation
-    "prettier/prettier": "warn",
+    // "prettier/prettier": "warn",
+    "prettier/prettier": ["error",{
+      "endOfLine": "auto"}
+    ],
     "no-console": "off",
     "no-unused-vars": [
       "error",
