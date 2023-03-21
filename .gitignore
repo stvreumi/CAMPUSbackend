@@ -49,3 +49,9 @@ ui-debug.log
 
 # local self test, don't commit
 self-test/*
+
+# firebase key
+smartcampus-1b31f-firebase*.json
+
+# cloud sdk
+cloud-sdk-docker
