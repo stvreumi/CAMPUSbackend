@@ -38,4 +38,11 @@ jobs:
       # https://github.com/facebook/jest/issues/11464#issuecomment-850055381
       run: firebase emulators:exec "npx jest --ci --forceExit"  --only firestore,auth 
       working-directory: ./apollo
+    # https://stackoverflow.com/a/69919724
+    - name: Archive npm failure logs
+      uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: npm-logs
+        path: ~/.npm/_logs
     
