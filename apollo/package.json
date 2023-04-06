@@ -10,7 +10,7 @@
     "migrate_to_algolia": "node -r dotenv/config ./scripts/addExistedDataOnFirestoreToAlgolia.js dotenv_config_path=./scripts/algolia.env"
   },
   "engines": {
-    "node": "14"
+    "node": "18"
   },
   "type": "module",
   "dependencies": {
