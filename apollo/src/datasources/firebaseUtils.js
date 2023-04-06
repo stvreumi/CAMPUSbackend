@@ -1,10 +1,10 @@
 // https://github.com/ai/nanoid
-const { nanoid } = require('nanoid');
-const { ForbiddenError } = require('apollo-server');
-const path = require('path');
+import { nanoid } from 'nanoid';
 
-const { GeoPoint, FieldValue } = require('firebase-admin').firestore;
-const { geohashForLocation } = require('geofire-common');
+import { ForbiddenError } from 'apollo-server';
+import path from 'path';
+import { geohashForLocation } from 'geofire-common';
+import { FieldValue, GeoPoint } from 'firebase-admin/firestore';
 
 const maxPageSize = 30;
 const defaultPageSize = 10;
@@ -207,7 +207,7 @@ const getPage = async (query, pageParams, collectionReference) => {
   };
 };
 
-module.exports = {
+export {
   generateFileName,
   getLatestStatus,
   getIdWithDataFromDocSnap,

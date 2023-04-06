@@ -1,8 +1,8 @@
 import { ApolloServer } from 'apollo-server';
 import EventEmitter from 'events';
 import algoliasearch from 'algoliasearch';
-import loggerFactory from 'pino-caller';
-import * as rootLogger from '../logger.js';
+// import loggerFactory from 'pino-caller';
+import logger from '../logger.js';
 
 import typeDefs from './schema/schema.js';
 import resolvers from './resolvers/resolvers.js';
@@ -14,9 +14,9 @@ import TagDataSource from './datasources/TagDataSource.js';
 import StorageDataSource from './datasources/StorageDataSource.js';
 import AuthDataSource from './datasources/AuthDataSource.js';
 import UserDataSource from './datasources/UserDataSource.js';
-import tagDataCollectionName from './datasources/firestoreCollections.js';
+import { tagDataCollectionName } from './datasources/constants.js';
 
-const logger = loggerFactory(rootLogger);
+
 
 /**
  * @typedef {import('firebase-admin')} firebaseAdmin
@@ -224,4 +224,4 @@ function apolloServerGenerator({
   return productionServerGenerator;
 }
 
-export default { apolloServerGenerator, dataSourcesGenerator };
+export { apolloServerGenerator, dataSourcesGenerator };

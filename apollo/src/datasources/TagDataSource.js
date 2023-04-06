@@ -1,19 +1,21 @@
 /** @module TagDataSource */
-const { DataSource } = require('apollo-datasource');
-const { FieldValue } = require('firebase-admin').firestore;
+import { DataSource } from 'apollo-datasource';
 
-/** @type {import('pino').Logger} */
-const logger = require('pino-caller')(require('../../logger'));
+import { FieldValue } from 'firebase-admin/firestore';
 
-const {
+
+import logger from '../../logger.js';
+
+import {
   getIdWithDataFromDocSnap,
   getLatestStatus,
   checkUserLogIn,
   generateTagDataToStoreInFirestore,
   getPage,
-} = require('./firebaseUtils');
+} from './firebaseUtils.js';
 
-const { upVoteActionName, cancelUpVoteActionName } = require('./constants');
+import { upVoteActionName, cancelUpVoteActionName } from './constants.js';
+
 
 // used for type annotation
 /**
@@ -548,6 +550,8 @@ class TagDataSource extends DataSource {
     ).data().createUserId;
 
     if (tagCreateUserId !== uid) {
+      logger.info(`request delete user: ${uid}`);
+      logger.info(`tag owner: ${tagCreateUserId}`);
       throw Error('This user can not delete this tag');
     }
 
@@ -732,4 +736,4 @@ class TagDataSource extends DataSource {
   }
 } // class TagDataSource
 
-module.exports = TagDataSource;
+export default TagDataSource;

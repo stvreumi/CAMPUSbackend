@@ -1,6 +1,7 @@
-const logger = require('pino-caller')(require('../../logger'));
+import loggerFactory from 'pino-caller';
+import * as rootLogger from '../../logger.js';
 
-const {
+import {
   tagResolvers,
   statusResolvers,
   userResolvers,
@@ -8,7 +9,9 @@ const {
   pageResolvers,
   fixedTagResolver,
   fixedTagSubLocationResolvers,
-} = require('./map_resolvers');
+} from './map_resolvers.js';
+
+const logger = loggerFactory(rootLogger);
 
 /**
  * @typedef {import('../types').ResolverArgsInfo} ResolverArgsInfo
@@ -359,4 +362,4 @@ const resolvers = {
   ...fixedTagSubLocationResolvers,
 };
 
-module.exports = resolvers;
+export default resolvers;

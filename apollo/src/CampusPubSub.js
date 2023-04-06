@@ -1,7 +1,7 @@
 // ref: https://github.com/m19c/graphql-firestore-subscriptions
-const { PubSubEngine } = require('graphql-subscriptions');
+import { PubSubEngine } from 'graphql-subscriptions';
 
-const PubSubHandlers = require('./PubSubHandlers');
+import PubSubHandlers from './PubSubHandlers.js';
 
 /**
  * note of async-iterator
@@ -78,4 +78,4 @@ class CampusPubSub extends PubSubEngine {
   }
 }
 
-module.exports = CampusPubSub;
+export default CampusPubSub;
