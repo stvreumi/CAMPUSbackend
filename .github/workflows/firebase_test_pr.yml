@@ -24,7 +24,7 @@ jobs:
     - name: Setup node environment
       uses: actions/setup-node@v1
       with:
-        node-version: '14'
+        node-version: '18'
     - name: Install necessary npm packages in the functions 
       run: npm ci
       working-directory: ./apollo
