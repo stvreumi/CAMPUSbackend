@@ -44,6 +44,7 @@ services:
       context: ./cloud-sdk-docker/debian_slim
       args:
         - INSTALL_COMPONENTS=google-cloud-cli-app-engine-java google-cloud-cli-pubsub-emulator openjdk-17-jre
+        - CLOUD_SDK_VERSION=431.0.0
     volumes:
       - ./pubsub-emulator:/pubsub-emulator
     # https://cloud.google.com/sdk/gcloud/reference/beta/emulators/pubsub/start
