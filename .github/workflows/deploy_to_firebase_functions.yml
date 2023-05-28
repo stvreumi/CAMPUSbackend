@@ -22,12 +22,12 @@ jobs:
     - name: Setup node environment
       uses: actions/setup-node@v1
       with:
-        node-version: '14'
+        node-version: '18'
     - name: Install necessary npm packages in the functions 
       run: npm ci
       working-directory: ./functions
     - name: Install firebase CLI
-      run: npm install -g firebase-tools
+      run: npm install -g firebase-tools@12
       # https://firebase.google.com/docs/cli#cli-ci-systems
     - name: Deploy to firebase functions
       run: firebase deploy --project ${{ secrets.GCP_PROJECT_ID }} --only functions
