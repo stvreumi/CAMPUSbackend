@@ -1,4 +1,4 @@
-FROM node:14-alpine as app
+FROM node:18-alpine as app
 
 ENV NODE_ENV=production
 
@@ -6,7 +6,7 @@ ENV NODE_ENV=production
 # from: https://github.com/seletskiy/firebase-emulator/blob/master/Dockerfile
 RUN apk --update --no-cache add openjdk11-jre
 
-RUN npm install -g firebase-tools
+RUN npm install -g firebase-tools@12
 
 # dependency
 # from: https://github.com/BretFisher/node-docker-good-defaults/blob/main/Dockerfile

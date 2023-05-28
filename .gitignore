@@ -45,6 +45,7 @@ credentials.csv
 emulator-data
 pubsub-emulator
 firestore-debug.log
+firebase-debug.log
 ui-debug.log
 
 # local self test, don't commit
