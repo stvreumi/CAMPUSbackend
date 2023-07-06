@@ -54,12 +54,12 @@ function dataSourcesGenerator(admin) {
     });
   const firebaseServiceReference = {
     tagDataCollectionRef: firestore.collection(tagDataCollectionName),
-    fixedTagCollectionRef: firestore.collection('fixedTag'),
+    fixedTagCollectionRef: firestore.collection('fixedTag_research'),
     fixedTagSubLocationCollectionRef: firestore.collection(
-      'fixedTagSubLocation'
+      'fixedTagSubLocation_research'
     ),
-    userCollectionRef: firestore.collection('user'),
-    userActivityCollectionRef: firestore.collection('userActivity'),
+    userCollectionRef: firestore.collection('user_research'),
+    userActivityCollectionRef: firestore.collection('userActivity_research'),
     auth: admin.auth(),
     bucket: admin.storage().bucket(),
   };

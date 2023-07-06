@@ -1,0 +1,97 @@
+type FixedTagResearch {
+  id: ID!
+	# 二餐
+  locationName: String!
+	# 經緯度
+  coordinates: Coordinate!
+  Tags: [TagResearch]
+}
+
+type TagResearch {
+  id: ID!
+	fixedTagId: ID!
+  locationName: String
+	# 經緯度
+  coordinates: CoordinateResearch
+  # 樓層
+  floor: String
+  # 回報類別 / 回報類別敘述
+  category: CategoryResearch
+  # 回報狀態 / 回報狀態敘述
+  status: StatusResearch
+  statusHistory(pageParams: PageParams): StatusPageResearch!
+	# timestamp 需要的資訊
+	createTime: String
+  lastUpdateTime: String
+  createUser: UserResearch
+  # pic 
+  imageUrl: [String]
+}
+
+# https://www.apollographql.com/docs/tutorial/resolvers/#paginate-results
+interface PageResearch {
+  cursor: String!
+  empty: Boolean!
+}
+
+type TagPageResearch implements PageResearch {
+  tags: [TagResearch]!
+  cursor: String!
+  empty: Boolean!
+}
+
+type StatusPageResearch implements PageResearch {
+  statusList: [StatusResearch]!
+  "the number of milliseconds elapsed since January 1, 1970 00:00:00 UTC."
+  cursor: String!
+  empty: Boolean!
+}
+
+type TagFieldsForSubscriptionResearch {
+  """
+  There are 4 types:
+  * added: the tag just added to the database(firestore)
+  * updated: the tag data or the status just be updated
+  * archived: the tag just be archived because of number of upvote exceed the 
+      threshold.
+  * deleted: the tag is deleted in the firestore  
+  """
+  changeType: String!
+  tagContent: TagResearch!
+}
+
+type CategoryResearch {
+  # 回報類別
+  categoryName: String!
+  # 回報類別敘述
+  categoryDescName: String!
+  # 相對位置圖
+  locationImgUrl: [String]
+}
+
+type StatusResearch {
+  id: ID!
+  # 回報狀態
+  statusName: String!
+  # 回報狀態敘述
+  statusDescName: String!
+  createTime: String!
+  createUser: User
+  "possible return value: null or []"
+  imageUrl: [String]
+}
+
+type UserResearch {
+  uid: ID!
+  displayName: String
+  photoURL: String
+  "only available when user is login"
+  email: String
+}
+
+type CoordinateResearch {
+  latitude: String!
+  longitude: String!
+}
+
+# mutation

@@ -110,16 +110,14 @@ const userResolvers = {
      * @param {ResolverArgsInfo} info
      */
     displayName: async ({ uid }, _, { dataSources }) =>
-      "X", // for cscw demo purpose, hide actual user's name
-      // dataSources.authDataSource.getUserName({ uid }),
+      dataSources.authDataSource.getUserName({ uid }),
     /**
      * @param {{uid: string}} param
      * @param {*} _
      * @param {ResolverArgsInfo} info
      */
     photoURL: async ({ uid }, _, { dataSources }) =>
-      "https://raw.githubusercontent.com/CAMPUS-NYCU/SmartCampus/9d3bb7096bf3f09c40c6f70850f57e14f7c471ff/public/Campus_Logo_512x.png", // for cscw demo purpose, hide actual user's photo
-      // dataSources.authDataSource.getUserPhotoURL({ uid }),
+      dataSources.authDataSource.getUserPhotoURL({ uid }),
     /**
      * @param {{uid: string}} param
      * @param {*} _
@@ -254,6 +252,12 @@ const fixedTagSubLocationResolvers = {
     ...fixedTagSubLocationStatusResolver,
   },
 };
+
+// const fixedTagSubLocationResolvers = {
+//   FixedTagSubLocation: {
+//     ...fixedTagSubLocationStatusResolver,
+//   },
+// };
 
 module.exports = {
   tagResolvers,

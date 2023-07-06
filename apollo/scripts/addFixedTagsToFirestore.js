@@ -32,16 +32,18 @@ console.log('check data...');
 console.dir(fixPointsWithGeoPointsAndId);
 console.dir(fixPointsWithGeoPointsAndId.map(point => point.information));
 
-// uploatd to collection `fixPoints`
+// upload to collection `fixPoints`
 Promise.all(
   fixPointsWithGeoPointsAndId.map(async point => {
     const { locationName, coordinates, viewCount, information } = point;
     const tagData = { locationName, coordinates, viewCount };
-    const tagRef = await firestore.collection('fixedTag').add(tagData);
+    const tagRef = await firestore.collection('fixedTag_research').add(tagData);
     return Promise.all(
       information.map(async info => {
         const subLocationData = { ...info, fixedTagId: tagRef.id };
-        await firestore.collection('fixedTagSubLocation').add(subLocationData);
+        await firestore
+          .collection('fixedTagSubLocation_research')
+          .add(subLocationData);
       })
     );
   })

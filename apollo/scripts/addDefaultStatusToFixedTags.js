@@ -17,7 +17,7 @@ const defaultStatus = {
 };
 
 async function main() {
-  const collectionRef = firestore.collection('fixedTagSubLocation');
+  const collectionRef = firestore.collection('fixedTagSubLocation_research');
   const fixedTagsSnapshot = await collectionRef.get();
   const promises = [];
   fixedTagsSnapshot.forEach(doc => {

@@ -10,4 +10,7 @@ type Query {
   "問題回報 archived threshold"
   archivedThreshold: Int!
   getUserData(uid: ID!): User
+
+  # For research
+  tagResearch(tagId: ID!): TagResearch
 }
