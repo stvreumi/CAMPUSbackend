@@ -150,7 +150,7 @@ async function addFakeDataToFirestore(
  * @param {String} projectID the id of the firestore emulator
  */
 async function clearFirestoreDatabase(projectID) {
-  const clearURL = `http://localhost:8080/emulator/v1/projects/${projectID}/databases/(default)/documents`;
+  const clearURL = `http://127.0.0.1:8080/emulator/v1/projects/${projectID}/databases/(default)/documents`;
   await axios.delete(clearURL);
   // console.log('clear response:', res.status);
 }
@@ -173,7 +173,7 @@ async function addTestAccountToAuthEmulator(auth) {
  * @param {string} projectID
  */
 async function clearAllAuthAccounts(projectID) {
-  const clearURL = `http://localhost:9099/emulator/v1/projects/${projectID}/accounts`;
+  const clearURL = `http://127.0.0.1:9099/emulator/v1/projects/${projectID}/accounts`;
   await axios.delete(clearURL);
 }
 

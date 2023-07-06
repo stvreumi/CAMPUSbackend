@@ -12,5 +12,5 @@ const pino = require('pino');
 // add below type annotation if there is no intellisense
 /** @type {import('pino').Logger} */
 module.exports = pino({
-  level: process.env.PINO_LOG_LEVEL || 'info',
+  level: process.env.PINO_LOG_LEVEL || 'debug',
 });

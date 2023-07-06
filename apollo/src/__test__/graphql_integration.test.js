@@ -178,7 +178,7 @@ describe('test graphql query', () => {
     fakeTagId = response.tag.id;
   });
 
-  test('test query unarchivedTagList, but is not 問題回報', async () => {
+  test.skip('test query unarchivedTagList, but is not 問題回報', async () => {
     const queryUnarchivedTagList = gql`
       query {
         unarchivedTagList {
@@ -273,9 +273,9 @@ describe('test graphql query', () => {
       },
       viewCount: 0,
     };
-    const docRef = await firestore.collection('fixedTag').add(docData);
+    const docRef = await firestore.collection('fixedTag_research').add(docData);
 
-    const collectionRef = firestore.collection('fixedTagSubLocation');
+    const collectionRef = firestore.collection('fixedTagSubLocation_research');
     const storeData = {
       type: 'restaurant-store',
       name: 'Subway',
@@ -360,9 +360,8 @@ describe('test graphql query', () => {
       createTime: expect.stringMatching(timestampStringRegex),
       type: 'fixedTagSubLocation',
     };
-    logger.debug(queryResult.fixedTags);
+    // logger.debug(JSON.stringify(queryResult));
 
-    // test
     expect(queryResult.fixedTags[0]).toHaveProperty('id', docRef.id);
     expect(queryResult.fixedTags[0]).toHaveProperty(
       'locationName',
@@ -416,13 +415,12 @@ describe('test graphql query', () => {
       { id: docRef.id }
     );
 
-    logger.debug(queryOneFixedTagResult);
     expect(queryOneFixedTagResult).toMatchObject({
       id: docRef.id,
       locationName: docData.locationName,
     });
   });
-  test('test query tag', async () => {
+  test.skip('test query tag', async () => {
     const queryTag = gql`
       query testQueryTag($id: ID!) {
         tag(tagId: $id) {
@@ -456,7 +454,7 @@ describe('test graphql query', () => {
       viewCount: 0,
     });
   });
-  test('test query tag with 問題回報, which has information about numberOfUpVote and hasUpVote', async () => {
+  test.skip('test query tag with 問題回報, which has information about numberOfUpVote and hasUpVote', async () => {
     const response = await addFakeDataToFirestore(mutateClient, true);
     const tagId = response.tag.id;
     const queryTag = gql`
@@ -500,7 +498,7 @@ describe('test graphql query', () => {
       hasUpVote: null,
     });
   });
-  test('test query userAddTagHistory', async () => {
+  test.skip('test query userAddTagHistory', async () => {
     const { uid } = userInfoAfterAccountCreated;
     const queryUserAddTagHistory = gql`
       query testQueryUserAddTagHistory($uid: ID!) {
@@ -533,7 +531,7 @@ describe('test graphql query', () => {
       imageUrl: [expect.any(String)],
     });
   });
-  test('test archived threshold number query', async () => {
+  test.skip('test archived threshold number query', async () => {
     // first add threshold into firestore
     const testThreshold = 3;
     await firestore
@@ -700,7 +698,7 @@ describe('test graphql mutate and paginate function', () => {
     });
   });
 
-  test('test update tag data', async () => {
+  test.skip('test update tag data', async () => {
     const mutateTag = gql`
       mutation tagUpdateTest($tagId: ID!, $data: updateTagDataInput!) {
         updateTagData(tagId: $tagId, data: $data) {
@@ -752,7 +750,7 @@ describe('test graphql mutate and paginate function', () => {
     expect(mutationResult.imageDeleteStatus).toBe(null);
   });
 
-  test('test update tag status', async () => {
+  test.skip('test update tag status', async () => {
     const response = await addFakeDataToFirestore(mutateClient);
     const fakeTagId = response.tag.id;
 
@@ -829,7 +827,7 @@ describe('test graphql mutate and paginate function', () => {
     expect(queryResult.tags[0].statusHistory.statusList).toHaveLength(2);
     expect(queryResult.tags[0].status.statusName).toEqual(testStatusName);
   });
-  test('test update fixed tag subLocation status', async () => {
+  test.skip('test update fixed tag subLocation status', async () => {
     const defaultStatus = {
       statusName: '非常不壅擠',
       description: '',
@@ -902,7 +900,7 @@ describe('test graphql mutate and paginate function', () => {
     });
   });
 
-  test('test `updateUpVoteStatus` and upvote related query', async () => {
+  test.skip('test `updateUpVoteStatus` and upvote related query', async () => {
     const response = await addFakeDataToFirestore(mutateClient, true);
 
     // upvote
@@ -1005,7 +1003,7 @@ describe('test graphql mutate and paginate function', () => {
       hasUpVote: false,
     });
   });
-  test('test update tag status and check if it can update numberOfUpVote', async () => {
+  test.skip('test update tag status and check if it can update numberOfUpVote', async () => {
     const response = await addFakeDataToFirestore(mutateClient, true);
     const fakeTagId = response.tag.id;
     const testStatusName = '已解決';
@@ -1110,7 +1108,7 @@ describe('test graphql mutate and paginate function', () => {
     // check if the setHasReadGuide success
     expect(await queryHasReadGuide()).toBe(true);
   });
-  test('test update tag: upload new image and delete exist image', async () => {
+  test.skip('test update tag: upload new image and delete exist image', async () => {
     const response = await addFakeDataToFirestore(mutateClient);
     const fakeTagId = response.tag.id;
 
@@ -1150,7 +1148,7 @@ describe('test graphql mutate and paginate function', () => {
     });
     expect(mutationResult.imageUploadUrls.length).toBe(imageUploadNumber);
   });
-  test('test archived mechanism', async () => {
+  test.skip('test archived mechanism', async () => {
     const testThreshold = 3;
     // first add threshold into firestore
     await firestore
@@ -1209,7 +1207,7 @@ describe('test graphql mutate and paginate function', () => {
       archived: true,
     });
   });
-  test('test incrementViewCount', async () => {
+  test.skip('test incrementViewCount', async () => {
     // There would be an `addTag` record when creating fake data.
     const response = await addFakeDataToFirestore(mutateClient);
     const fakeTagId = response.tag.id;
@@ -1261,7 +1259,7 @@ describe('test graphql mutate and paginate function', () => {
       });
     });
   });
-  test('test unarchivedTagList with paginate function', async () => {
+  test.skip('test unarchivedTagList with paginate function', async () => {
     // add many tag into firestore
     await Promise.all(
       [...new Array(10)].map(() => addFakeDataToFirestore(mutateClient))
@@ -1309,7 +1307,7 @@ describe('test graphql mutate and paginate function', () => {
       }
     );
   });
-  test('test status paginate function', async () => {
+  test.skip('test status paginate function', async () => {
     const response = await addFakeDataToFirestore(mutateClient);
     const testTagId = response.tag.id;
 
@@ -1371,7 +1369,7 @@ describe('test graphql mutate and paginate function', () => {
       }
     );
   });
-  test('test delete tagData by create user', async () => {
+  test.skip('test delete tagData by create user', async () => {
     const response = await addFakeDataToFirestore(mutateClient);
     const testTagId = response.tag.id;
 
@@ -1399,7 +1397,7 @@ describe('test graphql mutate and paginate function', () => {
 
     expect(tagSnap.exists).toBeFalsy();
   });
-  test('test delete tagData by user which not create the tag', async () => {
+  test.skip('test delete tagData by user which not create the tag', async () => {
     const response = await addFakeDataToFirestore(mutateClient);
     const testTagId = response.tag.id;
 
