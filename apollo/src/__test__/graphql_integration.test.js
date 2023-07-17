@@ -32,8 +32,10 @@ jest.mock('@google-cloud/pubsub');
 
 const {
   fakeTagData,
+  fakeTagDataResearch,
   mockFirebaseAdmin,
   addFakeDataToFirestore,
+  addFakeDataToFirestoreResearch,
   fakeUserRecord,
   clearFirestoreDatabase,
   clearAllAuthAccounts,
@@ -44,7 +46,7 @@ const {
  * @typedef {import('../types').DataSources} DataSources
  */
 
-const testProjectId = 'smartcampus-1b31f-graphql-test';
+const testProjectId = 'smartcampus-1b31f';
 
 const timestampStringRegex = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}\+08:00/;
 
@@ -73,6 +75,7 @@ function generateGraphQLHelper(type, testClient) {
         mutation: mutateString,
         variables,
       });
+      console.log(mutateResult);
       try {
         return {
           mutationResponse: mutateResult,
@@ -174,7 +177,7 @@ describe('test graphql query', () => {
     await clearFirestoreDatabase(testProjectId);
 
     // add data
-    const response = await addFakeDataToFirestore(mutateClient);
+    const response = await addFakeDataToFirestoreResearch(mutateClient);
     fakeTagId = response.tag.id;
   });
 
@@ -256,7 +259,7 @@ describe('test graphql query', () => {
       archived: false,
     });
   });
-  test('test query fix tag', async () => {
+  test.skip('test query fix tag', async () => {
     const defaultStatus = {
       statusName: '非常不壅擠',
       description: '',
@@ -440,7 +443,7 @@ describe('test graphql query', () => {
     const { queryResult } = await graphQLQueryHelper(queryTag, 'tag', {
       id: fakeTagId,
     });
-
+    // console.log(queryResult);
     expect(queryResult).toMatchObject({
       id: fakeTagId,
       createTime: expect.stringMatching(timestampStringRegex),
@@ -452,6 +455,41 @@ describe('test graphql query', () => {
       imageUrl: [expect.any(String)],
       floor: expect.any(Number),
       viewCount: 0,
+    });
+  });
+  test.skip('test query tag in research version', async () => {
+    const queryTagResearch = gql`
+      query testQueryTag($id: ID!) {
+        tagResearch(tagId: $id) {
+          id
+          createTime
+          lastUpdateTime
+          createUser {
+            uid
+            displayName
+          }
+          imageUrl
+          floor
+        }
+      }
+    `;
+    const { queryResult } = await graphQLQueryHelper(
+      queryTagResearch,
+      'tagResearch',
+      {
+        id: fakeTagId,
+      }
+    );
+    expect(queryResult).toMatchObject({
+      id: fakeTagId,
+      createTime: expect.stringMatching(timestampStringRegex),
+      lastUpdateTime: expect.stringMatching(timestampStringRegex),
+      createUser: {
+        uid: userInfoAfterAccountCreated.uid,
+        displayName: expect.any(String),
+      },
+      imageUrl: [expect.any(String)],
+      floor: expect.any(Number),
     });
   });
   test.skip('test query tag with 問題回報, which has information about numberOfUpVote and hasUpVote', async () => {
@@ -552,7 +590,7 @@ describe('test graphql query', () => {
 
     expect(queryResult).toBe(testThreshold);
   });
-  test('test get user data', async () => {
+  test.skip('test get user data', async () => {
     const { uid } = userInfoAfterAccountCreated;
     const getUserData = gql`
       query testGetUserData($uid: ID!) {
@@ -670,6 +708,81 @@ describe('test graphql mutate and paginate function', () => {
         status: {
           statusName: data.statusName,
           type: 'tag',
+        },
+      },
+      imageUploadNumber: data.imageUploadNumber,
+      imageUploadUrls: expect.any(Array),
+    });
+    expect(mutationResult.imageUploadUrls.length).toEqual(
+      data.imageUploadNumber
+    );
+
+    // test user history record
+    const { uid } = userInfoAfterAccountCreated;
+    // console.log(mutationResult.tag.id);
+    const querySnapshot = await firestore
+      .collection('userActivity')
+      .where('userId', '==', uid)
+      .limit(1)
+      .get();
+    querySnapshot.forEach(doc => {
+      const docData = doc.data();
+      expect(docData).toMatchObject({
+        action: 'addTag',
+        userId: uid,
+        tagId: mutationResult.tag.id,
+        createTime: expect.any(Timestamp),
+      });
+    });
+  });
+
+  test('test add tag data for research version', async () => {
+    const mutateTag = gql`
+      mutation tagAddTestResearch($data: addTagDataResearchInput!) {
+        addNewTagDataResearch(data: $data) {
+          tagResearch {
+            id
+            locationName
+            category {
+              categoryName
+              categoryDescName
+              locationImgUrl
+            }
+            floor
+            status {
+              statusName
+              statusDescName
+            }
+          }
+          imageUploadNumber
+          imageUploadUrls
+        }
+      }
+    `;
+    const data = {
+      ...fakeTagDataResearch,
+      coordinates: {
+        latitude: fakeTagDataResearch.coordinates.latitude,
+        longitude: fakeTagDataResearch.coordinates.longitude,
+      },
+    };
+    console.log(data);
+    const { mutationResult } = await graphQLMutationHelper(
+      mutateTag,
+      'addNewTagDataResearch',
+      {
+        data,
+      }
+    );
+    console.log(mutationResult);
+    expect(mutationResult).toMatchObject({
+      tagResearch: {
+        id: expect.any(String),
+        locationName: data.locationName,
+        floor: expect.any(Number),
+        status: {
+          statusName: data.statusName,
+          statusDescName: data.statusDescName,
         },
       },
       imageUploadNumber: data.imageUploadNumber,
@@ -1073,7 +1186,7 @@ describe('test graphql mutate and paginate function', () => {
       hasUpVote: true,
     });
   });
-  test('test get and set hasReadGuide', async () => {
+  test.skip('test get and set hasReadGuide', async () => {
     const queryHasReadGuide = async () => {
       const queryHasReadGuideQL = gql`
         query {

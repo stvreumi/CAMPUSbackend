@@ -26,4 +26,7 @@ type Mutation {
   setHasReadGuide: Boolean!
   "true if the increment operation success"
   incrementViewCount(tagId: ID!): Boolean!
+
+  # For research
+  addNewTagDataResearch(data: addTagDataResearchInput!): AddorUpdateTagResearchResponse!
 }

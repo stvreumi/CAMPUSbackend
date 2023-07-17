@@ -51,6 +51,27 @@ const fakeUserRecord = {
   photoURL: 'http://photo.url',
 };
 
+const fakeCategoryResearch = {
+  categoryName: '飲水機',
+  categoryDescName: '飲水機1',
+  locationImgUrl: [],
+};
+
+const fakeTagDataResearch = {
+  locationName: 'testResearch',
+  category: { ...fakeCategoryResearch },
+  coordinates: {
+    longitude: '120.99745541810988',
+    latitude: '24.786671229129603',
+  },
+  // [longitude, latitude]
+  floor: 3,
+  imageUploadNumber: 2,
+  statusName: '清潔狀態',
+  statusDescName: '乾淨',
+  // status: { ...fakeStatusResearch },
+};
+
 /**
  * Mock firebase admin instance
  * @param {string} projectId The projectId to initiate firebase admin
@@ -142,6 +163,53 @@ async function addFakeDataToFirestore(
   return result.data.addNewTagData;
 }
 
+async function addFakeDataToFirestoreResearch(
+  mutateClient,
+  testNumberOfUpVote = false
+) {
+  const addNewTagResearch = gql`
+    mutation tagAddTest($data: addTagDataResearchInput!) {
+      addNewTagDataResearch(data: $data) {
+        tagResearch {
+          id
+          locationName
+          category {
+            categoryName
+            categoryDescName
+            locationImgUrl
+          }
+          floor
+          status {
+            statusName
+            statusDescName
+          }
+        }
+        imageUploadNumber
+        imageUploadUrls
+      }
+    }
+  `;
+  const data = {
+    ...fakeTagDataResearch,
+  };
+  // const hasNumberOfUpVoteCategory = {
+  //   missionName: '問題回報',
+  //   subTypeName: '',
+  //   targetName: '',
+  // };
+  // if (testNumberOfUpVote) {
+  //   data.category = { ...hasNumberOfUpVoteCategory };
+  //   data.statusName = '已解決';
+  // }
+  console.log(data);
+  const result = await mutateClient({
+    mutation: addNewTagResearch,
+    variables: { data },
+  });
+  console.log(result);
+  return result.data.addNewTagDataResearch;
+}
+
 /**
  * clear database
  * ref: https://firebase.google.com/docs/emulator-suite/connect_firestore#clear_your_database_between_tests
@@ -180,7 +248,9 @@ async function clearAllAuthAccounts(projectID) {
 module.exports = {
   mockFirebaseAdmin,
   addFakeDataToFirestore,
+  addFakeDataToFirestoreResearch,
   fakeTagData,
+  fakeTagDataResearch,
   fakeDataId,
   fakeCategory,
   fakeStatusData,

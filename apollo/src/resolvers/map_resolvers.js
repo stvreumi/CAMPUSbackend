@@ -253,11 +253,124 @@ const fixedTagSubLocationResolvers = {
   },
 };
 
-// const fixedTagSubLocationResolvers = {
-//   FixedTagSubLocation: {
-//     ...fixedTagSubLocationStatusResolver,
-//   },
-// };
+// for research
+const tagResearchResolvers = {
+  TagResearch: {
+    /**
+     * @param {RawTagDocumentFields} tag
+     * @param {*} _
+     * @param {*} __
+     */
+    createTime: async (tag, _, __) => transferTimestamp(tag.createTime),
+
+    /**
+     * @param {RawTagDocumentFields} tag
+     * @param {*} _
+     * @param {*} __
+     */
+    lastUpdateTime: async (tag, _, __) => transferTimestamp(tag.lastUpdateTime),
+    createUser: async (tag, _, __) => ({
+      uid: tag.createUserId,
+    }),
+    /**
+     * @param {RawTagDocumentFields} tag
+     * @param {*} _
+     * @param {ResolverArgsInfo} info
+     */
+    imageUrl: async (tag, _, { dataSources }) =>
+      dataSources.storageDataSource.getImageUrls({ tagId: tag.id }),
+    /**
+     * @param {RawTagDocumentFields} tag
+     * @param {*} _
+     * @param {ResolverArgsInfo} info
+     */
+    status: async (tag, _, { dataSources, userInfo }) =>
+      dataSources.tagDataSource.getLatestStatusData({
+        tagId: tag.id,
+        userInfo,
+      }),
+    /**
+     * @param {RawTagDocumentFields} tag
+     * @param {{pageParams: PageParams}} params
+     * @param {ResolverArgsInfo} info
+     */
+    statusHistory: async (tag, { pageParams }, { dataSources }) =>
+      dataSources.tagDataSource.getStatusHistory({ tagId: tag.id, pageParams }),
+  },
+};
+
+const statusResearchResolvers = {
+  StatusResearch: {
+    /**
+     * @param {RawStatusDocumentFields} status
+     * @param {*} _
+     * @param {ResolverArgsInfo} info
+     */
+    // TODO add imageurl resolver here to get the image url
+    imageUrl: async () => null,
+    createTime: async (status, _, __) => transferTimestamp(status.createTime),
+    createUser: async (status, _, __) => ({ uid: status.createUserId }),
+  },
+};
+
+const userResearchResolvers = {
+  UserResearch: {
+    uid: async ({ uid }, _, __) => uid,
+    /**
+     * @param {{uid: string}} param
+     * @param {*} _
+     * @param {ResolverArgsInfo} info
+     */
+    displayName: async ({ uid }, _, { dataSources }) =>
+      dataSources.authDataSource.getUserName({ uid }),
+    /**
+     * @param {{uid: string}} param
+     * @param {*} _
+     * @param {ResolverArgsInfo} info
+     */
+    photoURL: async ({ uid }, _, { dataSources }) =>
+      dataSources.authDataSource.getUserPhotoURL({ uid }),
+    /**
+     * @param {{uid: string}} param
+     * @param {*} _
+     * @param {ResolverArgsInfo} info
+     */
+    email: async ({ uid }, _, { dataSources, userInfo }) => {
+      const { uid: logInUserUid, logIn } = userInfo;
+      return logIn && logInUserUid === uid
+        ? dataSources.authDataSource.getUserEmail({ uid })
+        : null;
+    },
+  },
+};
+
+const coordinateResearchResolvers = {
+  /**
+   *
+   * @param {GeoPoint | { latitude: string, longitude:string }} coordinates
+   * @param {*} _
+   * @param {*} __
+   * @returns
+   */
+  CoordinateResearch: async (coordinates, _, __) => {
+    const { latitude, longitude } = coordinates;
+    try {
+      if (typeof latitude === 'string' && typeof longitude === 'string') {
+        return { latitude, longitude };
+      }
+      if (typeof latitude === 'number' && typeof longitude === 'number') {
+        return {
+          latitude: latitude.toString(),
+          longitude: longitude.toString(),
+        };
+      }
+    } catch (e) {
+      console.error('error: the coordinate type or format may not correct');
+      console.error(e);
+    }
+    return null;
+  },
+};
 
 module.exports = {
   tagResolvers,
@@ -267,4 +380,8 @@ module.exports = {
   pageResolvers,
   fixedTagResolver,
   fixedTagSubLocationResolvers,
+  tagResearchResolvers,
+  statusResearchResolvers,
+  userResearchResolvers,
+  coordinateResearchResolvers,
 };

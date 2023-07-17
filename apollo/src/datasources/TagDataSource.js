@@ -10,6 +10,7 @@ const {
   getLatestStatus,
   checkUserLogIn,
   generateTagDataToStoreInFirestore,
+  generateTagDataResearchToStoreInFirestore,
   getPage,
 } = require('./firebaseUtils');
 
@@ -391,6 +392,46 @@ class TagDataSource extends DataSource {
     throw Error('Undefined action of tagData operation.');
   }
 
+  async addorUpdateTagDataResearchToFirestore(action, { data, userInfo }) {
+    const { statusName, statusDescName } = data;
+    const tagData = generateTagDataResearchToStoreInFirestore(
+      action,
+      data,
+      userInfo
+    );
+
+    if (action === 'add') {
+      // add tagData to server
+      const refAfterTagAdd = await this.tagDataCollectionRef.add(tagData);
+      const { id: newAddedTagId } = refAfterTagAdd;
+
+      await this.updateTagResearchStatus({
+        tagId: newAddedTagId,
+        statusName,
+        statusDescName,
+        userInfo,
+      });
+
+      // send data to algolia index for searching
+      if (this.algoliaIndexClient) {
+        const { locationName, category } = tagData;
+        // https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/how-to/incremental-updates/?client=javascript#adding-records
+        const res = await this.algoliaIndexClient.saveObject({
+          objectID: newAddedTagId,
+          locationName,
+          category,
+          statusName,
+          statusDescName,
+        });
+        console.log('algolia add object result:');
+        console.dir(res);
+      }
+
+      return getIdWithDataFromDocSnap(await refAfterTagAdd.get());
+    }
+    throw Error('Undefined action of tagData operation.');
+  }
+
   // TODO: refactor this function. Extract the verification process
   // to resolver
   /**
@@ -408,6 +449,24 @@ class TagDataSource extends DataSource {
     checkUserLogIn(logIn);
     // add tagData to firestore
     const tag = await this.addorUpdateTagDataToFirestore('add', {
+      data,
+      userInfo,
+    });
+
+    const { imageUploadNumber } = data;
+    return {
+      tag,
+      imageUploadNumber,
+    };
+  }
+
+  async addNewTagDataResearch({ data, userInfo }) {
+    // check user status
+    const { logIn } = userInfo;
+    checkUserLogIn(logIn);
+    // add tagData to firestore
+    console.log('Data in Add func research', data);
+    const tag = await this.addorUpdateTagDataResearchToFirestore('add', {
       data,
       userInfo,
     });
@@ -485,6 +544,36 @@ class TagDataSource extends DataSource {
       await this.algoliaIndexClient.partialUpdateObject({
         objectID: tagId,
         statusName,
+      });
+    }
+    return { ...getIdWithDataFromDocSnap(await docRef.get()), type: 'tag' };
+  }
+
+  async updateTagResearchStatus({
+    tagId,
+    statusName,
+    statusDescName,
+    userInfo,
+  }) {
+    const { logIn, uid } = userInfo;
+    checkUserLogIn(logIn);
+    const statusData = {
+      statusName,
+      statusDescName,
+      createTime: FieldValue.serverTimestamp(),
+      createUserId: uid,
+    };
+    const docRef = await this.tagDataCollectionRef
+      .doc(tagId)
+      .collection('status')
+      .add(statusData);
+
+    // update status field in the record of algolia index
+    if (this.algoliaIndexClient) {
+      await this.algoliaIndexClient.partialUpdateObject({
+        objectID: tagId,
+        statusName,
+        statusDescName,
       });
     }
     return { ...getIdWithDataFromDocSnap(await docRef.get()), type: 'tag' };

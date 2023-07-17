@@ -8,6 +8,10 @@ const {
   pageResolvers,
   fixedTagResolver,
   fixedTagSubLocationResolvers,
+  tagResearchResolvers,
+  statusResearchResolvers,
+  userResearchResolvers,
+  coordinateResearchResolvers,
 } = require('./map_resolvers');
 
 /**
@@ -40,6 +44,8 @@ const queryResolvers = {
      * @param {ResolverArgsInfo} info
      */
     tag: async (_, { tagId }, { dataSources }) =>
+      dataSources.tagDataSource.getTagData({ tagId }),
+    tagResearch: async (_, { tagId }, { dataSources }) =>
       dataSources.tagDataSource.getTagData({ tagId }),
     /**
      *
@@ -139,6 +145,47 @@ const mutationResolvers = {
         'addTag',
         userInfo,
         tag.id
+      );
+      return { tag, imageUploadNumber, imageUploadUrls };
+    },
+    /**
+     * @param {*} _
+     * @param {{data: AddTagDataResearchInput}} param
+     * @param {ResolverArgsInfo} info
+     */
+    addNewTagDataResearch: async (_, { data }, { dataSources, userInfo }) => {
+      const { tag, imageUploadNumber } =
+        await dataSources.tagDataSource.addNewTagDataResearch({
+          data,
+          userInfo,
+        });
+
+      const imageUploadUrls = await Promise.all(
+        dataSources.storageDataSource.getImageUploadUrls({
+          imageUploadNumber,
+          // Deprecate in the future. This is for the old version support.
+          firestorePath: tag.id,
+        })
+      );
+
+      // event: added
+      await dataSources.tagDataSource.triggerEvent('added', tag);
+
+      // Record user activity after the above function successfully return with
+      // no errors.
+      await dataSources.tagDataSource.recordUserActivity(
+        'addTag',
+        userInfo,
+        tag.id
+      );
+
+      console.log(
+        '==== Resolver End =====\n',
+        tag,
+        '\n',
+        imageUploadNumber,
+        '\n',
+        imageUploadUrls
       );
       return { tag, imageUploadNumber, imageUploadUrls };
     },
@@ -357,6 +404,10 @@ const resolvers = {
   ...pageResolvers,
   ...fixedTagResolver,
   ...fixedTagSubLocationResolvers,
+  ...tagResearchResolvers,
+  ...statusResearchResolvers,
+  ...userResearchResolvers,
+  ...coordinateResearchResolvers,
 };
 
 module.exports = resolvers;

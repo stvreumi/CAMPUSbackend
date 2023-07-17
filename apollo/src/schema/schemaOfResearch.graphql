@@ -95,3 +95,33 @@ type CoordinateResearch {
 }
 
 # mutation
+type AddorUpdateTagResearchResponse {
+  tagResearch: TagResearch!
+  imageUploadNumber: Int!
+  imageUploadUrls: [String]!
+  imageDeleteStatus: Boolean
+}
+
+input addTagDataResearchInput {
+  locationName: String!
+  category: CategoryResearchInput!
+  coordinates: CoordinateResearchInput!
+  imageUploadNumber: Int
+  floor: Int
+  statusName: String!
+  statusDescName: String!
+}
+
+input CoordinateResearchInput {
+  latitude: String
+  longitude: String
+}
+
+input CategoryResearchInput {
+  # 回報類別
+  categoryName: String
+  # 回報類別敘述
+  categoryDescName: String
+  # 相對位置圖
+  locationImgUrl: [String]
+}

@@ -115,6 +115,41 @@ function generateTagDataToStoreInFirestore(action, data, userInfo) {
   throw Error('Undefined action of tagData operation.');
 }
 
+function generateTagDataResearchToStoreInFirestore(action, data, userInfo) {
+  const { uid } = userInfo;
+  // get data which would be non-null
+  const { locationName, coordinates, category, floor = null } = data;
+  const tagData = {
+    locationName,
+    category,
+    lastUpdateTime: FieldValue.serverTimestamp(),
+    floor,
+  };
+  if (coordinates) {
+    const { latitude, longitude } = coordinates;
+    tagData.coordinates = new GeoPoint(
+      parseFloat(latitude),
+      parseFloat(longitude)
+    );
+    // https://firebase.google.com/docs/firestore/solutions/geoqueries
+    tagData.geohash = geohashForLocation([
+      parseFloat(latitude),
+      parseFloat(longitude),
+    ]);
+  }
+  if (action === 'add') {
+    // get data which would be nullable
+    return {
+      ...tagData,
+      createTime: FieldValue.serverTimestamp(),
+      createUserId: uid,
+      archived: false,
+    };
+  }
+
+  throw Error('Undefined action of tagData operation of Research Version.');
+}
+
 /**
  * Extract data from tag document reference
  * @param {import('firebase-admin').firestore.QueryDocumentSnapshot} docSnap The document we want to get the data
@@ -213,5 +248,6 @@ module.exports = {
   getIdWithDataFromDocSnap,
   checkUserLogIn,
   generateTagDataToStoreInFirestore,
+  generateTagDataResearchToStoreInFirestore,
   getPage,
 };
