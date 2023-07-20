@@ -45,8 +45,6 @@ const queryResolvers = {
      */
     tag: async (_, { tagId }, { dataSources }) =>
       dataSources.tagDataSource.getTagData({ tagId }),
-    tagResearch: async (_, { tagId }, { dataSources }) =>
-      dataSources.tagResearchDataSource.getTagResearchData({ tagId }),
     /**
      *
      * @param {*} _
@@ -109,6 +107,9 @@ const queryResolvers = {
      * @returns
      */
     getUserData: async (_, { uid }, __) => ({ uid }),
+    // for research
+    tagResearch: async (_, { tagId }, { dataSources }) =>
+      dataSources.tagResearchDataSource.getTagResearchData({ tagId }),
   },
 };
 

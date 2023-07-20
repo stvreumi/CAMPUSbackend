@@ -274,9 +274,9 @@ describe('test graphql query', () => {
       },
       viewCount: 0,
     };
-    const docRef = await firestore.collection('fixedTag_research').add(docData);
+    const docRef = await firestore.collection('fixedTag').add(docData);
 
-    const collectionRef = firestore.collection('fixedTagSubLocation_research');
+    const collectionRef = firestore.collection('fixedTagSubLocation');
     const storeData = {
       type: 'restaurant-store',
       name: 'Subway',
@@ -771,6 +771,7 @@ describe('test graphql mutate and paginate function', () => {
         data,
       }
     );
+    console.log(mutationResult);
     expect(mutationResult).toMatchObject({
       tagResearch: {
         id: expect.any(String),

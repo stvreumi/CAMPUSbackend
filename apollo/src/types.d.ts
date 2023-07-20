@@ -131,6 +131,7 @@ export interface DecodedUserInfoFromAuthHeader {
 
 interface DataSources {
   tagDataSource: TagDataSource;
+  tagResearchDataSource: TagDataSource;
   storageDataSource: StorageDataSource;
   authDataSource: AuthDataSource;
   userDataSource: UserDataSource;

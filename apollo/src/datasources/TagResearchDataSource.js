@@ -35,7 +35,7 @@ class TagResearchDataSource extends DataSource {
   /**
    * Use admin to construct necessary entity of communication
    * @param {CollectionReference} tagResearchDataCollectionRef
-   * @param {CollectionReference} userActivityCollectionRef
+   * @param {CollectionReference} userActivityResearchCollectionRef
    * @param {CollectionReference} fixedTagCollectionRef
    * @param {CollectionReference} fixedTagSubLocationCollectionRef
    * @param {number} archivedThreshold
@@ -45,7 +45,7 @@ class TagResearchDataSource extends DataSource {
    */
   constructor(
     tagResearchDataCollectionRef,
-    userActivityCollectionRef,
+    userActivityResearchCollectionRef,
     archivedThreshold,
     firestore,
     eventEmitter,
@@ -53,7 +53,7 @@ class TagResearchDataSource extends DataSource {
   ) {
     super();
     this.tagResearchDataCollectionRef = tagResearchDataCollectionRef;
-    this.userActivityCollectionRef = userActivityCollectionRef;
+    this.userActivityResearchCollectionRef = userActivityResearchCollectionRef;
     this.archivedThreshold = archivedThreshold;
     this.firestore = firestore;
     this.eventEmitter = eventEmitter;
@@ -179,7 +179,7 @@ class TagResearchDataSource extends DataSource {
 
   async recordUserActivity(action, userInfo, tagId = null) {
     const { uid: userId } = userInfo;
-    await this.userActivityCollectionRef.add({
+    await this.userActivityResearchCollectionRef.add({
       action,
       userId,
       tagId,
