@@ -46,7 +46,7 @@ const queryResolvers = {
     tag: async (_, { tagId }, { dataSources }) =>
       dataSources.tagDataSource.getTagData({ tagId }),
     tagResearch: async (_, { tagId }, { dataSources }) =>
-      dataSources.tagDataSource.getTagData({ tagId }),
+      dataSources.tagResearchDataSource.getTagResearchData({ tagId }),
     /**
      *
      * @param {*} _
@@ -148,14 +148,10 @@ const mutationResolvers = {
       );
       return { tag, imageUploadNumber, imageUploadUrls };
     },
-    /**
-     * @param {*} _
-     * @param {{data: AddTagDataResearchInput}} param
-     * @param {ResolverArgsInfo} info
-     */
-    addNewTagDataResearch: async (_, { data }, { dataSources, userInfo }) => {
+
+    addNewTagResearchData: async (_, { data }, { dataSources, userInfo }) => {
       const { tag, imageUploadNumber } =
-        await dataSources.tagDataSource.addNewTagDataResearch({
+        await dataSources.tagResearchDataSource.addNewTagResearchData({
           data,
           userInfo,
         });
@@ -169,25 +165,17 @@ const mutationResolvers = {
       );
 
       // event: added
-      await dataSources.tagDataSource.triggerEvent('added', tag);
+      await dataSources.tagResearchDataSource.triggerEvent('added', tag);
 
       // Record user activity after the above function successfully return with
       // no errors.
-      await dataSources.tagDataSource.recordUserActivity(
+      await dataSources.tagResearchDataSource.recordUserActivity(
         'addTag',
         userInfo,
         tag.id
       );
 
-      console.log(
-        '==== Resolver End =====\n',
-        tag,
-        '\n',
-        imageUploadNumber,
-        '\n',
-        imageUploadUrls
-      );
-      return { tag, imageUploadNumber, imageUploadUrls };
+      return { tagResearch: tag, imageUploadNumber, imageUploadUrls };
     },
     /**
      *

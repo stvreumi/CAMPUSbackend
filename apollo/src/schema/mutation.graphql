@@ -28,5 +28,5 @@ type Mutation {
   incrementViewCount(tagId: ID!): Boolean!
 
   # For research
-  addNewTagDataResearch(data: addTagDataResearchInput!): AddorUpdateTagResearchResponse!
+  addNewTagResearchData(data: addTagResearchDataInput!): AddorUpdateTagResearchResponse!
 }

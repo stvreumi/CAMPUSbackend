@@ -169,7 +169,7 @@ async function addFakeDataToFirestoreResearch(
 ) {
   const addNewTagResearch = gql`
     mutation tagAddTest($data: addTagDataResearchInput!) {
-      addNewTagDataResearch(data: $data) {
+      addNewTagResearchData(data: $data) {
         tagResearch {
           id
           locationName
@@ -201,13 +201,11 @@ async function addFakeDataToFirestoreResearch(
   //   data.category = { ...hasNumberOfUpVoteCategory };
   //   data.statusName = '已解決';
   // }
-  console.log(data);
   const result = await mutateClient({
     mutation: addNewTagResearch,
     variables: { data },
   });
-  console.log(result);
-  return result.data.addNewTagDataResearch;
+  return result.data.addNewTagResearchData;
 }
 
 /**

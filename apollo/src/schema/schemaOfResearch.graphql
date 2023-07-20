@@ -102,7 +102,7 @@ type AddorUpdateTagResearchResponse {
   imageDeleteStatus: Boolean
 }
 
-input addTagDataResearchInput {
+input addTagResearchDataInput {
   locationName: String!
   category: CategoryResearchInput!
   coordinates: CoordinateResearchInput!

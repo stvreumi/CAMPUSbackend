@@ -7,5 +7,5 @@ module.exports = {
    */
   // the following collection is used to collection service learning data in
   // semester 110-2.
-  tagDataCollectionName: 'tagData_research',
+  tagDataCollectionName: 'tagData',
 };

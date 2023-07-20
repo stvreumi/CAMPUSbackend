@@ -75,7 +75,6 @@ function generateGraphQLHelper(type, testClient) {
         mutation: mutateString,
         variables,
       });
-      console.log(mutateResult);
       try {
         return {
           mutationResponse: mutateResult,
@@ -226,7 +225,6 @@ describe('test graphql query', () => {
       'unarchivedTagList'
     );
     expect(queryResult.tags).toEqual(expect.any(Array));
-    // console.log(tagRenderListResult);
     expect(queryResult.tags[0]).toMatchObject({
       id: expect.any(String),
       locationName: fakeTagData.locationName,
@@ -738,8 +736,8 @@ describe('test graphql mutate and paginate function', () => {
 
   test('test add tag data for research version', async () => {
     const mutateTag = gql`
-      mutation tagAddTestResearch($data: addTagDataResearchInput!) {
-        addNewTagDataResearch(data: $data) {
+      mutation tagAddTestResearch($data: addTagResearchDataInput!) {
+        addNewTagResearchData(data: $data) {
           tagResearch {
             id
             locationName
@@ -766,20 +764,18 @@ describe('test graphql mutate and paginate function', () => {
         longitude: fakeTagDataResearch.coordinates.longitude,
       },
     };
-    console.log(data);
     const { mutationResult } = await graphQLMutationHelper(
       mutateTag,
-      'addNewTagDataResearch',
+      'addNewTagResearchData',
       {
         data,
       }
     );
-    console.log(mutationResult);
     expect(mutationResult).toMatchObject({
       tagResearch: {
         id: expect.any(String),
         locationName: data.locationName,
-        floor: expect.any(Number),
+        floor: expect.any(String),
         status: {
           statusName: data.statusName,
           statusDescName: data.statusDescName,

@@ -144,3 +144,42 @@ export interface ResolverArgsInfo {
   dataSources: DataSources;
   userInfo: DecodedUserInfoFromAuthHeader;
 }
+
+// for research
+interface UserResearch {
+  logIn: boolean;
+  uid: string;
+  email: string;
+  displayName: string;
+}
+
+interface CategoryResearch {
+  categoryName: string;
+  categoryDescName: string;
+  locationImgUrl: Array<string>;
+}
+
+interface CoordinateResearch {
+  latitude: string;
+  longitude: string;
+}
+export interface TagResearch extends RawTagResearchDocumentFields {
+  coordinates: Coordinate;
+  createTime: string;
+  lastUpdateTime: string;
+  imageUrl: Array<string>;
+  status: Status;
+  statusHistory: Array<Status>;
+}
+
+export interface RawTagResearchDocumentFields {
+  id: string;
+  locationName: string;
+  category: Category;
+  floor: number;
+  coordinates: firestore.GeoPoint;
+  createTime: firestore.Timestamp;
+  lastUpdateTime: firestore.Timestamp;
+  createUser: User;
+  geohash: string;
+}

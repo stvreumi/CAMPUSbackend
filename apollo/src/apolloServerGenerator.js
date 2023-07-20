@@ -9,6 +9,7 @@ const resolvers = require('./resolvers/resolvers');
 const CampusPubSub = require('./CampusPubSub');
 /** dataSources */
 const TagDataSource = require('./datasources/TagDataSource');
+const TagResearchDataSource = require('./datasources/TagResearchDataSource');
 const StorageDataSource = require('./datasources/StorageDataSource');
 const AuthDataSource = require('./datasources/AuthDataSource');
 const UserDataSource = require('./datasources/UserDataSource');
@@ -54,6 +55,7 @@ function dataSourcesGenerator(admin) {
     });
   const firebaseServiceReference = {
     tagDataCollectionRef: firestore.collection(tagDataCollectionName),
+    tagResearchDataCollectionRef: firestore.collection('tagData_research'),
     fixedTagCollectionRef: firestore.collection('fixedTag_research'),
     fixedTagSubLocationCollectionRef: firestore.collection(
       'fixedTagSubLocation_research'
@@ -71,6 +73,14 @@ function dataSourcesGenerator(admin) {
       firebaseServiceReference.userActivityCollectionRef,
       firebaseServiceReference.fixedTagCollectionRef,
       firebaseServiceReference.fixedTagSubLocationCollectionRef,
+      archivedThreshold,
+      firestore,
+      campusEventEmitter,
+      algoliaIndexClient
+    ),
+    tagResearchDataSource: new TagResearchDataSource(
+      firebaseServiceReference.tagResearchDataCollectionRef,
+      firebaseServiceReference.userActivityCollectionRef,
       archivedThreshold,
       firestore,
       campusEventEmitter,

@@ -285,7 +285,7 @@ const tagResearchResolvers = {
      * @param {ResolverArgsInfo} info
      */
     status: async (tag, _, { dataSources, userInfo }) =>
-      dataSources.tagDataSource.getLatestStatusData({
+      dataSources.tagResearchDataSource.getLatestStatusData({
         tagId: tag.id,
         userInfo,
       }),
@@ -295,7 +295,10 @@ const tagResearchResolvers = {
      * @param {ResolverArgsInfo} info
      */
     statusHistory: async (tag, { pageParams }, { dataSources }) =>
-      dataSources.tagDataSource.getStatusHistory({ tagId: tag.id, pageParams }),
+      dataSources.tagResearchDataSource.getStatusHistory({
+        tagId: tag.id,
+        pageParams,
+      }),
   },
 };
 

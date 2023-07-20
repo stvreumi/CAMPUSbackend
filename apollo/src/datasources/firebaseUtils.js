@@ -115,7 +115,7 @@ function generateTagDataToStoreInFirestore(action, data, userInfo) {
   throw Error('Undefined action of tagData operation.');
 }
 
-function generateTagDataResearchToStoreInFirestore(action, data, userInfo) {
+function generateTagResearchDataToStoreInFirestore(action, data, userInfo) {
   const { uid } = userInfo;
   // get data which would be non-null
   const { locationName, coordinates, category, floor = null } = data;
@@ -248,6 +248,6 @@ module.exports = {
   getIdWithDataFromDocSnap,
   checkUserLogIn,
   generateTagDataToStoreInFirestore,
-  generateTagDataResearchToStoreInFirestore,
+  generateTagResearchDataToStoreInFirestore,
   getPage,
 };
