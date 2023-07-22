@@ -155,6 +155,7 @@ interface UserResearch {
 }
 
 interface CategoryResearch {
+  categoryType: string;
   categoryName: string;
   categoryDescName: string;
   locationImgUrl: Array<string>;

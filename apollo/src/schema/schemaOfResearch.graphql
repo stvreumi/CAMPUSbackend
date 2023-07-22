@@ -62,8 +62,10 @@ type TagFieldsForSubscriptionResearch {
 
 type CategoryResearch {
   # 回報類別
+  categoryType: String!
+  # 回報項目
   categoryName: String!
-  # 回報類別敘述
+  # 回報項目敘述
   categoryDescName: String!
   # 相對位置圖
   locationImgUrl: [String]
@@ -119,8 +121,10 @@ input CoordinateResearchInput {
 
 input CategoryResearchInput {
   # 回報類別
+  categoryType: String
+  # 回報項目
   categoryName: String
-  # 回報類別敘述
+  # 回報項目敘述
   categoryDescName: String
   # 相對位置圖
   locationImgUrl: [String]

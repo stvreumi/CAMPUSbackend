@@ -52,9 +52,10 @@ const fakeUserRecord = {
 };
 
 const fakeCategoryResearch = {
+  categoryType: '物體',
   categoryName: '飲水機',
   categoryDescName: '飲水機1',
-  locationImgUrl: [],
+  locationImgUrl: ['http://photo.url'],
 };
 
 const fakeTagDataResearch = {
@@ -168,7 +169,7 @@ async function addFakeDataToFirestoreResearch(
   testNumberOfUpVote = false
 ) {
   const addNewTagResearch = gql`
-    mutation tagAddTest($data: addTagDataResearchInput!) {
+    mutation tagAddTest($data: addTagResearchDataInput!) {
       addNewTagResearchData(data: $data) {
         tagResearch {
           id

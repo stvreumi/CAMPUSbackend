@@ -78,7 +78,7 @@ class TagResearchDataSource extends DataSource {
    * @returns {Promise<RawTagDocumentFields>|null}
    */
   async getTagResearchData({ tagId }) {
-    const doc = await this.tagDataCollectionRef.doc(tagId).get();
+    const doc = await this.tagResearchDataCollectionRef.doc(tagId).get();
     if (!doc.exists) {
       return null;
     }

@@ -144,6 +144,7 @@ describe('test graphql query', () => {
   /** @type {import('firebase-admin').firestore.Firestore}*/
   let firestore;
   let fakeTagId;
+  let fakeTagIdResearch;
   let graphQLQueryHelper;
   let userInfoAfterAccountCreated;
   let mutateClient;
@@ -176,8 +177,12 @@ describe('test graphql query', () => {
     await clearFirestoreDatabase(testProjectId);
 
     // add data
-    const response = await addFakeDataToFirestoreResearch(mutateClient);
+    const response = await addFakeDataToFirestore(mutateClient);
     fakeTagId = response.tag.id;
+
+    // add data research
+    const responseResearch = await addFakeDataToFirestoreResearch(mutateClient);
+    fakeTagIdResearch = responseResearch.tagResearch.id;
   });
 
   test.skip('test query unarchivedTagList, but is not 問題回報', async () => {
@@ -421,7 +426,7 @@ describe('test graphql query', () => {
       locationName: docData.locationName,
     });
   });
-  test.skip('test query tag', async () => {
+  test('test query tag', async () => {
     const queryTag = gql`
       query testQueryTag($id: ID!) {
         tag(tagId: $id) {
@@ -455,7 +460,7 @@ describe('test graphql query', () => {
       viewCount: 0,
     });
   });
-  test.skip('test query tag in research version', async () => {
+  test('test query tag in research version', async () => {
     const queryTagResearch = gql`
       query testQueryTag($id: ID!) {
         tagResearch(tagId: $id) {
@@ -466,6 +471,16 @@ describe('test graphql query', () => {
             uid
             displayName
           }
+          category {
+            categoryType
+            categoryName
+            categoryDescName
+            locationImgUrl
+          }
+          status {
+            statusName
+            statusDescName
+          }
           imageUrl
           floor
         }
@@ -475,19 +490,27 @@ describe('test graphql query', () => {
       queryTagResearch,
       'tagResearch',
       {
-        id: fakeTagId,
+        id: fakeTagIdResearch,
       }
     );
+    console.log('Research version', queryResult);
     expect(queryResult).toMatchObject({
-      id: fakeTagId,
+      id: fakeTagIdResearch,
       createTime: expect.stringMatching(timestampStringRegex),
       lastUpdateTime: expect.stringMatching(timestampStringRegex),
       createUser: {
         uid: userInfoAfterAccountCreated.uid,
         displayName: expect.any(String),
       },
+      category: {
+        categoryType: expect.any(String),
+        locationImgUrl: [expect.any(String)],
+      },
+      status: {
+        statusName: expect.any(String),
+      },
       imageUrl: [expect.any(String)],
-      floor: expect.any(Number),
+      floor: expect.any(String),
     });
   });
   test.skip('test query tag with 問題回報, which has information about numberOfUpVote and hasUpVote', async () => {
@@ -742,6 +765,7 @@ describe('test graphql mutate and paginate function', () => {
             id
             locationName
             category {
+              categoryType
               categoryName
               categoryDescName
               locationImgUrl
@@ -771,7 +795,7 @@ describe('test graphql mutate and paginate function', () => {
         data,
       }
     );
-    console.log(mutationResult);
+    // console.log(mutationResult);
     expect(mutationResult).toMatchObject({
       tagResearch: {
         id: expect.any(String),
