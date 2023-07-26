@@ -61,6 +61,7 @@ function dataSourcesGenerator(admin) {
       'fixedTagSubLocation'
     ),
     userCollectionRef: firestore.collection('user'),
+    userResearchCollectionRef: firestore.collection('user_research'),
     userActivityCollectionRef: firestore.collection('userActivity'),
     userActivityResearchCollectionRef: firestore.collection(
       'userActivity_research'
@@ -90,7 +91,8 @@ function dataSourcesGenerator(admin) {
       algoliaIndexClient
     ),
     userDataSource: new UserDataSource(
-      firebaseServiceReference.userCollectionRef
+      firebaseServiceReference.userCollectionRef,
+      firebaseServiceReference.userResearchCollectionRef
     ),
     // other firebase service
     storageDataSource: new StorageDataSource(firebaseServiceReference.bucket),

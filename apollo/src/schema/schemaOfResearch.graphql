@@ -19,6 +19,7 @@ type TagResearch {
   category: CategoryResearch
   # 回報狀態 / 回報狀態敘述
   status: StatusResearch
+  # PageParams 用原本 CAMPUS schema 的定義
   statusHistory(pageParams: PageParams): StatusPageResearch!
 	# timestamp 需要的資訊
 	createTime: String

@@ -16,11 +16,12 @@ class UserDataSource extends DataSource {
    * DataSource construction
    * @param {UserCollectionRef} userCollectionRef
    */
-  constructor(userCollectionRef) {
+  constructor(userCollectionRef, userResearchCollectionRef) {
     super();
 
     // for authentication
     this.userCollectionRef = userCollectionRef;
+    this.userResearchCollectionRef = userResearchCollectionRef;
   }
 
   /**
@@ -111,6 +112,37 @@ class UserDataSource extends DataSource {
         { merge: true }
       );
     }
+  }
+
+  // For research
+  async getHasReadGuideStatusResearch({ userInfo }) {
+    const { logIn, uid } = userInfo;
+    checkUserLogIn(logIn);
+
+    const userDocRef = this.userResearchCollectionRef.doc(uid);
+
+    const doc = await userDocRef.get();
+
+    if (doc.exists && doc.data().hasReadGuide === true) {
+      return true;
+    }
+
+    return false;
+  }
+
+  async setHasReadGuideResearch({ userInfo }) {
+    const { logIn, uid } = userInfo;
+    checkUserLogIn(logIn);
+
+    const userDocRef = this.userResearchCollectionRef.doc(uid);
+
+    await userDocRef.set(
+      {
+        hasReadGuide: true,
+      },
+      { merge: true }
+    );
+    return true;
   }
 } // class UserDataSource
 

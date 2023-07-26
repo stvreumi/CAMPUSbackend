@@ -29,4 +29,5 @@ type Mutation {
 
   # For research
   addNewTagResearchData(data: addTagResearchDataInput!): AddorUpdateTagResearchResponse!
+  setHasReadGuideResearch: Boolean!
 }

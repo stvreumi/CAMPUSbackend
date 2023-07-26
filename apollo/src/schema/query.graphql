@@ -13,4 +13,5 @@ type Query {
 
   # For research
   tagResearch(tagId: ID!): TagResearch
+  hasReadGuideResearch: Boolean!
 }

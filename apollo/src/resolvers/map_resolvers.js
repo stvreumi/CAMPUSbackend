@@ -188,23 +188,6 @@ const pageResolvers = {
   },
 };
 
-const pageResearchResolvers = {
-  PageResearch: {
-    __resolveType(pageResearch, _, __) {
-      if (pageResearch.tags) {
-        return 'TagResearch';
-      }
-      if (pageResearch.statusList) {
-        return 'StatusResearch';
-      }
-      if (pageResearch.fixedTags) {
-        return 'FixedTagResearch';
-      }
-      return null;
-    },
-  },
-};
-
 const fixedTagResolver = {
   FixedTag: {
     /**
@@ -389,6 +372,23 @@ const coordinateResearchResolvers = {
       console.error(e);
     }
     return null;
+  },
+};
+
+const pageResearchResolvers = {
+  PageResearch: {
+    __resolveType(pageResearch, _, __) {
+      if (pageResearch.tags) {
+        return 'TagResearch';
+      }
+      if (pageResearch.statusList) {
+        return 'StatusResearch';
+      }
+      if (pageResearch.fixedTags) {
+        return 'FixedTagResearch';
+      }
+      return null;
+    },
   },
 };
 

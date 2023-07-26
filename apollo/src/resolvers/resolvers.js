@@ -111,6 +111,8 @@ const queryResolvers = {
     // for research
     tagResearch: async (_, { tagId }, { dataSources }) =>
       dataSources.tagResearchDataSource.getTagResearchData({ tagId }),
+    hasReadGuideResearch: async (_, __, { dataSources, userInfo }) =>
+      dataSources.userDataSource.getHasReadGuideStatusResearch({ userInfo }),
   },
 };
 
@@ -360,6 +362,9 @@ const mutationResolvers = {
 
       return data;
     },
+    // For research
+    setHasReadGuideResearch: async (_, __, { dataSources, userInfo }) =>
+      dataSources.userDataSource.setHasReadGuideResearch({ userInfo }),
   },
 };
 

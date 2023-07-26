@@ -757,7 +757,7 @@ describe('test graphql mutate and paginate function', () => {
     });
   });
 
-  test('test add tag data for research version', async () => {
+  test('test add tag data in research version', async () => {
     const mutateTag = gql`
       mutation tagAddTestResearch($data: addTagResearchDataInput!) {
         addNewTagResearchData(data: $data) {
@@ -1241,6 +1241,38 @@ describe('test graphql mutate and paginate function', () => {
 
     // check if the setHasReadGuide success
     expect(await queryHasReadGuide()).toBe(true);
+  });
+  test('test get and set hasReadGuide in research version', async () => {
+    const queryHasReadGuideResearch = async () => {
+      const queryHasReadGuideQL = gql`
+        query {
+          hasReadGuideResearch
+        }
+      `;
+
+      const { queryResult } = await graphQLQueryHelper(
+        queryHasReadGuideQL,
+        'hasReadGuideResearch'
+      );
+      return queryResult;
+    };
+
+    expect(await queryHasReadGuideResearch()).toBe(false);
+
+    const mutateSetHasReadGuide = gql`
+      mutation {
+        setHasReadGuideResearch
+      }
+    `;
+
+    const { mutationResult } = await graphQLMutationHelper(
+      mutateSetHasReadGuide,
+      'setHasReadGuideResearch'
+    );
+    // check if mutation successed
+    expect(mutationResult).toBe(true);
+    // check if the setHasReadGuide success
+    expect(await queryHasReadGuideResearch()).toBe(true);
   });
   test.skip('test update tag: upload new image and delete exist image', async () => {
     const response = await addFakeDataToFirestore(mutateClient);
