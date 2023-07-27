@@ -12,6 +12,7 @@ type Query {
   getUserData(uid: ID!): User
 
   # For research
+  unarchivedTagListResearch(pageParams: PageParams): TagPageResearch!
   tagResearch(tagId: ID!): TagResearch
   hasReadGuideResearch: Boolean!
 }

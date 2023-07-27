@@ -27,6 +27,7 @@ type TagResearch {
   createUser: UserResearch
   # pic 
   imageUrl: [String]
+  archived: Boolean
 }
 
 # https://www.apollographql.com/docs/tutorial/resolvers/#paginate-results

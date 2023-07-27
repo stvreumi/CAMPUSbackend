@@ -113,6 +113,22 @@ const queryResolvers = {
       dataSources.tagResearchDataSource.getTagResearchData({ tagId }),
     hasReadGuideResearch: async (_, __, { dataSources, userInfo }) =>
       dataSources.userDataSource.getHasReadGuideStatusResearch({ userInfo }),
+    unarchivedTagListResearch: async (
+      _,
+      { pageParams },
+      { dataSources, userInfo }
+    ) => {
+      const data = await dataSources.tagResearchDataSource.getAllUnarchivedTags(
+        pageParams
+      );
+      // Record user activity after the above function successfully return with
+      // no errors.
+      await dataSources.tagResearchDataSource.recordUserActivity(
+        'getTags',
+        userInfo
+      );
+      return data;
+    },
   },
 };
 

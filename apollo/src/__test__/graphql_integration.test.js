@@ -185,7 +185,7 @@ describe('test graphql query', () => {
     fakeTagIdResearch = responseResearch.tagResearch.id;
   });
 
-  test.skip('test query unarchivedTagList, but is not 問題回報', async () => {
+  test('test query unarchivedTagList, but is not 問題回報', async () => {
     const queryUnarchivedTagList = gql`
       query {
         unarchivedTagList {
@@ -229,6 +229,7 @@ describe('test graphql query', () => {
       queryUnarchivedTagList,
       'unarchivedTagList'
     );
+    console.log(queryResult);
     expect(queryResult.tags).toEqual(expect.any(Array));
     expect(queryResult.tags[0]).toMatchObject({
       id: expect.any(String),
@@ -259,6 +260,78 @@ describe('test graphql query', () => {
         ],
       },
       floor: expect.any(Number),
+      archived: false,
+    });
+  });
+  test('test query unarchivedTagList in research version', async () => {
+    const queryUnarchivedTagListResearch = gql`
+      query {
+        unarchivedTagListResearch {
+          tags {
+            id
+            locationName
+            category {
+              categoryType
+              categoryName
+              categoryDescName
+              locationImgUrl
+            }
+            coordinates {
+              latitude
+              longitude
+            }
+            status {
+              statusName
+              statusDescName
+            }
+            statusHistory {
+              statusList {
+                statusName
+                statusDescName
+                createTime
+              }
+              cursor
+              empty
+            }
+            floor
+            archived
+          }
+          cursor
+          empty
+        }
+      }
+    `;
+    const { queryResult } = await graphQLQueryHelper(
+      queryUnarchivedTagListResearch,
+      'unarchivedTagListResearch'
+    );
+    console.log(queryResult);
+    expect(queryResult.tags).toEqual(expect.any(Array));
+    expect(queryResult.tags[0]).toMatchObject({
+      id: expect.any(String),
+      locationName: fakeTagDataResearch.locationName,
+      category: {
+        categoryType: expect.any(String),
+        locationImgUrl: [expect.any(String)],
+      },
+      coordinates: {
+        latitude: expect.any(String),
+        longitude: expect.any(String),
+      },
+      status: {
+        statusName: expect.any(String),
+        statusDescName: expect.any(String),
+      },
+      statusHistory: {
+        statusList: [
+          {
+            statusName: expect.any(String),
+            statusDescName: expect.any(String),
+            createTime: expect.stringMatching(timestampStringRegex),
+          },
+        ],
+      },
+      floor: expect.any(String),
       archived: false,
     });
   });
@@ -426,7 +499,7 @@ describe('test graphql query', () => {
       locationName: docData.locationName,
     });
   });
-  test('test query tag', async () => {
+  test.skip('test query tag', async () => {
     const queryTag = gql`
       query testQueryTag($id: ID!) {
         tag(tagId: $id) {

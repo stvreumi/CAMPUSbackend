@@ -70,6 +70,18 @@ class TagResearchDataSource extends DataSource {
     this.context = config.context;
   }
 
+  async getAllUnarchivedTags(pageParams) {
+    const query = this.tagResearchDataCollectionRef
+      .where('archived', '==', false)
+      .orderBy('lastUpdateTime', 'desc');
+    const { data: tags, pageInfo } = await getPage(
+      query,
+      pageParams,
+      this.tagResearchDataCollectionRef
+    );
+    return { tags, ...pageInfo };
+  }
+
   /**
    * get tag detail from collection `tag_detail`
    * @async
@@ -83,6 +95,23 @@ class TagResearchDataSource extends DataSource {
       return null;
     }
     return getIdWithDataFromDocSnap(doc);
+  }
+
+  async getStatusHistory({ tagId, pageParams }) {
+    const docRef = this.tagResearchDataCollectionRef.doc(tagId);
+
+    const query = await docRef
+      .collection('status')
+      .orderBy('createTime', 'desc');
+
+    const { data, pageInfo } = await getPage(
+      query,
+      pageParams,
+      docRef.collection('status')
+    );
+    const statusList = data.map(status => ({ ...status, type: 'tag' }));
+
+    return { statusList, ...pageInfo };
   }
 
   async addorUpdateTagResearchDataToFirestore(action, { data, userInfo }) {
