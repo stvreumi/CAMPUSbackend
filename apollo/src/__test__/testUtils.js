@@ -175,6 +175,7 @@ async function addFakeDataToFirestoreResearch(
           id
           locationName
           category {
+            categoryType
             categoryName
             categoryDescName
             locationImgUrl

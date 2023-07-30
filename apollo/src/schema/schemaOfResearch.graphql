@@ -116,6 +116,15 @@ input addTagResearchDataInput {
   statusDescName: String!
 }
 
+input updateTagResearchDataInput {
+  locationName: String
+  category: CategoryResearchInput
+  imageDeleteUrls: [String!]
+  imageUploadNumber: Int
+  statusName: String
+  statusDescName: String!
+}
+
 input CoordinateResearchInput {
   latitude: String
   longitude: String

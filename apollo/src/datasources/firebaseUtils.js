@@ -125,6 +125,7 @@ function generateTagResearchDataToStoreInFirestore(action, data, userInfo) {
     lastUpdateTime: FieldValue.serverTimestamp(),
     floor,
   };
+
   if (coordinates) {
     const { latitude, longitude } = coordinates;
     tagData.coordinates = new GeoPoint(
@@ -145,6 +146,12 @@ function generateTagResearchDataToStoreInFirestore(action, data, userInfo) {
       createUserId: uid,
       archived: false,
     };
+  }
+  if (action === 'update') {
+    // filter out not change data (undefined)
+    return Object.keys(tagData)
+      .filter(key => tagData[key] !== undefined && tagData[key] !== null)
+      .reduce((obj, key) => ({ ...obj, [key]: tagData[key] }), {});
   }
 
   throw Error('Undefined action of tagData operation of Research Version.');

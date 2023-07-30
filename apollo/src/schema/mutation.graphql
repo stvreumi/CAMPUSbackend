@@ -30,4 +30,5 @@ type Mutation {
   # For research
   addNewTagResearchData(data: addTagResearchDataInput!): AddorUpdateTagResearchResponse!
   setHasReadGuideResearch: Boolean!
+  updateTagResearchData(tagId: ID!, data: updateTagResearchDataInput!): AddorUpdateTagResearchResponse!
 }

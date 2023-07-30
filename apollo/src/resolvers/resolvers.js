@@ -234,6 +234,41 @@ const mutationResolvers = {
         ),
       };
     },
+    updateTagResearchData: async (
+      _,
+      { tagId, data },
+      { dataSources, userInfo }
+    ) => {
+      const { imageDeleteUrls, imageUploadNumber = 0 } = data;
+      const { tag } =
+        await dataSources.tagResearchDataSource.updateTagResearchData({
+          tagId,
+          data,
+          userInfo,
+        });
+      // event: updated
+      await dataSources.tagResearchDataSource.triggerEvent('updated', tag);
+
+      // Record user activity after the above function successfully return with
+      // no errors.
+      await dataSources.tagResearchDataSource.recordUserActivity(
+        'updateTag',
+        userInfo,
+        tagId
+      );
+      return {
+        tagResearch: tag,
+        imageUploadNumber,
+        imageUploadUrls: await dataSources.storageDataSource.getImageUploadUrls(
+          // Deprecate in the future. This is for the old version support.
+          { imageUploadNumber, firestorePath: tagId }
+        ),
+        imageDeleteStatus: await dataSources.storageDataSource.doImageDelete(
+          tagId,
+          imageDeleteUrls
+        ),
+      };
+    },
     /**
      *
      * @param {*} _

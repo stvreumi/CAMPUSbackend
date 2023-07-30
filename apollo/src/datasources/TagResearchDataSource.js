@@ -114,14 +114,16 @@ class TagResearchDataSource extends DataSource {
     return { statusList, ...pageInfo };
   }
 
-  async addorUpdateTagResearchDataToFirestore(action, { data, userInfo }) {
+  async addorUpdateTagResearchDataToFirestore(
+    action,
+    { tagId = '', data, userInfo }
+  ) {
     const { statusName, statusDescName } = data;
     const tagData = generateTagResearchDataToStoreInFirestore(
       action,
       data,
       userInfo
     );
-
     if (action === 'add') {
       // add tagData to server
       const refAfterTagAdd = await this.tagResearchDataCollectionRef.add(
@@ -153,6 +155,38 @@ class TagResearchDataSource extends DataSource {
 
       return getIdWithDataFromDocSnap(await refAfterTagAdd.get());
     }
+
+    if (action === 'update') {
+      const refOfUpdateTag = this.tagResearchDataCollectionRef.doc(tagId);
+
+      await this.updateTagResearchStatus({
+        tagId,
+        statusName,
+        statusDescName,
+        userInfo,
+      });
+
+      // update tagData to server
+      await refOfUpdateTag.update(tagData);
+
+      // send data to algolia index for searching
+      if (this.algoliaIndexClient) {
+        const { locationName, category } = tagData;
+        // https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/how-to/incremental-updates/?client=javascript#updating-a-subset-of-the-record
+        const res = await this.algoliaIndexClient.partialUpdateObject({
+          objectID: tagId,
+          ...(locationName ? { locationName } : {}),
+          ...(category ? { category } : {}),
+          statusName,
+          statusDescName,
+        });
+        console.log('algolia update object result:');
+        console.dir(res);
+      }
+
+      return getIdWithDataFromDocSnap(await refOfUpdateTag.get());
+    }
+
     throw Error('Undefined action of tagData operation.');
   }
 
@@ -170,6 +204,23 @@ class TagResearchDataSource extends DataSource {
     return {
       tag,
       imageUploadNumber,
+    };
+  }
+
+  async updateTagResearchData({ tagId, data, userInfo }) {
+    // check user login status
+    const { logIn } = userInfo;
+    checkUserLogIn(logIn);
+
+    // add tagData to firestore
+    const tag = await this.addorUpdateTagResearchDataToFirestore('update', {
+      tagId,
+      data,
+      userInfo,
+    });
+
+    return {
+      tag,
     };
   }
 

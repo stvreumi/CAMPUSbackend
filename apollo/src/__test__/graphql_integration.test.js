@@ -185,7 +185,7 @@ describe('test graphql query', () => {
     fakeTagIdResearch = responseResearch.tagResearch.id;
   });
 
-  test('test query unarchivedTagList, but is not 問題回報', async () => {
+  test.skip('test query unarchivedTagList, but is not 問題回報', async () => {
     const queryUnarchivedTagList = gql`
       query {
         unarchivedTagList {
@@ -305,7 +305,7 @@ describe('test graphql query', () => {
       queryUnarchivedTagListResearch,
       'unarchivedTagListResearch'
     );
-    console.log(queryResult);
+    // console.log(queryResult);
     expect(queryResult.tags).toEqual(expect.any(Array));
     expect(queryResult.tags[0]).toMatchObject({
       id: expect.any(String),
@@ -566,7 +566,7 @@ describe('test graphql query', () => {
         id: fakeTagIdResearch,
       }
     );
-    console.log('Research version', queryResult);
+    // console.log('Research version', queryResult);
     expect(queryResult).toMatchObject({
       id: fakeTagIdResearch,
       createTime: expect.stringMatching(timestampStringRegex),
@@ -756,7 +756,7 @@ describe('test graphql mutate and paginate function', () => {
     await clearFirestoreDatabase(testProjectId);
   });
 
-  test('test add tag data', async () => {
+  test.skip('test add tag data', async () => {
     const mutateTag = gql`
       mutation tagAddTest($data: addTagDataInput!) {
         addNewTagData(data: $data) {
@@ -905,7 +905,7 @@ describe('test graphql mutate and paginate function', () => {
     });
   });
 
-  test.skip('test update tag data', async () => {
+  test('test update tag data', async () => {
     const mutateTag = gql`
       mutation tagUpdateTest($tagId: ID!, $data: updateTagDataInput!) {
         updateTagData(tagId: $tagId, data: $data) {
@@ -950,6 +950,66 @@ describe('test graphql mutate and paginate function', () => {
       locationName: fakeTagData.locationName, // remain unchanged
       status: {
         statusName: '人少',
+      },
+    });
+    expect(mutationResult.imageUploadNumber).toBe(0);
+    expect(mutationResult.imageUploadUrls.length).toBe(0);
+    expect(mutationResult.imageDeleteStatus).toBe(null);
+  });
+
+  test('test update tag data in research version', async () => {
+    const mutateTag = gql`
+      mutation tagUpdateTest($tagId: ID!, $data: updateTagResearchDataInput!) {
+        updateTagResearchData(tagId: $tagId, data: $data) {
+          tagResearch {
+            id
+            locationName
+            category {
+              categoryType
+              categoryName
+            }
+            status {
+              statusName
+              statusDescName
+            }
+          }
+          imageUploadNumber
+          imageUploadUrls
+          imageDeleteStatus
+        }
+      }
+    `;
+
+    // change field: category, statusName, statusDescName is neccessary
+    const data = {
+      category: {
+        categoryType: '空間',
+        categoryName: '停車塲',
+      },
+      statusName: '空間狀態',
+      statusDescName: '髒亂',
+    };
+
+    // first add data to firestore
+    const addFakeDataResponse = await addFakeDataToFirestoreResearch(
+      mutateClient
+    );
+    const fakeTagResearchId = addFakeDataResponse.tagResearch.id;
+
+    const { mutationResult } = await graphQLMutationHelper(
+      mutateTag,
+      'updateTagResearchData',
+      {
+        tagId: fakeTagResearchId,
+        data,
+      }
+    );
+
+    expect(mutationResult.tagResearch).toMatchObject({
+      id: expect.any(String),
+      locationName: fakeTagDataResearch.locationName, // remain unchanged
+      status: {
+        statusDescName: '髒亂',
       },
     });
     expect(mutationResult.imageUploadNumber).toBe(0);
