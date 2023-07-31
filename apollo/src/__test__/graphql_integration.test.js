@@ -1407,7 +1407,7 @@ describe('test graphql mutate and paginate function', () => {
     // check if the setHasReadGuide success
     expect(await queryHasReadGuideResearch()).toBe(true);
   });
-  test.skip('test update tag: upload new image and delete exist image', async () => {
+  test('test update tag: upload new image and delete exist image', async () => {
     const response = await addFakeDataToFirestore(mutateClient);
     const fakeTagId = response.tag.id;
 
@@ -1443,6 +1443,46 @@ describe('test graphql mutate and paginate function', () => {
     // console.log(updateImageMutationResult);
     expect(mutationResult).toMatchObject({
       tag: { id: fakeTagId },
+      imageDeleteStatus: true,
+    });
+    expect(mutationResult.imageUploadUrls.length).toBe(imageUploadNumber);
+  });
+  test('test update tag: upload new image and delete exist image in research version', async () => {
+    const response = await addFakeDataToFirestoreResearch(mutateClient);
+    const fakeTagResearchId = response.tagResearch.id;
+
+    const updateImageMutation = gql`
+      mutation upDateTest($tagId: ID!, $data: updateTagResearchDataInput!) {
+        updateTagResearchData(tagId: $tagId, data: $data) {
+          tagResearch {
+            id
+          }
+          imageUploadUrls
+          imageDeleteStatus
+        }
+      }
+    `;
+
+    // prepare update data
+    const imageDeleteUrls = [
+      `https://storage.googleapis.com/download/storage/v1/b/smartcampus-1b31f.appspot.com/o/${fakeTagResearchId}%2F40109ead-0bc5-43a1-8e99-d118df339517.jpg?generation=1607929899797089&alt=media`,
+    ];
+    const imageUploadNumber = 2;
+
+    const { mutationResult } = await graphQLMutationHelper(
+      updateImageMutation,
+      'updateTagResearchData',
+      {
+        tagId: fakeTagResearchId,
+        data: {
+          imageDeleteUrls,
+          imageUploadNumber,
+        },
+      }
+    );
+    // console.log(mutationResult);
+    expect(mutationResult).toMatchObject({
+      tagResearch: { id: fakeTagResearchId },
       imageDeleteStatus: true,
     });
     expect(mutationResult.imageUploadUrls.length).toBe(imageUploadNumber);

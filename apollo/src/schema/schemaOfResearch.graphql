@@ -122,7 +122,7 @@ input updateTagResearchDataInput {
   imageDeleteUrls: [String!]
   imageUploadNumber: Int
   statusName: String
-  statusDescName: String!
+  statusDescName: String
 }
 
 input CoordinateResearchInput {

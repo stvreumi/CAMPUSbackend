@@ -159,12 +159,15 @@ class TagResearchDataSource extends DataSource {
     if (action === 'update') {
       const refOfUpdateTag = this.tagResearchDataCollectionRef.doc(tagId);
 
-      await this.updateTagResearchStatus({
-        tagId,
-        statusName,
-        statusDescName,
-        userInfo,
-      });
+      // check for not only update image. if only update image, skip here
+      if (Object.prototype.hasOwnProperty.call(tagData, 'category')) {
+        await this.updateTagResearchStatus({
+          tagId,
+          statusName,
+          statusDescName,
+          userInfo,
+        });
+      }
 
       // update tagData to server
       await refOfUpdateTag.update(tagData);
