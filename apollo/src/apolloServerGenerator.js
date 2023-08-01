@@ -57,6 +57,7 @@ function dataSourcesGenerator(admin) {
     tagDataCollectionRef: firestore.collection(tagDataCollectionName),
     tagResearchDataCollectionRef: firestore.collection('tagData_research'),
     fixedTagCollectionRef: firestore.collection('fixedTag'),
+    fixedTagResearchCollectionRef: firestore.collection('fixedTag_research'),
     fixedTagSubLocationCollectionRef: firestore.collection(
       'fixedTagSubLocation'
     ),
@@ -85,6 +86,7 @@ function dataSourcesGenerator(admin) {
     tagResearchDataSource: new TagResearchDataSource(
       firebaseServiceReference.tagResearchDataCollectionRef,
       firebaseServiceReference.userActivityResearchCollectionRef,
+      firebaseServiceReference.fixedTagResearchCollectionRef,
       archivedThreshold,
       firestore,
       campusEventEmitter,

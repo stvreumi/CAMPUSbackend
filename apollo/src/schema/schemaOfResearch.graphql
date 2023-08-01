@@ -3,8 +3,8 @@ type FixedTagResearch {
 	# 二餐
   locationName: String!
 	# 經緯度
-  coordinates: Coordinate!
-  Tags: [TagResearch]
+  coordinates: CoordinateResearch!
+  tags: [TagResearch]
 }
 
 type TagResearch {
@@ -38,6 +38,13 @@ interface PageResearch {
 
 type TagPageResearch implements PageResearch {
   tags: [TagResearch]!
+  cursor: String!
+  empty: Boolean!
+}
+
+type FixedTagResearchPage implements Page {
+  fixedTags: [FixedTagResearch]!
+  "the number of milliseconds elapsed since January 1, 1970 00:00:00 UTC."
   cursor: String!
   empty: Boolean!
 }

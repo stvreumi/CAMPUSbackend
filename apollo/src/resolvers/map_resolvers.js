@@ -392,6 +392,23 @@ const pageResearchResolvers = {
   },
 };
 
+const fixedTagResearchResolver = {
+  FixedTagResearch: {
+    /**
+     *
+     * @param {*} fixedTag
+     * @param {*} _
+     * @param {ResolverArgsInfo} info
+     */
+    tags: async (fixedTag, _, { dataSources }) => {
+      logger.debug('in map_resolver fixedTagSubTags');
+      return dataSources.tagResearchDataSource.getAllfixedTagSubTag(
+        fixedTag.id
+      );
+    },
+  },
+};
+
 module.exports = {
   tagResolvers,
   statusResolvers,
@@ -405,4 +422,5 @@ module.exports = {
   userResearchResolvers,
   coordinateResearchResolvers,
   pageResearchResolvers,
+  fixedTagResearchResolver,
 };

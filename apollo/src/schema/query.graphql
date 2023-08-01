@@ -15,4 +15,7 @@ type Query {
   unarchivedTagListResearch(pageParams: PageParams): TagPageResearch!
   tagResearch(tagId: ID!): TagResearch
   hasReadGuideResearch: Boolean!
+  fixedTagResearchList(pageParams: PageParams): FixedTagResearchPage!
+  fixedTagResearch(fixedTagId: ID!): FixedTagResearch
+  getUserResearchData(uid: ID!): UserResearch
 }

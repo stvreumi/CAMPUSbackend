@@ -46,6 +46,7 @@ class TagResearchDataSource extends DataSource {
   constructor(
     tagResearchDataCollectionRef,
     userActivityResearchCollectionRef,
+    fixedTagResearchCollectionRef,
     archivedThreshold,
     firestore,
     eventEmitter,
@@ -54,6 +55,7 @@ class TagResearchDataSource extends DataSource {
     super();
     this.tagResearchDataCollectionRef = tagResearchDataCollectionRef;
     this.userActivityResearchCollectionRef = userActivityResearchCollectionRef;
+    this.fixedTagResearchCollectionRef = fixedTagResearchCollectionRef;
     this.archivedThreshold = archivedThreshold;
     this.firestore = firestore;
     this.eventEmitter = eventEmitter;
@@ -82,15 +84,48 @@ class TagResearchDataSource extends DataSource {
     return { tags, ...pageInfo };
   }
 
-  /**
-   * get tag detail from collection `tag_detail`
-   * @async
-   * @param {object} param
-   * @param {string} param.tagId tagId of the document with detailed info.
-   * @returns {Promise<RawTagDocumentFields>|null}
-   */
+  async getAllFixedTags(pageParams) {
+    // explicitly ask query ordery by the doc id
+    // the orderby usage comes from here
+    // https://firebase.google.com/docs/firestore/manage-data/delete-data#collections
+    const query = this.fixedTagResearchCollectionRef.orderBy('__name__');
+    const { data: fixedTags, pageInfo } = await getPage(
+      query,
+      pageParams,
+      this.fixedTagResearchCollectionRef
+    );
+    return { fixedTags, ...pageInfo };
+  }
+
+  // for map resolver
+  async getAllfixedTagSubTag(fixedTagId) {
+    // logger.debug('getAllfixedTagSubTag');
+    // logger.debug({ fixedTagId });
+    // explicitly ask query ordery by the doc id
+    // the orderby usage comes from here
+    // https://firebase.google.com/docs/firestore/manage-data/delete-data#collections
+    const query = this.tagResearchDataCollectionRef.where(
+      'fixedTagId',
+      '==',
+      fixedTagId
+    );
+
+    const snapshot = await query.get();
+    const subTags = [];
+    snapshot.forEach(doc => subTags.push({ ...doc.data(), id: doc.id }));
+    return subTags;
+  }
+
   async getTagResearchData({ tagId }) {
     const doc = await this.tagResearchDataCollectionRef.doc(tagId).get();
+    if (!doc.exists) {
+      return null;
+    }
+    return getIdWithDataFromDocSnap(doc);
+  }
+
+  async getFixedTagResearchData({ fixedTagId }) {
+    const doc = await this.fixedTagResearchCollectionRef.doc(fixedTagId).get();
     if (!doc.exists) {
       return null;
     }

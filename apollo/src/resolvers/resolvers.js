@@ -13,6 +13,7 @@ const {
   statusResearchResolvers,
   userResearchResolvers,
   coordinateResearchResolvers,
+  fixedTagResearchResolver,
 } = require('./map_resolvers');
 
 /**
@@ -129,6 +130,15 @@ const queryResolvers = {
       );
       return data;
     },
+    fixedTagResearchList: async (
+      _,
+      { pageParams },
+      { dataSources, userInfo }
+    ) =>
+      dataSources.tagResearchDataSource.getAllFixedTags(pageParams, userInfo),
+    fixedTagResearch: async (_, { fixedTagId }, { dataSources }) =>
+      dataSources.tagResearchDataSource.getFixedTagResearchData({ fixedTagId }),
+    getUserResearchData: async (_, { uid }, __) => ({ uid }),
   },
 };
 
@@ -455,6 +465,7 @@ const resolvers = {
   ...statusResearchResolvers,
   ...userResearchResolvers,
   ...coordinateResearchResolvers,
+  ...fixedTagResearchResolver,
 };
 
 module.exports = resolvers;

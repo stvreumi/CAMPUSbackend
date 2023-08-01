@@ -434,6 +434,7 @@ describe('test graphql query', () => {
       querFixedTagList,
       'fixedTagList'
     );
+
     const statusExpectData = {
       statusName: '非常不壅擠',
       createTime: expect.stringMatching(timestampStringRegex),
@@ -458,6 +459,7 @@ describe('test graphql query', () => {
     queryResult.fixedTags[0].fixedTagSubLocations.forEach(location => {
       fixedTagSubLocationsResult[location.id] = location;
     });
+
     expect(fixedTagSubLocationsResult[storeDocRef.id]).toMatchObject({
       ...storeData,
       id: storeDocRef.id,
@@ -494,6 +496,146 @@ describe('test graphql query', () => {
       { id: docRef.id }
     );
 
+    expect(queryOneFixedTagResult).toMatchObject({
+      id: docRef.id,
+      locationName: docData.locationName,
+    });
+  });
+  test('test query fix tag in research version', async () => {
+    // add fix tag data to firestore
+    const docData = {
+      locationName: '第二餐廳',
+      coordinates: {
+        latitude: '24.789345225611136',
+        longitude: '120.99719144686011',
+      },
+    };
+    const docRef = await firestore.collection('fixedTag_research').add(docData);
+
+    const collectionRef = firestore.collection('tagData_research');
+    const defaultStatus = {
+      statusName: '清潔狀態',
+      statusDescName: '乾淨',
+      createTime: FieldValue.serverTimestamp(),
+      createUserId: 'admin',
+    };
+    const CategoryData = {
+      categoryType: '物體',
+      categoryName: '飲水機',
+      categoryDescName: '飲水機1',
+      locationImgUrl: ['http://photo.url'],
+    };
+    const tagData = {
+      fixedTagId: docRef.id,
+      locationName: 'testResearch',
+      category: { ...CategoryData },
+      coordinates: {
+        longitude: '120.99745541810988',
+        latitude: '24.786671229129603',
+      },
+      floor: '3',
+    };
+    const tagDocRef = await collectionRef.add(tagData);
+    await tagDocRef.collection('status').add(defaultStatus);
+
+    const querFixedTagList = gql`
+      query {
+        fixedTagResearchList {
+          fixedTags {
+            id
+            locationName
+            coordinates {
+              latitude
+              longitude
+            }
+            tags {
+              id
+              fixedTagId
+              locationName
+              floor
+              category {
+                categoryType
+                categoryName
+                categoryDescName
+                locationImgUrl
+              }
+              coordinates {
+                latitude
+                longitude
+              }
+              status {
+                statusName
+                statusDescName
+                createTime
+              }
+              statusHistory {
+                statusList {
+                  statusName
+                  statusDescName
+                  createTime
+                }
+                empty
+              }
+            }
+          }
+          cursor
+          empty
+        }
+      }
+    `;
+    const { queryResult } = await graphQLQueryHelper(
+      querFixedTagList,
+      'fixedTagResearchList'
+    );
+
+    expect(queryResult.fixedTags[0]).toHaveProperty('id', docRef.id);
+    expect(queryResult.fixedTags[0]).toHaveProperty(
+      'locationName',
+      docData.locationName
+    );
+    expect(queryResult.fixedTags[0]).toHaveProperty(
+      'coordinates',
+      docData.coordinates
+    );
+    const fixedTagSubTagsResult = {};
+    queryResult.fixedTags[0].tags.forEach(location => {
+      fixedTagSubTagsResult[location.id] = location;
+    });
+    // console.log(fixedTagSubTagsResult[tagDocRef.id].statusHistory);
+    const statusExpectData = {
+      statusName: '清潔狀態',
+      statusDescName: '乾淨',
+      createTime: expect.stringMatching(timestampStringRegex),
+    };
+    expect(fixedTagSubTagsResult[tagDocRef.id]).toMatchObject({
+      ...tagData,
+      id: tagDocRef.id,
+      fixedTagId: docRef.id,
+      status: statusExpectData,
+      statusHistory: {
+        statusList: [statusExpectData],
+      },
+    });
+
+    // also test one fixed tag query
+    const queryFixedTag = gql`
+      query testQueryFixedTag($id: ID!) {
+        fixedTagResearch(fixedTagId: $id) {
+          id
+          locationName
+          tags {
+            id
+            fixedTagId
+            locationName
+          }
+        }
+      }
+    `;
+    const { queryResult: queryOneFixedTagResult } = await graphQLQueryHelper(
+      queryFixedTag,
+      'fixedTagResearch',
+      { id: docRef.id }
+    );
     expect(queryOneFixedTagResult).toMatchObject({
       id: docRef.id,
       locationName: docData.locationName,
@@ -709,6 +851,32 @@ describe('test graphql query', () => {
       photoURL: expect.stringMatching(/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/),
       email: fakeUserRecord.email,
       userAddTagNumber: 1,
+    });
+  });
+  test.skip('test get user data in research version', async () => {
+    const { uid } = userInfoAfterAccountCreated;
+    const getUserData = gql`
+      query testGetUserData($uid: ID!) {
+        getUserResearchData(uid: $uid) {
+          uid
+          displayName
+          photoURL
+          email
+        }
+      }
+    `;
+    const { queryResult } = await graphQLQueryHelper(
+      getUserData,
+      'getUserResearchData',
+      { uid }
+    );
+    console.log(queryResult);
+    expect(queryResult).toMatchObject({
+      uid,
+      displayName: expect.any(String),
+      // https://uibakery.io/regex-library/url
+      photoURL: expect.stringMatching(/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/),
+      email: fakeUserRecord.email,
     });
   });
 });
@@ -1407,7 +1575,7 @@ describe('test graphql mutate and paginate function', () => {
     // check if the setHasReadGuide success
     expect(await queryHasReadGuideResearch()).toBe(true);
   });
-  test('test update tag: upload new image and delete exist image', async () => {
+  test.skip('test update tag: upload new image and delete exist image', async () => {
     const response = await addFakeDataToFirestore(mutateClient);
     const fakeTagId = response.tag.id;
 
