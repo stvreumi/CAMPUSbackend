@@ -805,6 +805,39 @@ describe('test graphql query', () => {
       imageUrl: [expect.any(String)],
     });
   });
+  test('test query userAddTagResearchHistory in research version', async () => {
+    const { uid } = userInfoAfterAccountCreated;
+    const queryUserAddTagResearchHistory = gql`
+      query testQueryUserAddTagResearchHistory($uid: ID!) {
+        userAddTagResearchHistory(uid: $uid) {
+          tags {
+            id
+            createUser {
+              uid
+            }
+            imageUrl
+          }
+          cursor
+          empty
+        }
+      }
+    `;
+
+    const { queryResult } = await graphQLQueryHelper(
+      queryUserAddTagResearchHistory,
+      'userAddTagResearchHistory',
+      { uid }
+    );
+
+    expect(queryResult.tags).toEqual(expect.any(Array));
+    expect(queryResult.tags[0]).toMatchObject({
+      id: fakeTagIdResearch,
+      createUser: {
+        uid: userInfoAfterAccountCreated.uid,
+      },
+      imageUrl: [expect.any(String)],
+    });
+  });
   test.skip('test archived threshold number query', async () => {
     // first add threshold into firestore
     const testThreshold = 3;

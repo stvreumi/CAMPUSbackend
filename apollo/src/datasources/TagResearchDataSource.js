@@ -291,6 +291,19 @@ class TagResearchDataSource extends DataSource {
     return { ...getIdWithDataFromDocSnap(await docRef.get()), type: 'tag' };
   }
 
+  async getUserAddTagResearchHistory({ uid, pageParams }) {
+    const query = this.tagResearchDataCollectionRef
+      .where('createUserId', '==', uid)
+      .orderBy('createTime', 'desc');
+    const { data: tags, pageInfo } = await getPage(
+      query,
+      pageParams,
+      this.tagResearchDataCollectionRef
+    );
+
+    return { tags, ...pageInfo };
+  }
+
   async triggerEvent(eventName, tagData) {
     this.eventEmitter.emit(eventName, tagData);
   }

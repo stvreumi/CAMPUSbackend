@@ -12,10 +12,11 @@ type Query {
   getUserData(uid: ID!): User
 
   # For research
-  unarchivedTagListResearch(pageParams: PageParams): TagPageResearch!
+  unarchivedTagListResearch(pageParams: PageParams): TagResearchPage!
   tagResearch(tagId: ID!): TagResearch
   hasReadGuideResearch: Boolean!
   fixedTagResearchList(pageParams: PageParams): FixedTagResearchPage!
   fixedTagResearch(fixedTagId: ID!): FixedTagResearch
   getUserResearchData(uid: ID!): UserResearch
+  userAddTagResearchHistory(uid: ID!, pageParams: PageParams): TagResearchPage!
 }

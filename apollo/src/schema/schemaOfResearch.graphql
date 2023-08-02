@@ -36,7 +36,7 @@ interface PageResearch {
   empty: Boolean!
 }
 
-type TagPageResearch implements PageResearch {
+type TagResearchPage implements PageResearch {
   tags: [TagResearch]!
   cursor: String!
   empty: Boolean!
