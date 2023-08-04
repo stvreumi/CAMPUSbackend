@@ -118,7 +118,7 @@ input addTagResearchDataInput {
   category: CategoryResearchInput!
   coordinates: CoordinateResearchInput!
   imageUploadNumber: Int
-  floor: Int
+  floor: String
   statusName: String!
   statusDescName: String!
 }

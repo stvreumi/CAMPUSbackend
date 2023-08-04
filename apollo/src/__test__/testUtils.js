@@ -66,7 +66,7 @@ const fakeTagDataResearch = {
     latitude: '24.786671229129603',
   },
   // [longitude, latitude]
-  floor: 3,
+  floor: 'B1',
   imageUploadNumber: 2,
   statusName: '清潔狀態',
   statusDescName: '乾淨',
