@@ -6,6 +6,69 @@ const subscriptionName = process.env.CAMPUS_EVENT_SUPSCRIPTION_NAME;
 
 const subscription = pubSubClient.subscription(subscriptionName);
 
+const customTagChangeSubscription = (
+  onMessage,
+  eventEmitter,
+  algoliaIndexClient,
+  isResearch
+) => {
+  const subscriptionKey = isResearch
+    ? 'tagResearchChangeSubscription'
+    : 'tagChangeSubscription';
+  const listenOnTagChangeEvents = changeType => {
+    eventEmitter.on(changeType, idWithResultData =>
+      onMessage({
+        [subscriptionKey]: {
+          changeType,
+          tagContent: idWithResultData,
+        },
+      })
+    );
+  };
+  // register listening function
+
+  // event emitted location: [CAMPUS-backend dir]/apollo/src/resolvers/resolvers.js
+  listenOnTagChangeEvents('added');
+  listenOnTagChangeEvents('updated');
+  // event emitted location: `checkIfNeedArchived` from [CAMPUS-backend dir]/apollo/src/datasources/TagDataSource.js
+  listenOnTagChangeEvents('archived');
+
+  // * delete event from firebase function delete event trigger function
+  // * event delivered by GCP Pub/Sub
+  // * event name: `deleted`
+  // * the pub/sub may deliver event multiple times, so the subscribe function
+  //   must be idempotent function.
+  //   https://stackoverflow.com/questions/53823366/google-pubsub-and-duplicated-messages-from-the-topic
+  // * https://cloud.google.com/pubsub/docs/quickstart-client-libraries#receive_messages
+  subscription.on('message', async message => {
+    console.log(`receive message id: ${message.id}`);
+    const { changeType, tagContent } = JSON.parse(message.data);
+
+    // "Ack" (acknowledge receipt of) the message
+    // (maybe) ack as soon as possible
+    message.ack();
+
+    // error, no changeType or the event name is not 'deleted'
+    if (changeType !== 'deleted') {
+      console.error('Error when receive pub/sub data. Received data: ');
+      console.dir(message.data);
+      return;
+    }
+    onMessage({
+      [subscriptionKey]: {
+        changeType,
+        tagContent,
+      },
+    });
+
+    const { id } = tagContent;
+    // algolia_object_delete
+    const res = await algoliaIndexClient.deleteObject(id);
+    console.log('algolia delete object result:');
+    console.dir(res);
+  });
+};
+
 /**
  *
  * @param {import('firebase-admin').firestore.Firestore} firestore
@@ -25,60 +88,20 @@ const PubSubHandlers = (firestore, eventEmitter, algoliaIndexClient) => ({
           });
         }
       }),
-  tagChangeSubscription: onMessage => {
-    const listenOnTagChangeEvents = changeType => {
-      eventEmitter.on(changeType, idWithResultData =>
-        onMessage({
-          tagChangeSubscription: {
-            changeType,
-            tagContent: idWithResultData,
-          },
-        })
-      );
-    };
-    // register listening function
-
-    // event emitted location: [CAMPUS-backend dir]/apollo/src/resolvers/resolvers.js
-    listenOnTagChangeEvents('added');
-    listenOnTagChangeEvents('updated');
-    // event emitted location: `checkIfNeedArchived` from [CAMPUS-backend dir]/apollo/src/datasources/TagDataSource.js
-    listenOnTagChangeEvents('archived');
-
-    // * delete event from firebase function delete event trigger function
-    // * event delivered by GCP Pub/Sub
-    // * event name: `deleted`
-    // * the pub/sub may deliver event multiple times, so the subscribe function
-    //   must be idempotent function.
-    //   https://stackoverflow.com/questions/53823366/google-pubsub-and-duplicated-messages-from-the-topic
-    // * https://cloud.google.com/pubsub/docs/quickstart-client-libraries#receive_messages
-    subscription.on('message', async message => {
-      console.log(`receive message id: ${message.id}`);
-      const { changeType, tagContent } = JSON.parse(message.data);
-
-      // "Ack" (acknowledge receipt of) the message
-      // (maybe) ack as soon as possible
-      message.ack();
-
-      // error, no changeType or the event name is not 'deleted'
-      if (changeType !== 'deleted') {
-        console.error('Error when receive pub/sub data. Received data: ');
-        console.dir(message.data);
-        return;
-      }
-      onMessage({
-        tagChangeSubscription: {
-          changeType,
-          tagContent,
-        },
-      });
-
-      const { id } = tagContent;
-      // algolia_object_delete
-      const res = await algoliaIndexClient.deleteObject(id);
-      console.log('algolia delete object result:');
-      console.dir(res);
-    });
-  },
+  tagChangeSubscription: onMessage =>
+    customTagChangeSubscription(
+      onMessage,
+      eventEmitter,
+      algoliaIndexClient,
+      false
+    ),
+  tagResearchChangeSubscription: onMessage =>
+    customTagChangeSubscription(
+      onMessage,
+      eventEmitter,
+      algoliaIndexClient,
+      true
+    ),
 });
 
 module.exports = PubSubHandlers;
