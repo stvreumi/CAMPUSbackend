@@ -455,6 +455,17 @@ const subscriptionResolvers = {
       subscribe: (_, __, { pubsub }) =>
         pubsub.asyncIterator(['tagChangeSubscription']),
     },
+    tagResearchChangeSubscription: {
+      /**
+       * Subscribe to the events occured after the unix timestamp (millseconds)
+       * @param {*} _
+       * @param {*} __
+       * @param {{pubsub: PubSub}}
+       * @returns
+       */
+      subscribe: (_, __, { pubsub }) =>
+        pubsub.asyncIterator(['tagResearchChangeSubscription']),
+    },
   },
 };
 

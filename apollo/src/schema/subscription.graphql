@@ -1,4 +1,7 @@
 type Subscription {
   archivedThreshold: Int
   tagChangeSubscription: TagFieldsForSubscription!
+
+  # For research
+  tagResearchChangeSubscription: TagFieldsForSubscriptionResearch!
 }
