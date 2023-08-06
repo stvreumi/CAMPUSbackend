@@ -60,3 +60,32 @@
 # Document
 - [firestore fields description](docs/firestoreFields.md)
 - [naming convention](docs/names.md)
+# `Jest` test
+- We need to add `NODE_OPTIONS=--experimental-vm-modules` befor running `jest. See this [doc](https://jestjs.io/docs/ecmascript-modules) for more information.
+# troubleshooting
+## eslint
+-  Use `eslint-import-resolver-typescript` to fix eslint import error. 
+  - [Document](https://github.com/import-js/eslint-import-resolver-typescript)
+  - [Stack Overflow comment](https://stackoverflow.com/a/74808302)
+## Auth error when using emulator
+If encounter the following error in the test/emulator environment: <br/>
+```
+Error: Could not load the default crentials...
+```
+add the following fake auth object to the client(front-end):
+```js
+// https://firebase.google.com/docs/web/learn-more#config-object
+// for test only
+const app = initializeApp({
+  apiKey: "API_KEY",
+  authDomain: "PROJECT_ID.firebaseapp.com",
+  // The value of `databaseURL` depends on the location of the database
+  databaseURL: "https://DATABASE_NAME.firebaseio.com",
+  projectId: "PROJECT_ID",
+  storageBucket: "PROJECT_ID.appspot.com",
+  messagingSenderId: "SENDER_ID",
+  appId: "APP_ID",
+  // For Firebase JavaScript SDK v7.20.0 and later, `measurementId` is an optional field
+  measurementId: "G-MEASUREMENT_ID",
+});
+```

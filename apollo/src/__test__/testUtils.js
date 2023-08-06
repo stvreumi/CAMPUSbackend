@@ -1,7 +1,13 @@
-const firebase = require('@firebase/rules-unit-testing');
-const axios = require('axios');
-const { nanoid } = require('nanoid');
-const gql = require('graphql-tag');
+import axios from 'axios';
+import { nanoid } from 'nanoid';
+import gql from 'graphql-tag';
+
+import { initializeApp } from 'firebase-admin/app';
+import { getAuth } from 'firebase-admin/auth';
+import { getFirestore } from 'firebase-admin/firestore';
+import 'firebase-admin/storage';
+
+import { jest } from '@jest/globals';
 
 /**
  * @typedef {import('../types').DataSources} DataSources
@@ -45,6 +51,7 @@ const fakeStatusData = {
   statusName: '存在',
 };
 
+// ref: https://github.com/firebase/firebase-js-sdk/blob/master/packages/rules-unit-testing/src/public_types/index.ts#L32
 const fakeUserRecord = {
   email: 'test-uid@test.com',
   displayName: 'test-display-name',
@@ -54,11 +61,18 @@ const fakeUserRecord = {
 /**
  * Mock firebase admin instance
  * @param {string} projectId The projectId to initiate firebase admin
- * @returns {firebaseAdminApp} the mock and initiate firebase app instance
+ * @returns {object} the mock and initiate firebase app instance
+ * https://firebase.google.com/docs/rules/unit-tests#rut-v1-testing
+ * Create a `RulesTestContext` object for interact with emulator
  */
-function mockFirebaseAdmin(projectId) {
-  const admin = firebase.initializeAdminApp({ projectId });
+async function mockFirebaseAdmin(projectId) {
+  // attach firestore to admin
+  const admin = initializeApp({ projectId });
 
+  const testAdmin = Object();
+
+  testAdmin.auth = jest.fn(() => getAuth(admin));
+  testAdmin.firestore = jest.fn(() => getFirestore(admin));
   // mock storage
   const mockBuckeFile = jest.fn(_ => ({
     getSignedUrl: jest.fn(__ => ['http://signed.url']),
@@ -84,10 +98,12 @@ function mockFirebaseAdmin(projectId) {
     file: mockBuckeFile,
     getFiles: mockBucketGetFiles,
   }));
-  admin.storage = jest.fn(() => ({
+
+  testAdmin.storage = jest.fn(() => ({
     bucket: mockBucket,
   }));
-  return admin;
+
+  return testAdmin;
 }
 
 /**
@@ -143,7 +159,7 @@ async function addFakeDataToFirestore(
 }
 
 /**
- * clear database
+ * Using emulator specific API to clear database
  * ref: https://firebase.google.com/docs/emulator-suite/connect_firestore#clear_your_database_between_tests
  * or use `clearFirestoreData({ projectId: string }) => Promise`
  * ref: https://firebase.google.com/docs/rules/unit-tests#test_sdk_methods
@@ -161,23 +177,25 @@ async function clearFirestoreDatabase(projectID) {
  * @param {firebaseAdminAppAuth} auth
  * @returns {string}
  */
-async function addTestAccountToAuthEmulator(auth) {
+export async function addTestAccountToAuthEmulator(auth) {
   const { email, displayName, photoURL } = fakeUserRecord;
   const { uid } = await auth.createUser({ email, displayName, photoURL });
   return uid;
 }
 
 /**
- * Clear auth accounts
+ * Using emulator specific API to clear auth accounts
  * https://firebase.google.com/docs/reference/rest/auth#section-auth-emulator-clearaccounts
  * @param {string} projectID
  */
-async function clearAllAuthAccounts(projectID) {
+export async function clearAllAuthAccounts(projectID) {
   const clearURL = `http://localhost:9099/emulator/v1/projects/${projectID}/accounts`;
   await axios.delete(clearURL);
 }
 
-module.exports = {
+// TODO: export it when defining the function,
+// we don't need to export it in the last line of the files
+export {
   mockFirebaseAdmin,
   addFakeDataToFirestore,
   fakeTagData,
@@ -186,6 +204,4 @@ module.exports = {
   fakeStatusData,
   fakeUserRecord,
   clearFirestoreDatabase,
-  clearAllAuthAccounts,
-  addTestAccountToAuthEmulator,
 };

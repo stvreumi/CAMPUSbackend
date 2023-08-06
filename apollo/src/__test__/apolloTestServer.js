@@ -1,6 +1,6 @@
 /** @module src/index */
-const { apolloServerGenerator } = require('../apolloServerGenerator');
+import { apolloServerGenerator } from '../apolloServerGenerator.js';
 
 const apolloTestServer = apolloServerGenerator({ test: true });
 
-module.exports = apolloTestServer;
+export default apolloTestServer;

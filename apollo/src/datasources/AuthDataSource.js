@@ -1,7 +1,8 @@
 /** @module AuthDataSource */
-const { DataSource } = require('apollo-datasource');
-const { AuthenticationError } = require('apollo-server');
-const DataLoader = require('dataloader');
+import { DataSource } from 'apollo-datasource';
+
+import { AuthenticationError } from 'apollo-server';
+import DataLoader from 'dataloader';
 
 // used for type annotation
 /**
@@ -109,4 +110,4 @@ class AuthDataSource extends DataSource {
   }
 } // class AuthDataSource
 
-module.exports = AuthDataSource;
+export default AuthDataSource;

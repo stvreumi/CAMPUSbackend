@@ -1,11 +1,13 @@
-const path = require('path');
+import path from 'path';
+
 /** @module StorageDataSource */
-const { DataSource } = require('apollo-datasource');
-/** @type {import('pino').Logger} */
-const logger = require('pino-caller')(require('../../logger'));
+import { DataSource } from 'apollo-datasource';
+
+
+import logger from '../../logger.js';
 
 // firebaseUtil
-const { generateFileName } = require('./firebaseUtils');
+import { generateFileName } from './firebaseUtils.js';
 
 // used for type annotation
 /**
@@ -153,4 +155,4 @@ class StorageDataSource extends DataSource {
   }
 } // class StorageDataSource
 
-module.exports = StorageDataSource;
+export default StorageDataSource;

@@ -2,7 +2,7 @@ const admin = require('firebase-admin');
 const algoliasearch = require('algoliasearch');
 const {
   tagDataCollectionName,
-} = require('../src/datasources/firestoreCollections');
+} = require('../src/datasources/constants.js');
 
 // Please set google credential in the env when running
 admin.initializeApp({

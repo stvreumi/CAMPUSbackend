@@ -1,7 +1,7 @@
 // The Firebase Admin SDK to access the Firebase Realtime Database.
-const admin = require('firebase-admin');
+import * as admin from 'firebase-admin';
 
-const apolloServer = require('./src');
+import apolloServer from './src/index.js';
 
 const { storageBucket } = process.env;
 

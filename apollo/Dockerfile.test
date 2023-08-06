@@ -1,7 +1,7 @@
 # Dockerfile naming convention
 # https://stackoverflow.com/a/63995752
 # https://docs.docker.com/engine/reference/commandline/build/#specify-a-dockerfile--f
-FROM node:14-alpine as app
+FROM node:18-alpine as app
 
 ENV NODE_ENV=production
 

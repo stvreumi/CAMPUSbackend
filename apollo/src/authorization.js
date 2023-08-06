@@ -1,6 +1,11 @@
 /** @module authorization */
-const { ForbiddenError } = require('apollo-server');
-const { skip } = require('graphql-resolvers');
+/**
+ * WARNING: this files are not imported by any other files. May delete in the 
+ * future.
+ */
+import { ForbiddenError } from 'apollo-server';
+
+import { skip } from 'graphql-resolvers';
 
 /**
  * A resover. Check if user is authorized.
@@ -12,7 +17,7 @@ const { skip } = require('graphql-resolvers');
  * @returns {undefined|ForbiddenError} skip, go to executute next resolvers.
  * If not login, return ForbiddenError forbid not login users
  */
-module.exports.isAuthenticated = (_, __, { me }) =>
+export const isAuthenticated = (_, __, { me }) =>
   me ? skip : new ForbiddenError('User is not login');
 
 /**
@@ -25,7 +30,7 @@ module.exports.isAuthenticated = (_, __, { me }) =>
  * @returns {undefined} skip, go to executute next resolvers
  * @throws {ForbiddenError} forbid not authorize users
  */
-module.exports.isTagOwner = (_, { data }, { me, dataSources }) => {
+export const isTagOwner = (_, { data }, { me, dataSources }) => {
   if (data.modify) {
     const { createUser } = dataSources.firestoreAPI.getTagCreateUser({
       tagID: data.id,

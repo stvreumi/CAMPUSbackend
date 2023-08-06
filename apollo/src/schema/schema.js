@@ -1,9 +1,13 @@
-const { gql } = require('apollo-server');
-const { readFileSync } = require('fs');
-const path = require('path');
+import { gql } from 'apollo-server';
+import { readFileSync } from 'fs';
+import path from 'path';
+
+// can not use `__dirname` when we move from CommonJS to ES module
+// https://nodejs.org/api/esm.html#no-__filename-or-__dirname
+const dirname = path.dirname(import.meta.url).replace(/^file:/, '');
 
 const loadSchemaFromFile = schemaPath =>
-  readFileSync(path.join(__dirname, schemaPath)).toString('utf-8');
+  readFileSync(path.join(dirname, schemaPath)).toString('utf-8');
 
 const typeDefsOfCampus = loadSchemaFromFile('schemaOfCampus.graphql');
 
@@ -24,4 +28,4 @@ const typeDefs = gql`
   ${mergeSchema}
 `;
 
-module.exports = typeDefs;
+export default typeDefs;

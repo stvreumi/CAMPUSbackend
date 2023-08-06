@@ -1,7 +1,9 @@
 /** @module UserDataSource */
-const { DataSource } = require('apollo-datasource');
-const { FieldValue } = require('firebase-admin').firestore;
-const { checkUserLogIn } = require('./firebaseUtils');
+import { DataSource } from 'apollo-datasource';
+
+import { FieldValue } from 'firebase-admin/firestore';
+import { checkUserLogIn } from './firebaseUtils.js';
+
 
 // used for type annotation
 /**
@@ -114,4 +116,4 @@ class UserDataSource extends DataSource {
   }
 } // class UserDataSource
 
-module.exports = UserDataSource;
+export default UserDataSource;

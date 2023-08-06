@@ -5,7 +5,7 @@
     "jest": true
   },
   "extends": ["airbnb-base", "prettier"],
-  "plugins": ["prettier"],
+  "plugins": ["prettier", "import"],
   "parserOptions": {
     "ecmaVersion": 11
   },
@@ -28,6 +28,21 @@
       "error",
       { "devDependencies": ["**/__test__/*"] }
     ],
-    "spaced-comment": [2, "always", { "exceptions": ["@ts-check"] }]
+    "spaced-comment": [2, "always", { "exceptions": ["@ts-check"] }],
+    // for eslint-plugin-import
+    "import/no-unresolved": 2,
+    "import/no-commonjs": 2,
+    "import/extensions": [2, "ignorePackages"]
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    // https://github.com/import-js/eslint-import-resolver-typescript#configuration
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+      }
+    }
   }
 }

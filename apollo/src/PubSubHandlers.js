@@ -1,8 +1,8 @@
-const { PubSub } = require('@google-cloud/pubsub');
+import { PubSub } from '@google-cloud/pubsub';
 
 // Creates a client; cache this for further use
 const pubSubClient = new PubSub();
-const subscriptionName = process.env.CAMPUS_EVENT_SUPSCRIPTION_NAME;
+const subscriptionName = process.env.CAMPUS_EVENT_SUPSCRIPTION_NAME || 'test';
 
 const subscription = pubSubClient.subscription(subscriptionName);
 
@@ -81,4 +81,4 @@ const PubSubHandlers = (firestore, eventEmitter, algoliaIndexClient) => ({
   },
 });
 
-module.exports = PubSubHandlers;
+export default PubSubHandlers;

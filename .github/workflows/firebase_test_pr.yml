@@ -24,7 +24,7 @@ jobs:
     - name: Setup node environment
       uses: actions/setup-node@v1
       with:
-        node-version: '14'
+        node-version: '18'
     - name: Install necessary npm packages in the functions 
       run: npm ci
       working-directory: ./apollo
@@ -36,6 +36,13 @@ jobs:
       # workaround: `--forceExit`, https://github.com/facebook/jest/issues/7287#issuecomment-511217501
       # https://github.com/firebase/firebase-js-sdk/issues/4884
       # https://github.com/facebook/jest/issues/11464#issuecomment-850055381
-      run: firebase emulators:exec "npx jest --ci --forceExit"  --only firestore,auth 
+      run: npm test
       working-directory: ./apollo
+    # https://stackoverflow.com/a/69919724
+    - name: Archive npm failure logs
+      uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: npm-logs
+        path: ~/.npm/_logs
     

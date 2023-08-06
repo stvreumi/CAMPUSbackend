@@ -1,6 +1,6 @@
-const { DateTime } = require('luxon');
+import { DateTime } from 'luxon';
+import logger from '../../logger.js';
 
-const logger = require('pino-caller')(require('../../logger'));
 
 /**
  * @typedef {import('../types').ResolverArgsInfo} ResolverArgsInfo
@@ -255,7 +255,7 @@ const fixedTagSubLocationResolvers = {
   },
 };
 
-module.exports = {
+export {
   tagResolvers,
   statusResolvers,
   userResolvers,
