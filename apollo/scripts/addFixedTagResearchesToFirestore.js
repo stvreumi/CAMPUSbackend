@@ -11,7 +11,8 @@ const firestore = admin.firestore();
 
 // read json file
 const fixPoints = JSON.parse(
-  readFileSync('../fixedTagsData.json').toString('utf-8')
+  readFileSync('../fixedTagResearchesData.json').toString('utf-8')
+  //   readFileSync('../fixedTagsData.json').toString('utf-8')
 );
 
 // convert geo related data to geo type, also have geo hash function and field
@@ -30,23 +31,16 @@ const fixPointsWithGeoPointsAndId = fixPoints.map(point => {
 console.log('check data...');
 
 console.dir(fixPointsWithGeoPointsAndId);
-console.dir(fixPointsWithGeoPointsAndId.map(point => point.information));
+// console.dir(fixPointsWithGeoPointsAndId.map(point => point.information));
 
-// upload to collection `fixPoints`
+// upload to `fixedTagResearches` collection
 Promise.all(
   fixPointsWithGeoPointsAndId.map(async point => {
-    const { locationName, coordinates, viewCount, information } = point;
-    const tagData = { locationName, coordinates, viewCount };
-    const tagRef = await firestore.collection('fixedTag').add(tagData);
-    return Promise.all(
-      information.map(async info => {
-        const subLocationData = { ...info, fixedTagId: tagRef.id };
-        await firestore.collection('fixedTagSubLocation').add(subLocationData);
-      })
-    );
+    const { locationName, coordinates } = point;
+    const tagResearchData = { locationName, coordinates };
+    const tagRef = await firestore
+      .collection('fixedTag_research')
+      .add(tagResearchData);
+    console.log('uploading to...', tagRef.id);
   })
-).catch(e => console.error(e));
-
-console.log('finish upload!!');
-
-// status collection name: `status-{uid}`
+).catch(err => console.log(err.message));
