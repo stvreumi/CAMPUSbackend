@@ -114,6 +114,7 @@ type AddorUpdateTagResearchResponse {
 }
 
 input addTagResearchDataInput {
+  fixedTagId: ID!
   locationName: String!
   category: CategoryResearchInput!
   coordinates: CoordinateResearchInput!

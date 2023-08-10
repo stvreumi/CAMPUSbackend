@@ -587,7 +587,6 @@ describe('test graphql query', () => {
       querFixedTagList,
       'fixedTagResearchList'
     );
-
     expect(queryResult.fixedTags[0]).toHaveProperty('id', docRef.id);
     expect(queryResult.fixedTags[0]).toHaveProperty(
       'locationName',
@@ -680,6 +679,7 @@ describe('test graphql query', () => {
       query testQueryTag($id: ID!) {
         tagResearch(tagId: $id) {
           id
+          fixedTagId
           createTime
           lastUpdateTime
           createUser {
@@ -1037,6 +1037,7 @@ describe('test graphql mutate and paginate function', () => {
         addNewTagResearchData(data: $data) {
           tagResearch {
             id
+            fixedTagId
             locationName
             category {
               categoryType
@@ -1073,6 +1074,7 @@ describe('test graphql mutate and paginate function', () => {
     expect(mutationResult).toMatchObject({
       tagResearch: {
         id: expect.any(String),
+        fixedTagId: expect.any(String),
         locationName: data.locationName,
         floor: expect.any(String),
         status: {

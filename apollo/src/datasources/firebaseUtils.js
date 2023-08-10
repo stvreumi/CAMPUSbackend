@@ -118,8 +118,15 @@ function generateTagDataToStoreInFirestore(action, data, userInfo) {
 function generateTagResearchDataToStoreInFirestore(action, data, userInfo) {
   const { uid } = userInfo;
   // get data which would be non-null
-  const { locationName, coordinates, category, floor = null } = data;
+  const {
+    fixedTagId,
+    locationName,
+    coordinates,
+    category,
+    floor = null,
+  } = data;
   const tagData = {
+    fixedTagId,
     locationName,
     category,
     lastUpdateTime: FieldValue.serverTimestamp(),

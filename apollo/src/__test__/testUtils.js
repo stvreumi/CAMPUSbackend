@@ -59,6 +59,7 @@ const fakeCategoryResearch = {
 };
 
 const fakeTagDataResearch = {
+  fixedTagId: nanoid(20),
   locationName: 'testResearch',
   category: { ...fakeCategoryResearch },
   coordinates: {
