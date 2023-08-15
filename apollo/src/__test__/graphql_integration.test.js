@@ -280,6 +280,10 @@ describe('test graphql query', () => {
               latitude
               longitude
             }
+            createUser {
+              uid
+              displayName
+            }
             status {
               statusName
               statusDescName
@@ -306,6 +310,7 @@ describe('test graphql query', () => {
       'unarchivedTagListResearch'
     );
     // console.log(queryResult);
+    // console.log(queryResult.tags[0].createUser);
     expect(queryResult.tags).toEqual(expect.any(Array));
     expect(queryResult.tags[0]).toMatchObject({
       id: expect.any(String),
@@ -333,6 +338,65 @@ describe('test graphql query', () => {
       },
       floor: expect.any(String),
       archived: false,
+    });
+  });
+  test('test query TagList By UserId in research version', async () => {
+    const { uid } = userInfoAfterAccountCreated;
+    const queryTagListByUser = gql`
+      query testTagListByUser($uid: ID!) {
+        getTagResearchListByUser(uid: $uid) {
+          tags {
+            id
+            locationName
+            category {
+              categoryType
+              categoryName
+              categoryDescName
+              locationImgUrl
+            }
+            coordinates {
+              latitude
+              longitude
+            }
+            createUser {
+              uid
+              displayName
+            }
+            status {
+              statusName
+              statusDescName
+            }
+            statusHistory {
+              statusList {
+                statusName
+                statusDescName
+                createTime
+              }
+              cursor
+              empty
+            }
+            floor
+            archived
+          }
+          cursor
+          empty
+        }
+      }
+    `;
+    const { queryResult } = await graphQLQueryHelper(
+      queryTagListByUser,
+      'getTagResearchListByUser',
+      { uid }
+    );
+    const createUserId = uid;
+    // console.log(queryResult.tags[0]);
+    expect(queryResult.tags).toEqual(expect.any(Array));
+    expect(queryResult.tags[0]).toMatchObject({
+      id: expect.any(String),
+      createUser: {
+        uid: createUserId,
+        displayName: expect.any(String),
+      },
     });
   });
   test.skip('test query fix tag', async () => {

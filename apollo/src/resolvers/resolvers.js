@@ -130,6 +130,23 @@ const queryResolvers = {
       );
       return data;
     },
+    getTagResearchListByUser: async (
+      _,
+      { uid, pageParams },
+      { dataSources, userInfo }
+    ) => {
+      const data = await dataSources.tagResearchDataSource.getUserIdAllTags(
+        uid,
+        pageParams
+      );
+      // Record user activity after the above function successfully return with
+      // no errors.
+      await dataSources.tagResearchDataSource.recordUserActivity(
+        'getTags',
+        userInfo
+      );
+      return data;
+    },
     fixedTagResearchList: async (
       _,
       { pageParams },

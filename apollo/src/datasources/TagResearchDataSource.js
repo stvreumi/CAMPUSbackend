@@ -84,6 +84,18 @@ class TagResearchDataSource extends DataSource {
     return { tags, ...pageInfo };
   }
 
+  async getUserIdAllTags(uid, pageParams) {
+    const query = this.tagResearchDataCollectionRef
+      .where('createUserId', '==', uid)
+      .orderBy('lastUpdateTime', 'desc');
+    const { data: tags, pageInfo } = await getPage(
+      query,
+      pageParams,
+      this.tagResearchDataCollectionRef
+    );
+    return { tags, ...pageInfo };
+  }
+
   async getAllFixedTags(pageParams) {
     // explicitly ask query ordery by the doc id
     // the orderby usage comes from here
