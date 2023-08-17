@@ -4,105 +4,29 @@
       "coordinates": {
         "latitude": "24.786606833598242",
         "longitude": "120.99820507103847"
-      }
-    },
-    {
-      "locationName": "第二餐廳",
-      "coordinates": {
-        "latitude": "24.789345225611136",
-        "longitude": "120.99719144686011"
-      }
-    },
-    {
-      "locationName": "小木屋鬆餅",
-      "coordinates": {
-          "latitude": "24.787687190478",
-          "longitude": "120.99764017172566"
-      }
-    },
-    {
-      "locationName": "第一餐廳",
-      "coordinates": {
-          "latitude": "24.786538076257727",
-          "longitude": "120.99939833724402"
-      }
-    }, 
-    {
-      "locationName": "女二餐廳 - B棟",
-      "coordinates": {
-          "latitude": "24.784575202593278",
-          "longitude": "120.99950190913825"
-      }
-    },
-    {
-      "locationName": "女二餐廳 - A棟",
-      "coordinates": {
-          "latitude": "24.78460447175565",
-          "longitude": "120.99913188952512"
-      }
-    },
-    {
-      "locationName": "研三餐廳",
-      "coordinates": {
-          "latitude": "24.783807451368112",
-          "longitude": "120.9970736962237"
-      }
-    },
-    {
-      "locationName": "綜合球館",
-      "coordinates": {
-          "latitude": "24.78989676741009",
-          "longitude": "120.99505052315682"
-      }
-    },
-    {
-      "locationName": "游泳館",
-      "coordinates": {
-          "latitude": "24.78994836636744",
-          "longitude": "120.99588582600177"
-      }
-    },
-    {
-      "locationName": "西區球場（籃球場）",
-      "coordinates": {
-          "latitude": "24.787529799424163",
-          "longitude": "120.99493029548856"
-      }
-    },
-    {
-      "locationName": "西區球場（排球場）",
-      "coordinates": {
-          "latitude": "24.78795350500375",
-          "longitude": "120.9949437065332"
-      }
-    },
-    {
-      "locationName": "西區球場（網球場）",
-      "coordinates": {
-          "latitude": "24.787286289815594",
-          "longitude": "120.99471840098307"
-      }
-    },
-    {
-      "locationName": "東區球場（羽球舊館）",
-      "coordinates": {
-          "latitude": "24.78712029314653",
-          "longitude": "121.00140408586178"
-      }
-    },
-    {
-      "locationName": "東區球場（戶外網球場）",
-      "coordinates": {
-          "latitude": "24.78754101633732",
-          "longitude": "121.0014888461622"
-      }
-    },
-    {
-      "locationName": "體育館",
-      "coordinates": {
-          "latitude": "24.788936658471613",
-          "longitude": "120.99577723048645"
-      }
+      },
+      "information": [
+        {
+          "tagLocationName": "testResearch",
+          "tagCoordinates": {
+            "latitude": "24.786606833598242",
+            "longitude": "120.99820507103847"
+          },
+          "floor": "2F",
+          "category": {
+            "categoryType": "物體",
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1",
+            "locationImgUrl":["http://photo.url"]
+          },
+          "createUserId": "5k3owowCAGUXL6D2dW5faP0r4sCq",
+          "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "乾淨",
+            "createUserId": "5k3owowCAGUXL6D2dW5faP0r4sCq"
+          }
+        }
+      ]
     }
   ]
   

@@ -1,6 +1,8 @@
 const { readFileSync } = require('fs');
 
 const admin = require('firebase-admin');
+const { FieldValue, GeoPoint } = require('firebase-admin').firestore;
+const { geohashForLocation } = require('geofire-common');
 
 // Please set google credential in the env when running
 admin.initializeApp({
@@ -36,11 +38,47 @@ console.dir(fixPointsWithGeoPointsAndId);
 // upload to `fixedTagResearches` collection
 Promise.all(
   fixPointsWithGeoPointsAndId.map(async point => {
-    const { locationName, coordinates } = point;
+    const { locationName, coordinates, information } = point;
     const tagResearchData = { locationName, coordinates };
     const tagRef = await firestore
       .collection('fixedTag_research')
       .add(tagResearchData);
     console.log('uploading to...', tagRef.id);
+    Promise.all(
+      information.map(async info => {
+        const geohashTmp = geohashForLocation([
+          parseFloat(info.tagCoordinates.latitude),
+          parseFloat(info.tagCoordinates.longitude),
+        ]);
+        const coordinatesTmp = new GeoPoint(
+          parseFloat(info.tagCoordinates.latitude),
+          parseFloat(info.tagCoordinates.longitude)
+        );
+        const { tagLocationName, floor, status, category, createUserId } = info;
+        const tagsData = {
+          locationName: tagLocationName,
+          coordinates: coordinatesTmp,
+          floor,
+          category,
+          createUserId,
+          fixedTagId: tagRef.id,
+          createTime: FieldValue.serverTimestamp(),
+          lastUpdateTime: FieldValue.serverTimestamp(),
+          geohash: geohashTmp,
+          archived: false,
+        };
+        const promises = [];
+        const fixedTagsSnapshot = await firestore
+          .collection('tagData_research')
+          .add(tagsData);
+        console.log(fixedTagsSnapshot.id);
+        const statusData = {
+          ...status,
+          createTime: FieldValue.serverTimestamp(),
+        };
+        promises.push(fixedTagsSnapshot.collection('status').add(statusData));
+        await Promise.all(promises);
+      })
+    ).catch(err => console.log('Information Upload', err.message));
   })
 ).catch(err => console.log(err.message));
