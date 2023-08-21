@@ -1,0 +1,6338 @@
+[
+    {
+        "pid": "m1_rp1",
+        "fixedTagId": "m1",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.78981922441728,
+            "longitude": 120.99619550920663
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "功能正常"
+        }
+    },
+    {
+        "pid": "m1_rp2",
+        "fixedTagId": "m1",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.78981259438034,
+            "longitude": 120.99608694266489
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-9",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m1_rp3",
+        "fixedTagId": "m1",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.78978083722474,
+            "longitude": 120.99512526408553
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區2-4",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m1_rp4",
+        "fixedTagId": "m1",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.78986682737204,
+            "longitude": 120.99532983032279
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區2-2",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m1_rp5",
+        "fixedTagId": "m1",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789725166539963,
+            "longitude": 120.99574701004883
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "置物櫃",
+            "categoryDescName": "置物櫃2-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "吵雜"
+        }
+    },
+    {
+        "pid": "m1_rp6",
+        "fixedTagId": "m1",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789792833951573,
+            "longitude": 120.99525453342639
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區2-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m1_rp7",
+        "fixedTagId": "m1",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.78980078101307,
+            "longitude": 120.99551228861851
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "空位有限"
+        }
+    },
+    {
+        "pid": "m1_rp8",
+        "fixedTagId": "m1",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789806558562724,
+            "longitude": 120.99593693375398
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "櫃台",
+            "categoryDescName": "櫃台2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "體感狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m2_rp1",
+        "fixedTagId": "m2",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789821167855727,
+            "longitude": 120.99620936939515
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "功能正常"
+        }
+    },
+    {
+        "pid": "m2_rp2",
+        "fixedTagId": "m2",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789794295771763,
+            "longitude": 120.99525950523942
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區2-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "沒人"
+        }
+    },
+    {
+        "pid": "m2_rp3",
+        "fixedTagId": "m2",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789925741794182,
+            "longitude": 120.99532656860512
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區2-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "髒亂"
+        }
+    },
+    {
+        "pid": "m2_rp4",
+        "fixedTagId": "m2",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.78981085316672,
+            "longitude": 120.99610233184518
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-8",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "尚可使用"
+        }
+    },
+    {
+        "pid": "m2_rp5",
+        "fixedTagId": "m2",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789825466219384,
+            "longitude": 120.9960954526664
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-4",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "無人使用"
+        }
+    },
+    {
+        "pid": "m2_rp6",
+        "fixedTagId": "m2",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789804810961638,
+            "longitude": 120.99614864050012
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-7",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "尚可使用"
+        }
+    },
+    {
+        "pid": "m2_rp7",
+        "fixedTagId": "m2",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.78979737711568,
+            "longitude": 120.99619592950897
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-6",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "無法使用"
+        }
+    },
+    {
+        "pid": "m2_rp8",
+        "fixedTagId": "m2",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789810943605303,
+            "longitude": 120.99623800234576
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-5",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "外觀破損"
+        }
+    },
+    {
+        "pid": "m3_rp1",
+        "fixedTagId": "m3",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789815404453712,
+            "longitude": 120.99619464288003
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "功能正常"
+        }
+    },
+    {
+        "pid": "m3_rp2",
+        "fixedTagId": "m3",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789806237861434,
+            "longitude": 120.99593910602032
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "櫃台",
+            "categoryDescName": "櫃台2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "外觀破損"
+        }
+    },
+    {
+        "pid": "m3_rp3",
+        "fixedTagId": "m3",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.78979751317349,
+            "longitude": 120.99613345475112
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-7",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "無人使用"
+        }
+    },
+    {
+        "pid": "m3_rp4",
+        "fixedTagId": "m3",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789735512148635,
+            "longitude": 120.99624893826598
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "轉體機",
+            "categoryDescName": "轉體機2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "維護完成"
+        }
+    },
+    {
+        "pid": "m3_rp5",
+        "fixedTagId": "m3",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.78981756353741,
+            "longitude": 120.9962127597278
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "維修中"
+        }
+    },
+    {
+        "pid": "m3_rp6",
+        "fixedTagId": "m3",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789817214554304,
+            "longitude": 120.99620645769996
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "有人佔用"
+        }
+    },
+    {
+        "pid": "m3_rp7",
+        "fixedTagId": "m3",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789815871781737,
+            "longitude": 120.99620306396652
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "髒亂"
+        }
+    },
+    {
+        "pid": "m3_rp8",
+        "fixedTagId": "m3",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789812880823085,
+            "longitude": 120.9962041828195
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "外觀破損"
+        }
+    },
+    {
+        "pid": "m4_rp1",
+        "fixedTagId": "m4",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789825676106897,
+            "longitude": 120.9961934698085
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "功能正常"
+        }
+    },
+    {
+        "pid": "m4_rp2",
+        "fixedTagId": "m4",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789816831072308,
+            "longitude": 120.9961230653113
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-3",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "髒亂"
+        }
+    },
+    {
+        "pid": "m4_rp3",
+        "fixedTagId": "m4",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789798744916517,
+            "longitude": 120.99604694819637
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-10",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "功能正常"
+        }
+    },
+    {
+        "pid": "m4_rp4",
+        "fixedTagId": "m4",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.78979845462719,
+            "longitude": 120.99553057329817
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "有人佔用"
+        }
+    },
+    {
+        "pid": "m4_rp5",
+        "fixedTagId": "m4",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789827703270113,
+            "longitude": 120.99620405934797
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "功能正常"
+        }
+    },
+    {
+        "pid": "m4_rp6",
+        "fixedTagId": "m4",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.78981614698289,
+            "longitude": 120.99620595576987
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "功能正常"
+        }
+    },
+    {
+        "pid": "m4_rp7",
+        "fixedTagId": "m4",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789820181869832,
+            "longitude": 120.99620357573609
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "功能正常"
+        }
+    },
+    {
+        "pid": "m4_rp8",
+        "fixedTagId": "m4",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789827381593973,
+            "longitude": 120.99619305227044
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "跑步機",
+            "categoryDescName": "跑步機2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "功能正常"
+        }
+    },
+    {
+        "pid": "m5_rp1",
+        "fixedTagId": "m5",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78642047263449,
+            "longitude": 120.99828739711184
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "功能正常"
+        }
+    },
+    {
+        "pid": "m5_rp2",
+        "fixedTagId": "m5",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78640230211682,
+            "longitude": 120.9982557729589
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-3",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "維護完成"
+        }
+    },
+    {
+        "pid": "m5_rp3",
+        "fixedTagId": "m5",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78632926447549,
+            "longitude": 120.99846580351496
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "櫃台",
+            "categoryDescName": "櫃台2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "無法使用"
+        }
+    },
+    {
+        "pid": "m5_rp4",
+        "fixedTagId": "m5",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78633152759872,
+            "longitude": 120.9984648883794
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "櫃台",
+            "categoryDescName": "櫃台2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "維護完成"
+        }
+    },
+    {
+        "pid": "m5_rp5",
+        "fixedTagId": "m5",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.7860733594807,
+            "longitude": 120.99838255678662
+        },
+        "floor": "3F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區3-8",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "無人使用"
+        }
+    },
+    {
+        "pid": "m5_rp6",
+        "fixedTagId": "m5",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78638032796311,
+            "longitude": 120.99860376543927
+        },
+        "floor": "3F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機3-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "保養中"
+        }
+    },
+    {
+        "pid": "m5_rp7",
+        "fixedTagId": "m5",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78646386590639,
+            "longitude": 120.99838303474372
+        },
+        "floor": "3F",
+        "category": {
+            "categoryName": "高腳椅區",
+            "categoryDescName": "高腳椅區3-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "完好無損"
+        }
+    },
+    {
+        "pid": "m5_rp8",
+        "fixedTagId": "m5",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78648740278083,
+            "longitude": 120.99852271795099
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "沙發區",
+            "categoryDescName": "沙發區2-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m6_rp1",
+        "fixedTagId": "m6",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786418793984847,
+            "longitude": 120.998293125838
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "功能正常"
+        }
+    },
+    {
+        "pid": "m6_rp2",
+        "fixedTagId": "m6",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78642695431404,
+            "longitude": 120.99829581599862
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "外觀破損"
+        }
+    },
+    {
+        "pid": "m6_rp3",
+        "fixedTagId": "m6",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78624982118112,
+            "longitude": 120.9981970062609
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-18",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "無人使用"
+        }
+    },
+    {
+        "pid": "m6_rp4",
+        "fixedTagId": "m6",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786250062507857,
+            "longitude": 120.99821300002665
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-16",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "有人佔用"
+        }
+    },
+    {
+        "pid": "m6_rp5",
+        "fixedTagId": "m6",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78633334477295,
+            "longitude": 120.99820820304076
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-10",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "髒亂"
+        }
+    },
+    {
+        "pid": "m6_rp6",
+        "fixedTagId": "m6",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786264764717284,
+            "longitude": 120.99829305418076
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-13",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "無法使用"
+        }
+    },
+    {
+        "pid": "m6_rp7",
+        "fixedTagId": "m6",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78631509234947,
+            "longitude": 120.99820687036103
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-11",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "尚可使用"
+        }
+    },
+    {
+        "pid": "m6_rp8",
+        "fixedTagId": "m6",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786385189048456,
+            "longitude": 120.99820729886866
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-5",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "有人佔用"
+        }
+    },
+    {
+        "pid": "m7_rp1",
+        "fixedTagId": "m7",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786412723884883,
+            "longitude": 120.99829265755854
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "功能正常"
+        }
+    },
+    {
+        "pid": "m7_rp2",
+        "fixedTagId": "m7",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78639454325298,
+            "longitude": 120.99821002549783
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-5",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "無人使用"
+        }
+    },
+    {
+        "pid": "m7_rp3",
+        "fixedTagId": "m7",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786256625676874,
+            "longitude": 120.99826653505477
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-15",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "外觀破損"
+        }
+    },
+    {
+        "pid": "m7_rp4",
+        "fixedTagId": "m7",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786329563868044,
+            "longitude": 120.9982235101993
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-10",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "外觀破損"
+        }
+    },
+    {
+        "pid": "m7_rp5",
+        "fixedTagId": "m7",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78641862908341,
+            "longitude": 120.99828420369657
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "保養中"
+        }
+    },
+    {
+        "pid": "m7_rp6",
+        "fixedTagId": "m7",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786414764088992,
+            "longitude": 120.99828562246643
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "無人使用"
+        }
+    },
+    {
+        "pid": "m7_rp7",
+        "fixedTagId": "m7",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78641875277023,
+            "longitude": 120.99829134525365
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "外觀破損"
+        }
+    },
+    {
+        "pid": "m7_rp8",
+        "fixedTagId": "m7",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786421653370045,
+            "longitude": 120.99828213876616
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m8_rp1",
+        "fixedTagId": "m8",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786414193172913,
+            "longitude": 120.99828193844354
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "功能正常"
+        }
+    },
+    {
+        "pid": "m8_rp2",
+        "fixedTagId": "m8",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78652627613731,
+            "longitude": 120.99827784283532
+        },
+        "floor": "B1",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機B1-2",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "無人使用"
+        }
+    },
+    {
+        "pid": "m8_rp3",
+        "fixedTagId": "m8",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78625660533111,
+            "longitude": 120.99818280663577
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-18",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "髒亂"
+        }
+    },
+    {
+        "pid": "m8_rp4",
+        "fixedTagId": "m8",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786253661206292,
+            "longitude": 120.99818792136604
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-18",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "完好無損"
+        }
+    },
+    {
+        "pid": "m8_rp5",
+        "fixedTagId": "m8",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786410018092518,
+            "longitude": 120.99828319051565
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "功能正常"
+        }
+    },
+    {
+        "pid": "m8_rp6",
+        "fixedTagId": "m8",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786416187526232,
+            "longitude": 120.99828749129618
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "功能正常"
+        }
+    },
+    {
+        "pid": "m8_rp7",
+        "fixedTagId": "m8",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786409562880447,
+            "longitude": 120.99829221952623
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "功能正常"
+        }
+    },
+    {
+        "pid": "m8_rp8",
+        "fixedTagId": "m8",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786411506954998,
+            "longitude": 120.99828673166796
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "功能正常"
+        }
+    },
+    {
+        "pid": "m9_rp1",
+        "fixedTagId": "m9",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786445960157497,
+            "longitude": 121.00037918076154
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊無障礙停車位",
+            "categoryDescName": "路邊無障礙停車位1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    },
+    {
+        "pid": "m9_rp2",
+        "fixedTagId": "m9",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786508272824538,
+            "longitude": 121.00045261383778
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊一般停車位",
+            "categoryDescName": "路邊一般停車位1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "空位有限"
+        }
+    },
+    {
+        "pid": "m9_rp3",
+        "fixedTagId": "m9",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786507623299244,
+            "longitude": 121.0004568535781
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊一般停車位",
+            "categoryDescName": "路邊一般停車位1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m9_rp4",
+        "fixedTagId": "m9",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786473848412392,
+            "longitude": 120.99962820563562
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "櫃台",
+            "categoryDescName": "櫃台1-5",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m9_rp5",
+        "fixedTagId": "m9",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786563690579108,
+            "longitude": 120.99940444308821
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-2",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "功能正常"
+        }
+    },
+    {
+        "pid": "m9_rp6",
+        "fixedTagId": "m9",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786275610824486,
+            "longitude": 121.00032833590362
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊一般停車位",
+            "categoryDescName": "路邊一般停車位1-7",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "保養中"
+        }
+    },
+    {
+        "pid": "m9_rp7",
+        "fixedTagId": "m9",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786627600587778,
+            "longitude": 120.99968285695633
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "櫃台",
+            "categoryDescName": "櫃台1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "保養中"
+        }
+    },
+    {
+        "pid": "m9_rp8",
+        "fixedTagId": "m9",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786492513280045,
+            "longitude": 120.99990425925347
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "ATM",
+            "categoryDescName": "ATM1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "保養中"
+        }
+    },
+    {
+        "pid": "m10_rp1",
+        "fixedTagId": "m10",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786453829655084,
+            "longitude": 121.00039141590983
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊無障礙停車位",
+            "categoryDescName": "路邊無障礙停車位1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    },
+    {
+        "pid": "m10_rp2",
+        "fixedTagId": "m10",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786445113415088,
+            "longitude": 121.00041421282843
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊一般停車位",
+            "categoryDescName": "路邊一般停車位1-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m10_rp3",
+        "fixedTagId": "m10",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.78655856078428,
+            "longitude": 120.99961172381967
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m10_rp4",
+        "fixedTagId": "m10",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786268345334765,
+            "longitude": 121.00032892091687
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊一般停車位",
+            "categoryDescName": "路邊一般停車位1-7",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "沒人"
+        }
+    },
+    {
+        "pid": "m10_rp5",
+        "fixedTagId": "m10",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786410317436207,
+            "longitude": 121.00035554437439
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊無障礙停車位",
+            "categoryDescName": "路邊無障礙停車位1-2",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "體感狀態",
+            "statusDescName": "舒適"
+        }
+    },
+    {
+        "pid": "m10_rp6",
+        "fixedTagId": "m10",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.7862817073097,
+            "longitude": 121.00031031221792
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊無障礙停車位",
+            "categoryDescName": "路邊無障礙停車位1-5",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m10_rp7",
+        "fixedTagId": "m10",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.78634470583549,
+            "longitude": 121.00032183472838
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊無障礙停車位",
+            "categoryDescName": "路邊無障礙停車位1-4",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "沒人"
+        }
+    },
+    {
+        "pid": "m10_rp8",
+        "fixedTagId": "m10",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.78637920370594,
+            "longitude": 121.00034847873671
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊無障礙停車位",
+            "categoryDescName": "路邊無障礙停車位1-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m11_rp1",
+        "fixedTagId": "m11",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786458007194835,
+            "longitude": 121.00038345947664
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊無障礙停車位",
+            "categoryDescName": "路邊無障礙停車位1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    },
+    {
+        "pid": "m11_rp2",
+        "fixedTagId": "m11",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786460734610706,
+            "longitude": 120.9997319751597
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "櫃台",
+            "categoryDescName": "櫃台1-4",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "完好無損"
+        }
+    },
+    {
+        "pid": "m11_rp3",
+        "fixedTagId": "m11",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786317158202124,
+            "longitude": 121.00036399671146
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊一般停車位",
+            "categoryDescName": "路邊一般停車位1-6",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "吵雜"
+        }
+    },
+    {
+        "pid": "m11_rp4",
+        "fixedTagId": "m11",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786579813625394,
+            "longitude": 120.99967665283329
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "櫃台",
+            "categoryDescName": "櫃台1-2",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m11_rp5",
+        "fixedTagId": "m11",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786443202989226,
+            "longitude": 121.00038266918601
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊無障礙停車位",
+            "categoryDescName": "路邊無障礙停車位1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "吵雜"
+        }
+    },
+    {
+        "pid": "m11_rp6",
+        "fixedTagId": "m11",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.78646176504852,
+            "longitude": 121.00038239348821
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊無障礙停車位",
+            "categoryDescName": "路邊無障礙停車位1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "擁擠"
+        }
+    },
+    {
+        "pid": "m11_rp7",
+        "fixedTagId": "m11",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786446455917012,
+            "longitude": 121.00037788169985
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊無障礙停車位",
+            "categoryDescName": "路邊無障礙停車位1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "體感狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m11_rp8",
+        "fixedTagId": "m11",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.78644215012664,
+            "longitude": 121.00037760043428
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊無障礙停車位",
+            "categoryDescName": "路邊無障礙停車位1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m12_rp1",
+        "fixedTagId": "m12",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786456574530863,
+            "longitude": 121.00038250389366
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊無障礙停車位",
+            "categoryDescName": "路邊無障礙停車位1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    },
+    {
+        "pid": "m12_rp2",
+        "fixedTagId": "m12",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786474300944725,
+            "longitude": 120.99953201891586
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "櫃台",
+            "categoryDescName": "櫃台1-6",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "維護完成"
+        }
+    },
+    {
+        "pid": "m12_rp3",
+        "fixedTagId": "m12",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.786297635719414,
+            "longitude": 121.00030876880308
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊無障礙停車位",
+            "categoryDescName": "路邊無障礙停車位1-5",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m12_rp4",
+        "fixedTagId": "m12",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.78658610315513,
+            "longitude": 120.99967258089782
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "櫃台",
+            "categoryDescName": "櫃台1-2",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "完好無損"
+        }
+    },
+    {
+        "pid": "m12_rp5",
+        "fixedTagId": "m12",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.78644418655529,
+            "longitude": 121.00039453793502
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊無障礙停車位",
+            "categoryDescName": "路邊無障礙停車位1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    },
+    {
+        "pid": "m12_rp6",
+        "fixedTagId": "m12",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.78645229193149,
+            "longitude": 121.00038663219645
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊無障礙停車位",
+            "categoryDescName": "路邊無障礙停車位1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    },
+    {
+        "pid": "m12_rp7",
+        "fixedTagId": "m12",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.78644909551113,
+            "longitude": 121.00039341853525
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊無障礙停車位",
+            "categoryDescName": "路邊無障礙停車位1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    },
+    {
+        "pid": "m12_rp8",
+        "fixedTagId": "m12",
+        "locationName": "活動中心&一餐",
+        "coordinates": {
+            "latitude": 24.78646136711196,
+            "longitude": 121.00037642938618
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊無障礙停車位",
+            "categoryDescName": "路邊無障礙停車位1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    },
+    {
+        "pid": "m13_rp1",
+        "fixedTagId": "m13",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.78722091583736,
+            "longitude": 120.9975680632736
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "完好無損"
+        }
+    },
+    {
+        "pid": "m13_rp2",
+        "fixedTagId": "m13",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.787068098439903,
+            "longitude": 120.99660447674506
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "沙發區",
+            "categoryDescName": "沙發區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m13_rp3",
+        "fixedTagId": "m13",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.78706438716467,
+            "longitude": 120.99660520562882
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "沙發區",
+            "categoryDescName": "沙發區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "擁擠"
+        }
+    },
+    {
+        "pid": "m13_rp4",
+        "fixedTagId": "m13",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.787411620932065,
+            "longitude": 120.99668608663839
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "無障礙停車區",
+            "categoryDescName": "無障礙停車區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "吵雜"
+        }
+    },
+    {
+        "pid": "m13_rp5",
+        "fixedTagId": "m13",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.78741931138795,
+            "longitude": 120.9966830687327
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "無障礙停車區",
+            "categoryDescName": "無障礙停車區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "已無空位"
+        }
+    },
+    {
+        "pid": "m13_rp6",
+        "fixedTagId": "m13",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.787045966435137,
+            "longitude": 120.99741481804345
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "已無空位"
+        }
+    },
+    {
+        "pid": "m13_rp7",
+        "fixedTagId": "m13",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.786736618854533,
+            "longitude": 120.99741940302339
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-2",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "吵雜"
+        }
+    },
+    {
+        "pid": "m13_rp8",
+        "fixedTagId": "m13",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.786737433462623,
+            "longitude": 120.99657353245878
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "腳踏車停車區",
+            "categoryDescName": "腳踏車停車區1-2",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "髒亂"
+        }
+    },
+    {
+        "pid": "m14_rp1",
+        "fixedTagId": "m14",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.787237219374394,
+            "longitude": 120.99758414921858
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "完好無損"
+        }
+    },
+    {
+        "pid": "m14_rp2",
+        "fixedTagId": "m14",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.787221057988823,
+            "longitude": 120.99696239220411
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-3",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "完好無損"
+        }
+    },
+    {
+        "pid": "m14_rp3",
+        "fixedTagId": "m14",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.787036984692122,
+            "longitude": 120.99741603844672
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "沒人"
+        }
+    },
+    {
+        "pid": "m14_rp4",
+        "fixedTagId": "m14",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.786745481157833,
+            "longitude": 120.99657165751884
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "腳踏車停車區",
+            "categoryDescName": "腳踏車停車區1-2",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "體感狀態",
+            "statusDescName": "舒適"
+        }
+    },
+    {
+        "pid": "m14_rp5",
+        "fixedTagId": "m14",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.787293083018813,
+            "longitude": 120.99695848653218
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-4",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "維護完成"
+        }
+    },
+    {
+        "pid": "m14_rp6",
+        "fixedTagId": "m14",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.786715422252268,
+            "longitude": 120.9971323962251
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-3",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "無人使用"
+        }
+    },
+    {
+        "pid": "m14_rp7",
+        "fixedTagId": "m14",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.787306880791377,
+            "longitude": 120.99713974251019
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-2",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m14_rp8",
+        "fixedTagId": "m14",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.786821074088234,
+            "longitude": 120.9969558630572
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-5",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "維護完成"
+        }
+    },
+    {
+        "pid": "m15_rp1",
+        "fixedTagId": "m15",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.787237653232843,
+            "longitude": 120.99758303185881
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "完好無損"
+        }
+    },
+    {
+        "pid": "m15_rp2",
+        "fixedTagId": "m15",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.78681466043705,
+            "longitude": 120.99695072716676
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-5",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "外觀破損"
+        }
+    },
+    {
+        "pid": "m15_rp3",
+        "fixedTagId": "m15",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.786876495460326,
+            "longitude": 120.99753590767605
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "腳踏車停車區",
+            "categoryDescName": "腳踏車停車區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m15_rp4",
+        "fixedTagId": "m15",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.787295909931625,
+            "longitude": 120.99714230458905
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-2",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "尚可使用"
+        }
+    },
+    {
+        "pid": "m15_rp5",
+        "fixedTagId": "m15",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.787228229336623,
+            "longitude": 120.9975686163232
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "維修中"
+        }
+    },
+    {
+        "pid": "m15_rp6",
+        "fixedTagId": "m15",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.78723554356815,
+            "longitude": 120.9975743254701
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "功能正常"
+        }
+    },
+    {
+        "pid": "m15_rp7",
+        "fixedTagId": "m15",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.78723127143364,
+            "longitude": 120.9975710988881
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "有人佔用"
+        }
+    },
+    {
+        "pid": "m15_rp8",
+        "fixedTagId": "m15",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.787223722019444,
+            "longitude": 120.9975740953879
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m16_rp1",
+        "fixedTagId": "m16",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.78722925580565,
+            "longitude": 120.99757564269912
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "完好無損"
+        }
+    },
+    {
+        "pid": "m16_rp2",
+        "fixedTagId": "m16",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.786713005057614,
+            "longitude": 120.9971272953458
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-3",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m16_rp3",
+        "fixedTagId": "m16",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.78681433499502,
+            "longitude": 120.99694798734203
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-5",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "無人使用"
+        }
+    },
+    {
+        "pid": "m16_rp4",
+        "fixedTagId": "m16",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.78727946244385,
+            "longitude": 120.99697427289678
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-4",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "維護完成"
+        }
+    },
+    {
+        "pid": "m16_rp5",
+        "fixedTagId": "m16",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.787231471615186,
+            "longitude": 120.99757350601034
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "完好無損"
+        }
+    },
+    {
+        "pid": "m16_rp6",
+        "fixedTagId": "m16",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.787234604476,
+            "longitude": 120.99757974042886
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "完好無損"
+        }
+    },
+    {
+        "pid": "m16_rp7",
+        "fixedTagId": "m16",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.787231509087324,
+            "longitude": 120.99758579700662
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "完好無損"
+        }
+    },
+    {
+        "pid": "m16_rp8",
+        "fixedTagId": "m16",
+        "locationName": "工三&工四",
+        "coordinates": {
+            "latitude": 24.787228250383734,
+            "longitude": 120.99756786243779
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "販賣機",
+            "categoryDescName": "販賣機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "完好無損"
+        }
+    },
+    {
+        "pid": "m17_rp1",
+        "fixedTagId": "m17",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786629288393573,
+            "longitude": 120.99857848734403
+        },
+        "floor": "B1",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機B1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m17_rp2",
+        "fixedTagId": "m17",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78633690626804,
+            "longitude": 120.99815486417702
+        },
+        "floor": "3F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區3-5",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "沒人"
+        }
+    },
+    {
+        "pid": "m17_rp3",
+        "fixedTagId": "m17",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.785992904518576,
+            "longitude": 120.99823652663414
+        },
+        "floor": "3F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機3-2",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "無人使用"
+        }
+    },
+    {
+        "pid": "m17_rp4",
+        "fixedTagId": "m17",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786259417026795,
+            "longitude": 120.99821777901855
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-16",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "完好無損"
+        }
+    },
+    {
+        "pid": "m17_rp5",
+        "fixedTagId": "m17",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786484915070286,
+            "longitude": 120.99851294452833
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "沙發區",
+            "categoryDescName": "沙發區2-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "保養中"
+        }
+    },
+    {
+        "pid": "m17_rp6",
+        "fixedTagId": "m17",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.7862577296841,
+            "longitude": 120.99827448691688
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-15",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "無人使用"
+        }
+    },
+    {
+        "pid": "m17_rp7",
+        "fixedTagId": "m17",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78651878046142,
+            "longitude": 120.99837679803217
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "櫃台",
+            "categoryDescName": "櫃台2-2",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "有人佔用"
+        }
+    },
+    {
+        "pid": "m17_rp8",
+        "fixedTagId": "m17",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786435849951868,
+            "longitude": 120.99839326348611
+        },
+        "floor": "3F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區3-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "尚可使用"
+        }
+    },
+    {
+        "pid": "m18_rp1",
+        "fixedTagId": "m18",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78663832946775,
+            "longitude": 120.99858091162417
+        },
+        "floor": "B1",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機B1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m18_rp2",
+        "fixedTagId": "m18",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786414644956917,
+            "longitude": 120.99844403702905
+        },
+        "floor": "3F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦3-3",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "尚可使用"
+        }
+    },
+    {
+        "pid": "m18_rp3",
+        "fixedTagId": "m18",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78631736150081,
+            "longitude": 120.9982222480435
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-11",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "維護完成"
+        }
+    },
+    {
+        "pid": "m18_rp4",
+        "fixedTagId": "m18",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786440667989854,
+            "longitude": 120.99817351438183
+        },
+        "floor": "3F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區3-4",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    },
+    {
+        "pid": "m18_rp5",
+        "fixedTagId": "m18",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786533254967434,
+            "longitude": 120.99827827379778
+        },
+        "floor": "B1",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機B1-2",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "有人佔用"
+        }
+    },
+    {
+        "pid": "m18_rp6",
+        "fixedTagId": "m18",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78599258304676,
+            "longitude": 120.9982432297516
+        },
+        "floor": "3F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機3-2",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "外觀破損"
+        }
+    },
+    {
+        "pid": "m18_rp7",
+        "fixedTagId": "m18",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.7861055867989,
+            "longitude": 120.99816743438475
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "外觀破損"
+        }
+    },
+    {
+        "pid": "m18_rp8",
+        "fixedTagId": "m18",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78637357548121,
+            "longitude": 120.9986175855816
+        },
+        "floor": "3F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機3-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "有人佔用"
+        }
+    },
+    {
+        "pid": "m19_rp1",
+        "fixedTagId": "m19",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786639285212843,
+            "longitude": 120.99858385543297
+        },
+        "floor": "B1",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機B1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m19_rp2",
+        "fixedTagId": "m19",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786409147298468,
+            "longitude": 120.99826213614648
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-3",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "完好無損"
+        }
+    },
+    {
+        "pid": "m19_rp3",
+        "fixedTagId": "m19",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78633091412254,
+            "longitude": 120.99847009328325
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "櫃台",
+            "categoryDescName": "櫃台2-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "無法使用"
+        }
+    },
+    {
+        "pid": "m19_rp4",
+        "fixedTagId": "m19",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78623068329156,
+            "longitude": 120.99829454856346
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-14",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m19_rp5",
+        "fixedTagId": "m19",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786628452089374,
+            "longitude": 120.99857061687857
+        },
+        "floor": "B1",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機B1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "有人佔用"
+        }
+    },
+    {
+        "pid": "m19_rp6",
+        "fixedTagId": "m19",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786623261805687,
+            "longitude": 120.99857630771629
+        },
+        "floor": "B1",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機B1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "保養中"
+        }
+    },
+    {
+        "pid": "m19_rp7",
+        "fixedTagId": "m19",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786632122197155,
+            "longitude": 120.99857214466964
+        },
+        "floor": "B1",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機B1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "外觀破損"
+        }
+    },
+    {
+        "pid": "m19_rp8",
+        "fixedTagId": "m19",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786621028334235,
+            "longitude": 120.99858849318237
+        },
+        "floor": "B1",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機B1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "功能正常"
+        }
+    },
+    {
+        "pid": "m20_rp1",
+        "fixedTagId": "m20",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786632383921418,
+            "longitude": 120.99857055119149
+        },
+        "floor": "B1",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機B1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m20_rp2",
+        "fixedTagId": "m20",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786635166739178,
+            "longitude": 120.99858707812645
+        },
+        "floor": "B1",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機B1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "保養中"
+        }
+    },
+    {
+        "pid": "m20_rp3",
+        "fixedTagId": "m20",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786227279244756,
+            "longitude": 120.99820517200483
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-17",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "尚可使用"
+        }
+    },
+    {
+        "pid": "m20_rp4",
+        "fixedTagId": "m20",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786315561273735,
+            "longitude": 120.99822007227198
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "公用電腦",
+            "categoryDescName": "公用電腦2-11",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m20_rp5",
+        "fixedTagId": "m20",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786627318829005,
+            "longitude": 120.99857822838104
+        },
+        "floor": "B1",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機B1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m20_rp6",
+        "fixedTagId": "m20",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786638516881705,
+            "longitude": 120.99857082808468
+        },
+        "floor": "B1",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機B1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m20_rp7",
+        "fixedTagId": "m20",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.786637430207204,
+            "longitude": 120.99857124338084
+        },
+        "floor": "B1",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機B1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m20_rp8",
+        "fixedTagId": "m20",
+        "locationName": "圖書館",
+        "coordinates": {
+            "latitude": 24.78664091025273,
+            "longitude": 120.9985835423498
+        },
+        "floor": "B1",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機B1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m21_rp1",
+        "fixedTagId": "m21",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.78809897584444,
+            "longitude": 120.9949212874453
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "無人使用"
+        }
+    },
+    {
+        "pid": "m21_rp2",
+        "fixedTagId": "m21",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.787673937909016,
+            "longitude": 120.99427905248919
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊一般停車位",
+            "categoryDescName": "路邊一般停車位1-13",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "已無空位"
+        }
+    },
+    {
+        "pid": "m21_rp3",
+        "fixedTagId": "m21",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.787663603921303,
+            "longitude": 120.99443295388902
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊一般停車位",
+            "categoryDescName": "路邊一般停車位1-11",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m21_rp4",
+        "fixedTagId": "m21",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.787525261802983,
+            "longitude": 120.99490410770791
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "室外籃球場",
+            "categoryDescName": "室外籃球場1-2",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "體感狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m21_rp5",
+        "fixedTagId": "m21",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.787696587173418,
+            "longitude": 120.9943498371171
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊一般停車位",
+            "categoryDescName": "路邊一般停車位1-5",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "已無空位"
+        }
+    },
+    {
+        "pid": "m21_rp6",
+        "fixedTagId": "m21",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.78793122440841,
+            "longitude": 120.9948154505757
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "室外排球場",
+            "categoryDescName": "室外排球場1-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m21_rp7",
+        "fixedTagId": "m21",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.78806626170379,
+            "longitude": 120.99512744664516
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m21_rp8",
+        "fixedTagId": "m21",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.787505472837807,
+            "longitude": 120.99444576343006
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "室外籃球場",
+            "categoryDescName": "室外籃球場1-4",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "吵雜"
+        }
+    },
+    {
+        "pid": "m22_rp1",
+        "fixedTagId": "m22",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.78810769808651,
+            "longitude": 120.99492241912839
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "無人使用"
+        }
+    },
+    {
+        "pid": "m22_rp2",
+        "fixedTagId": "m22",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.78768850526984,
+            "longitude": 120.99453392655548
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊一般停車位",
+            "categoryDescName": "路邊一般停車位1-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "吵雜"
+        }
+    },
+    {
+        "pid": "m22_rp3",
+        "fixedTagId": "m22",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.787719785605855,
+            "longitude": 120.9949218273256
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-3",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "無人使用"
+        }
+    },
+    {
+        "pid": "m22_rp4",
+        "fixedTagId": "m22",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.787702184650033,
+            "longitude": 120.99445133220013
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊一般停車位",
+            "categoryDescName": "路邊一般停車位1-4",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "體感狀態",
+            "statusDescName": "不適"
+        }
+    },
+    {
+        "pid": "m22_rp5",
+        "fixedTagId": "m22",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.787653617422063,
+            "longitude": 120.99504318384082
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-4",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "維護完成"
+        }
+    },
+    {
+        "pid": "m22_rp6",
+        "fixedTagId": "m22",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.787732176139034,
+            "longitude": 120.99490583081835
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-3",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "尚可使用"
+        }
+    },
+    {
+        "pid": "m22_rp7",
+        "fixedTagId": "m22",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.787414912145604,
+            "longitude": 120.99503398064577
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-5",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "完好無損"
+        }
+    },
+    {
+        "pid": "m22_rp8",
+        "fixedTagId": "m22",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.787737215259586,
+            "longitude": 120.99444706444173
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-2",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "有人佔用"
+        }
+    },
+    {
+        "pid": "m23_rp1",
+        "fixedTagId": "m23",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.788097501913565,
+            "longitude": 120.99492510212521
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "無人使用"
+        }
+    },
+    {
+        "pid": "m23_rp2",
+        "fixedTagId": "m23",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.78809605257537,
+            "longitude": 120.99491849764446
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "外觀破損"
+        }
+    },
+    {
+        "pid": "m23_rp3",
+        "fixedTagId": "m23",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.787931479264216,
+            "longitude": 120.99435655844208
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "室外排球場",
+            "categoryDescName": "室外排球場1-6",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "體感狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m23_rp4",
+        "fixedTagId": "m23",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.78770059098507,
+            "longitude": 120.99435573127666
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊一般停車位",
+            "categoryDescName": "路邊一般停車位1-5",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "體感狀態",
+            "statusDescName": "舒適"
+        }
+    },
+    {
+        "pid": "m23_rp5",
+        "fixedTagId": "m23",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.7881070715607,
+            "longitude": 120.99492558926238
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "完好無損"
+        }
+    },
+    {
+        "pid": "m23_rp6",
+        "fixedTagId": "m23",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.788092492642082,
+            "longitude": 120.99493174611271
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m23_rp7",
+        "fixedTagId": "m23",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.78810736984093,
+            "longitude": 120.99492363215263
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "功能狀態",
+            "statusDescName": "無法使用"
+        }
+    },
+    {
+        "pid": "m23_rp8",
+        "fixedTagId": "m23",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.78810487581712,
+            "longitude": 120.99491696133171
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "維護完成"
+        }
+    },
+    {
+        "pid": "m24_rp1",
+        "fixedTagId": "m24",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.78810878791902,
+            "longitude": 120.99491798526608
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "無人使用"
+        }
+    },
+    {
+        "pid": "m24_rp2",
+        "fixedTagId": "m24",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.787690311941663,
+            "longitude": 120.9945462654363
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "路邊一般停車位",
+            "categoryDescName": "路邊一般停車位1-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    },
+    {
+        "pid": "m24_rp3",
+        "fixedTagId": "m24",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.78752658188276,
+            "longitude": 120.99469723640901
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "室外籃球場",
+            "categoryDescName": "室外籃球場1-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m24_rp4",
+        "fixedTagId": "m24",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.78792164328156,
+            "longitude": 120.99514326703341
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "室外排球場",
+            "categoryDescName": "室外排球場1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "空位有限"
+        }
+    },
+    {
+        "pid": "m24_rp5",
+        "fixedTagId": "m24",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.78810236160594,
+            "longitude": 120.99492045538979
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "無人使用"
+        }
+    },
+    {
+        "pid": "m24_rp6",
+        "fixedTagId": "m24",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.788103075794666,
+            "longitude": 120.9949234087544
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "無人使用"
+        }
+    },
+    {
+        "pid": "m24_rp7",
+        "fixedTagId": "m24",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.788107411591167,
+            "longitude": 120.99493062080737
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "無人使用"
+        }
+    },
+    {
+        "pid": "m24_rp8",
+        "fixedTagId": "m24",
+        "locationName": "室外球場",
+        "coordinates": {
+            "latitude": 24.78810419064293,
+            "longitude": 120.99491523453271
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "佔用狀態",
+            "statusDescName": "無人使用"
+        }
+    },
+    {
+        "pid": "m25_rp1",
+        "fixedTagId": "m25",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.790004460910442,
+            "longitude": 120.99533820940675
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "擁擠"
+        }
+    },
+    {
+        "pid": "m25_rp2",
+        "fixedTagId": "m25",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789953266589976,
+            "longitude": 120.99517992277997
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-11",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "已無空位"
+        }
+    },
+    {
+        "pid": "m25_rp3",
+        "fixedTagId": "m25",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789801444274882,
+            "longitude": 120.99527345803469
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-2",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "體感狀態",
+            "statusDescName": "不適"
+        }
+    },
+    {
+        "pid": "m25_rp4",
+        "fixedTagId": "m25",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789793409592303,
+            "longitude": 120.9950707417733
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "空位有限"
+        }
+    },
+    {
+        "pid": "m25_rp5",
+        "fixedTagId": "m25",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789666327240045,
+            "longitude": 120.9957535199704
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "沙發區",
+            "categoryDescName": "沙發區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "已無空位"
+        }
+    },
+    {
+        "pid": "m25_rp6",
+        "fixedTagId": "m25",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789756889828872,
+            "longitude": 120.99507398789311
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "空位有限"
+        }
+    },
+    {
+        "pid": "m25_rp7",
+        "fixedTagId": "m25",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789804520399123,
+            "longitude": 120.99507438537577
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "體感狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m25_rp8",
+        "fixedTagId": "m25",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789804945114472,
+            "longitude": 120.99567872101677
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "置物櫃",
+            "categoryDescName": "置物櫃1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m26_rp1",
+        "fixedTagId": "m26",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.790002250133245,
+            "longitude": 120.99533076702085
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "擁擠"
+        }
+    },
+    {
+        "pid": "m26_rp2",
+        "fixedTagId": "m26",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789999758723845,
+            "longitude": 120.99501097233332
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-6",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m26_rp3",
+        "fixedTagId": "m26",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.7899624375464,
+            "longitude": 120.9950540053889
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-12",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m26_rp4",
+        "fixedTagId": "m26",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789793857484945,
+            "longitude": 120.99582920174814
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "櫃台",
+            "categoryDescName": "櫃台1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "維修中"
+        }
+    },
+    {
+        "pid": "m26_rp5",
+        "fixedTagId": "m26",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.78999397167776,
+            "longitude": 120.9950138824287
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-6",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "沒人"
+        }
+    },
+    {
+        "pid": "m26_rp6",
+        "fixedTagId": "m26",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.78994545728118,
+            "longitude": 120.99529561381301
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-8",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "吵雜"
+        }
+    },
+    {
+        "pid": "m26_rp7",
+        "fixedTagId": "m26",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789993748572954,
+            "longitude": 120.99507976279997
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-5",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "沒人"
+        }
+    },
+    {
+        "pid": "m26_rp8",
+        "fixedTagId": "m26",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789947227048064,
+            "longitude": 120.99518983561009
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-11",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "吵雜"
+        }
+    },
+    {
+        "pid": "m27_rp1",
+        "fixedTagId": "m27",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789992504567014,
+            "longitude": 120.9953285040066
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "擁擠"
+        }
+    },
+    {
+        "pid": "m27_rp2",
+        "fixedTagId": "m27",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.78967440762057,
+            "longitude": 120.99602836119165
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m27_rp3",
+        "fixedTagId": "m27",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.790000862285826,
+            "longitude": 120.99521471977955
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m27_rp4",
+        "fixedTagId": "m27",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789789751006253,
+            "longitude": 120.99582511885345
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "櫃台",
+            "categoryDescName": "櫃台1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "保養中"
+        }
+    },
+    {
+        "pid": "m27_rp5",
+        "fixedTagId": "m27",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789996885254567,
+            "longitude": 120.99534039358859
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "體感狀態",
+            "statusDescName": "不適"
+        }
+    },
+    {
+        "pid": "m27_rp6",
+        "fixedTagId": "m27",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.790000133553804,
+            "longitude": 120.99534352070792
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m27_rp7",
+        "fixedTagId": "m27",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.78999712494545,
+            "longitude": 120.9953394379999
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "已無空位"
+        }
+    },
+    {
+        "pid": "m27_rp8",
+        "fixedTagId": "m27",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.790005421585054,
+            "longitude": 120.99532806509666
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m28_rp1",
+        "fixedTagId": "m28",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.790001459305284,
+            "longitude": 120.9953402548385
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "擁擠"
+        }
+    },
+    {
+        "pid": "m28_rp2",
+        "fixedTagId": "m28",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789753637073694,
+            "longitude": 120.99507521826409
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "外觀狀態",
+            "statusDescName": "外觀破損"
+        }
+    },
+    {
+        "pid": "m28_rp3",
+        "fixedTagId": "m28",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.78998417558039,
+            "longitude": 120.99508478075353
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-5",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "髒亂"
+        }
+    },
+    {
+        "pid": "m28_rp4",
+        "fixedTagId": "m28",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.78994335803815,
+            "longitude": 120.9951855971924
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-11",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m28_rp5",
+        "fixedTagId": "m28",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.78998609380355,
+            "longitude": 120.99533161742939
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "擁擠"
+        }
+    },
+    {
+        "pid": "m28_rp6",
+        "fixedTagId": "m28",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.78999701182819,
+            "longitude": 120.99533811023666
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "擁擠"
+        }
+    },
+    {
+        "pid": "m28_rp7",
+        "fixedTagId": "m28",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.789989692722447,
+            "longitude": 120.99533996580135
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "擁擠"
+        }
+    },
+    {
+        "pid": "m28_rp8",
+        "fixedTagId": "m28",
+        "locationName": "游泳館&綜合球館",
+        "coordinates": {
+            "latitude": 24.78999725183031,
+            "longitude": 120.99532748875363
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "桌球場",
+            "categoryDescName": "桌球場1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "擁擠"
+        }
+    },
+    {
+        "pid": "m29_rp1",
+        "fixedTagId": "m29",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.789282201094718,
+            "longitude": 120.99726494434313
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m29_rp2",
+        "fixedTagId": "m29",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.78936864459023,
+            "longitude": 120.99739454757754
+        },
+        "floor": "3F",
+        "category": {
+            "categoryName": "沙發區",
+            "categoryDescName": "沙發區3-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "體感狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m29_rp3",
+        "fixedTagId": "m29",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.789277068510017,
+            "longitude": 120.99698960992885
+        },
+        "floor": "3F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區3-2",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m29_rp4",
+        "fixedTagId": "m29",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.789317003676533,
+            "longitude": 120.99723899033084
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "高腳椅區",
+            "categoryDescName": "高腳椅區1-2",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m29_rp5",
+        "fixedTagId": "m29",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.789133868774734,
+            "longitude": 120.99720257108713
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "櫃台",
+            "categoryDescName": "櫃台1-5",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    },
+    {
+        "pid": "m29_rp6",
+        "fixedTagId": "m29",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.789124798994525,
+            "longitude": 120.99710189987599
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "ATM",
+            "categoryDescName": "ATM1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "吵雜"
+        }
+    },
+    {
+        "pid": "m29_rp7",
+        "fixedTagId": "m29",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.78935664020468,
+            "longitude": 120.99721236796172
+        },
+        "floor": "3F",
+        "category": {
+            "categoryName": "沙發區",
+            "categoryDescName": "沙發區3-2",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m29_rp8",
+        "fixedTagId": "m29",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.789322111241525,
+            "longitude": 120.9971919583484
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "高腳椅區",
+            "categoryDescName": "高腳椅區1-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "吵雜"
+        }
+    },
+    {
+        "pid": "m30_rp1",
+        "fixedTagId": "m30",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.789278358579274,
+            "longitude": 120.99726034851655
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m30_rp2",
+        "fixedTagId": "m30",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.789219680658846,
+            "longitude": 120.9971097302475
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "沙發區",
+            "categoryDescName": "沙發區1-2",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "體感狀態",
+            "statusDescName": "舒適"
+        }
+    },
+    {
+        "pid": "m30_rp3",
+        "fixedTagId": "m30",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.789268007565774,
+            "longitude": 120.99699383079741
+        },
+        "floor": "3F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區3-2",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m30_rp4",
+        "fixedTagId": "m30",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.78926615954132,
+            "longitude": 120.99697636860061
+        },
+        "floor": "3F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區3-2",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m30_rp5",
+        "fixedTagId": "m30",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.78918595637755,
+            "longitude": 120.99739715942125
+        },
+        "floor": "3F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區3-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m30_rp6",
+        "fixedTagId": "m30",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.78925938729613,
+            "longitude": 120.99694382025206
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區2-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    },
+    {
+        "pid": "m30_rp7",
+        "fixedTagId": "m30",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.78925655223564,
+            "longitude": 120.99732772058013
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區2-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m30_rp8",
+        "fixedTagId": "m30",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.78916633953856,
+            "longitude": 120.99705492223754
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-2",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m31_rp1",
+        "fixedTagId": "m31",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.789284731306616,
+            "longitude": 120.99725904439396
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m31_rp2",
+        "fixedTagId": "m31",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.78917594626202,
+            "longitude": 120.99739447711575
+        },
+        "floor": "3F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區3-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m31_rp3",
+        "fixedTagId": "m31",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.789328509403575,
+            "longitude": 120.99717608074202
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "高腳椅區",
+            "categoryDescName": "高腳椅區1-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "吵雜"
+        }
+    },
+    {
+        "pid": "m31_rp4",
+        "fixedTagId": "m31",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.789230663860426,
+            "longitude": 120.99701194838252
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "ATM",
+            "categoryDescName": "ATM1-2",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m31_rp5",
+        "fixedTagId": "m31",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.789272060409484,
+            "longitude": 120.99726826337898
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    },
+    {
+        "pid": "m31_rp6",
+        "fixedTagId": "m31",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.78927694259417,
+            "longitude": 120.99726924471803
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "體感狀態",
+            "statusDescName": "舒適"
+        }
+    },
+    {
+        "pid": "m31_rp7",
+        "fixedTagId": "m31",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.789281744658876,
+            "longitude": 120.99726425536754
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m31_rp8",
+        "fixedTagId": "m31",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.78927345309299,
+            "longitude": 120.99725656573476
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m32_rp1",
+        "fixedTagId": "m32",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.789269289652857,
+            "longitude": 120.99725042207847
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m32_rp2",
+        "fixedTagId": "m32",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.789189641452733,
+            "longitude": 120.99743012823036
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "櫃台",
+            "categoryDescName": "櫃台1-2",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "維護狀態",
+            "statusDescName": "維修中"
+        }
+    },
+    {
+        "pid": "m32_rp3",
+        "fixedTagId": "m32",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.789360587287952,
+            "longitude": 120.99721300624729
+        },
+        "floor": "3F",
+        "category": {
+            "categoryName": "沙發區",
+            "categoryDescName": "沙發區3-2",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "空位有限"
+        }
+    },
+    {
+        "pid": "m32_rp4",
+        "fixedTagId": "m32",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.78925742250756,
+            "longitude": 120.99709147314817
+        },
+        "floor": "2F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區2-2",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m32_rp5",
+        "fixedTagId": "m32",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.789282026585592,
+            "longitude": 120.99725967974625
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m32_rp6",
+        "fixedTagId": "m32",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.78927853527035,
+            "longitude": 120.99726515354577
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m32_rp7",
+        "fixedTagId": "m32",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.78926805177468,
+            "longitude": 120.99725286329287
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m32_rp8",
+        "fixedTagId": "m32",
+        "locationName": "二餐&停車場",
+        "coordinates": {
+            "latitude": 24.789270959736726,
+            "longitude": 120.9972540184953
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m33_rp1",
+        "fixedTagId": "m33",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.789234543572334,
+            "longitude": 120.99575939419665
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般停車區",
+            "categoryDescName": "一般停車區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    },
+    {
+        "pid": "m33_rp2",
+        "fixedTagId": "m33",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.788771621583315,
+            "longitude": 120.99577769835854
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "室內籃球場",
+            "categoryDescName": "室內籃球場1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "吵雜"
+        }
+    },
+    {
+        "pid": "m33_rp3",
+        "fixedTagId": "m33",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.789239192513357,
+            "longitude": 120.9955814728394
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般停車區",
+            "categoryDescName": "一般停車區1-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m33_rp4",
+        "fixedTagId": "m33",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.789209795668928,
+            "longitude": 120.99589990297989
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "教職員停車區",
+            "categoryDescName": "教職員停車區1-4",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "髒亂"
+        }
+    },
+    {
+        "pid": "m33_rp5",
+        "fixedTagId": "m33",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.7888359541599,
+            "longitude": 120.99564620250145
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m33_rp6",
+        "fixedTagId": "m33",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.78922074560853,
+            "longitude": 120.99590562992182
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "教職員停車區",
+            "categoryDescName": "教職員停車區1-4",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "吵雜"
+        }
+    },
+    {
+        "pid": "m33_rp7",
+        "fixedTagId": "m33",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.78856517582356,
+            "longitude": 120.99600459177363
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-1",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "吵雜"
+        }
+    },
+    {
+        "pid": "m33_rp8",
+        "fixedTagId": "m33",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.788763960938503,
+            "longitude": 120.99596548083781
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "室內排球場",
+            "categoryDescName": "室內排球場1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "髒亂"
+        }
+    },
+    {
+        "pid": "m34_rp1",
+        "fixedTagId": "m34",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.789232569562465,
+            "longitude": 120.99574834091415
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般停車區",
+            "categoryDescName": "一般停車區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    },
+    {
+        "pid": "m34_rp2",
+        "fixedTagId": "m34",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.788772062109473,
+            "longitude": 120.99597273386215
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "室內排球場",
+            "categoryDescName": "室內排球場1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "擁擠"
+        }
+    },
+    {
+        "pid": "m34_rp3",
+        "fixedTagId": "m34",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.78922023903421,
+            "longitude": 120.99600658520474
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "教職員停車區",
+            "categoryDescName": "教職員停車區1-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "空位有限"
+        }
+    },
+    {
+        "pid": "m34_rp4",
+        "fixedTagId": "m34",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.788682478988942,
+            "longitude": 120.9956412125512
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-4",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "沒人"
+        }
+    },
+    {
+        "pid": "m34_rp5",
+        "fixedTagId": "m34",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.789223705640783,
+            "longitude": 120.9955039376786
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般停車區",
+            "categoryDescName": "一般停車區1-4",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "體感狀態",
+            "statusDescName": "不適"
+        }
+    },
+    {
+        "pid": "m34_rp6",
+        "fixedTagId": "m34",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.789235771300945,
+            "longitude": 120.99541447845876
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般停車區",
+            "categoryDescName": "一般停車區1-5",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "髒亂"
+        }
+    },
+    {
+        "pid": "m34_rp7",
+        "fixedTagId": "m34",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.78923010077058,
+            "longitude": 120.99557818085752
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般停車區",
+            "categoryDescName": "一般停車區1-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m34_rp8",
+        "fixedTagId": "m34",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.789223094932293,
+            "longitude": 120.99568299952243
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般停車區",
+            "categoryDescName": "一般停車區1-2",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "體感狀態",
+            "statusDescName": "不適"
+        }
+    },
+    {
+        "pid": "m35_rp1",
+        "fixedTagId": "m35",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.78923324134097,
+            "longitude": 120.99575324375462
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般停車區",
+            "categoryDescName": "一般停車區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    },
+    {
+        "pid": "m35_rp2",
+        "fixedTagId": "m35",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.788597586070757,
+            "longitude": 120.99596693138075
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "整潔"
+        }
+    },
+    {
+        "pid": "m35_rp3",
+        "fixedTagId": "m35",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.789223124844753,
+            "longitude": 120.99600243911429
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "教職員停車區",
+            "categoryDescName": "教職員停車區1-3",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "體感狀態",
+            "statusDescName": "舒適"
+        }
+    },
+    {
+        "pid": "m35_rp4",
+        "fixedTagId": "m35",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.78867706202397,
+            "longitude": 120.99565688038041
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-4",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "體感狀態",
+            "statusDescName": "不適"
+        }
+    },
+    {
+        "pid": "m35_rp5",
+        "fixedTagId": "m35",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.789216074477334,
+            "longitude": 120.99575135704369
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般停車區",
+            "categoryDescName": "一般停車區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "沒人"
+        }
+    },
+    {
+        "pid": "m35_rp6",
+        "fixedTagId": "m35",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.78922682732582,
+            "longitude": 120.99574419881432
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般停車區",
+            "categoryDescName": "一般停車區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "噪音狀態",
+            "statusDescName": "安靜"
+        }
+    },
+    {
+        "pid": "m35_rp7",
+        "fixedTagId": "m35",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.789226269944145,
+            "longitude": 120.9957421701966
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般停車區",
+            "categoryDescName": "一般停車區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m35_rp8",
+        "fixedTagId": "m35",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.78921931090951,
+            "longitude": 120.99574601046811
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般停車區",
+            "categoryDescName": "一般停車區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "體感狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m36_rp1",
+        "fixedTagId": "m36",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.7892330717796,
+            "longitude": 120.99575667328232
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般停車區",
+            "categoryDescName": "一般停車區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    },
+    {
+        "pid": "m36_rp2",
+        "fixedTagId": "m36",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.788525651636338,
+            "longitude": 120.99601628811628
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1-2",
+            "categoryType": "物體",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "普通"
+        }
+    },
+    {
+        "pid": "m36_rp3",
+        "fixedTagId": "m36",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.78860211474995,
+            "longitude": 120.99573960041594
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般座位區",
+            "categoryDescName": "一般座位區1-2",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "人潮狀態",
+            "statusDescName": "沒人"
+        }
+    },
+    {
+        "pid": "m36_rp4",
+        "fixedTagId": "m36",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.789221643983527,
+            "longitude": 120.99575881432919
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般停車區",
+            "categoryDescName": "一般停車區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "體感狀態",
+            "statusDescName": "不適"
+        }
+    },
+    {
+        "pid": "m36_rp5",
+        "fixedTagId": "m36",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.78923280765033,
+            "longitude": 120.9957511933958
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般停車區",
+            "categoryDescName": "一般停車區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    },
+    {
+        "pid": "m36_rp6",
+        "fixedTagId": "m36",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.789224241457983,
+            "longitude": 120.99574608033853
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般停車區",
+            "categoryDescName": "一般停車區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    },
+    {
+        "pid": "m36_rp7",
+        "fixedTagId": "m36",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.789232760863843,
+            "longitude": 120.99574783537804
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般停車區",
+            "categoryDescName": "一般停車區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    },
+    {
+        "pid": "m36_rp8",
+        "fixedTagId": "m36",
+        "locationName": "舊體育館",
+        "coordinates": {
+            "latitude": 24.789227696842794,
+            "longitude": 120.99575021473649
+        },
+        "floor": "1F",
+        "category": {
+            "categoryName": "一般停車區",
+            "categoryDescName": "一般停車區1-1",
+            "categoryType": "空間",
+            "locationImgUrl": [
+                "http://photo.url/"
+            ]
+        },
+        "status": {
+            "statusName": "使用狀態",
+            "statusDescName": "尚有空位"
+        }
+    }
+]
