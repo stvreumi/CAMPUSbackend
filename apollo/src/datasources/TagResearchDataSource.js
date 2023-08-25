@@ -109,6 +109,33 @@ class TagResearchDataSource extends DataSource {
     return { fixedTags, ...pageInfo };
   }
 
+  async getUserFixedTags(uNumber, pageParams) {
+    let query;
+    if (uNumber < 25) {
+      query = this.fixedTagResearchCollectionRef
+        .where('groupId', '==', 1)
+        .orderBy('__name__');
+      console.log('group1');
+    } else if (uNumber >= 25 && uNumber < 48) {
+      query = this.fixedTagResearchCollectionRef
+        .where('groupId', '==', 2)
+        .orderBy('__name__');
+      console.log('group2');
+    } else if (uNumber >= 48) {
+      query = this.fixedTagResearchCollectionRef
+        .where('groupId', '==', 3)
+        .orderBy('__name__');
+      console.log('group3');
+    }
+    const { data: fixedTags, pageInfo } = await getPage(
+      query,
+      pageParams,
+      this.fixedTagResearchCollectionRef
+    );
+    console.log(fixedTags);
+    return { fixedTags, ...pageInfo };
+  }
+
   // for map resolver
   async getAllfixedTagSubTag(fixedTagId) {
     // logger.debug('getAllfixedTagSubTag');

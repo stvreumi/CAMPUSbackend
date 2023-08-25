@@ -153,6 +153,16 @@ const queryResolvers = {
       { dataSources, userInfo }
     ) =>
       dataSources.tagResearchDataSource.getAllFixedTags(pageParams, userInfo),
+    getUserFixedTagResearchList: async (
+      _,
+      { uNumber, pageParams },
+      { dataSources, userInfo }
+    ) =>
+      dataSources.tagResearchDataSource.getUserFixedTags(
+        uNumber,
+        pageParams,
+        userInfo
+      ),
     fixedTagResearch: async (_, { fixedTagId }, { dataSources }) =>
       dataSources.tagResearchDataSource.getFixedTagResearchData({ fixedTagId }),
     getUserResearchData: async (_, { uid }, __) => ({ uid }),

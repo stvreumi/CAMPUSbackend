@@ -20,4 +20,5 @@ type Query {
   getUserResearchData(uid: ID!): UserResearch
   userAddTagResearchHistory(uid: ID!, pageParams: PageParams): TagResearchPage!
   getTagResearchListByUser(uid: ID!, pageParams: PageParams): TagResearchPage!
+  getUserFixedTagResearchList(uNumber: Int!, pageParams: PageParams): FixedTagResearchPage!
 }
