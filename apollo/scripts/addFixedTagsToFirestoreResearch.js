@@ -16,8 +16,9 @@ const centerCoordinates = JSON.parse(
 // Process the data and add to Firestore
 Promise.all(
   centerCoordinates.map(async center => {
-    const { mid, locationName, coordinates } = center;
+    const { groupId, mid, locationName, coordinates } = center;
     const taskData = {
+      groupId,
       mid,
       locationName,
       coordinates: new admin.firestore.GeoPoint(
