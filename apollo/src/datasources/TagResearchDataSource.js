@@ -152,7 +152,7 @@ class TagResearchDataSource extends DataSource {
       fixedTagId
     );
     const snapshot = await query.get();
-    const subTagsTmp = [];
+    const subTags = [];
     snapshot.forEach(doc => {
       const subTagData = { ...doc.data(), id: doc.id };
       const subTagCoordinates = subTagData.coordinates;
@@ -166,20 +166,16 @@ class TagResearchDataSource extends DataSource {
           longitude: parseFloat(fixedTagCor.longitude),
         }
       );
-      subTagData.distance = distance;
 
-      subTagsTmp.push(subTagData);
+      subTags.push({
+        data: subTagData,
+        distance,
+      });
     });
     // return the subTags according to the distance from fixedTag
-    subTagsTmp.sort((a, b) => a.distance - b.distance);
-    // After getting the order, remove distance from subTagsTmp
-    const subTags = subTagsTmp.map(subTagData => {
-      const updatedSubTagData = { ...subTagData };
-      delete updatedSubTagData.distance;
-      return updatedSubTagData;
-    });
-
-    return subTags;
+    subTags.sort((a, b) => a.distance - b.distance);
+    // remove distance from subTags before return
+    return subTags.map(item => item.data);
   }
 
   async getTagResearchData({ tagId }) {
