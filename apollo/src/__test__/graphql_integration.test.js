@@ -263,7 +263,7 @@ describe('test graphql query', () => {
       archived: false,
     });
   });
-  test.skip('test query unarchivedTagList in research version', async () => {
+  test('test query unarchivedTagList in research version', async () => {
     const queryUnarchivedTagListResearch = gql`
       query {
         unarchivedTagListResearch {
@@ -340,7 +340,7 @@ describe('test graphql query', () => {
       archived: false,
     });
   });
-  test.skip('test query TagList By UserId in research version', async () => {
+  test('test query TagList By UserId in research version', async () => {
     const { uid } = userInfoAfterAccountCreated;
     const queryTagListByUser = gql`
       query testTagListByUser($uid: ID!) {
@@ -716,7 +716,7 @@ describe('test graphql query', () => {
       locationName: docData.locationName,
     });
   });
-  test.skip('test query user fixTags in research version', async () => {
+  test('test query user fixTags in research version', async () => {
     // add fix tag data to firestore
     const docData = {
       groupId: 1,
@@ -892,7 +892,7 @@ describe('test graphql query', () => {
       viewCount: 0,
     });
   });
-  test.skip('test query tag in research version', async () => {
+  test('test query tag in research version', async () => {
     const queryTagResearch = gql`
       query testQueryTag($id: ID!) {
         tagResearch(tagId: $id) {
@@ -1023,7 +1023,7 @@ describe('test graphql query', () => {
       imageUrl: [expect.any(String)],
     });
   });
-  test.skip('test query userAddTagResearchHistory in research version', async () => {
+  test('test query userAddTagResearchHistory in research version', async () => {
     const { uid } = userInfoAfterAccountCreated;
     const queryUserAddTagResearchHistory = gql`
       query testQueryUserAddTagResearchHistory($uid: ID!) {
@@ -1249,7 +1249,7 @@ describe('test graphql mutate and paginate function', () => {
     });
   });
 
-  test.skip('test add tag data in research version', async () => {
+  test('test add tag data in research version', async () => {
     const mutateTag = gql`
       mutation tagAddTestResearch($data: addTagResearchDataInput!) {
         addNewTagResearchData(data: $data) {
@@ -1378,7 +1378,7 @@ describe('test graphql mutate and paginate function', () => {
     expect(mutationResult.imageDeleteStatus).toBe(null);
   });
 
-  test.skip('test update tag data in research version', async () => {
+  test('test update tag data in research version', async () => {
     const mutateTag = gql`
       mutation tagUpdateTest($tagId: ID!, $data: updateTagResearchDataInput!) {
         updateTagResearchData(tagId: $tagId, data: $data) {
@@ -1868,7 +1868,7 @@ describe('test graphql mutate and paginate function', () => {
     });
     expect(mutationResult.imageUploadUrls.length).toBe(imageUploadNumber);
   });
-  test.skip('test update tag: upload new image and delete exist image in research version', async () => {
+  test('test update tag: upload new image and delete exist image in research version', async () => {
     const response = await addFakeDataToFirestoreResearch(mutateClient);
     const fakeTagResearchId = response.tagResearch.id;
 
