@@ -677,7 +677,6 @@ describe('test graphql query', () => {
       fixedTagSubTagsResult[location.id] = location;
     });
     // console.log(fixedTagSubTagsResult[tagDocRef.id].statusHistory);
-    console.log(fixedTagSubTagsResult);
     const statusExpectData = {
       statusName: '清潔狀態',
       statusDescName: '乾淨',
