@@ -5,6 +5,7 @@ const { FieldValue } = require('firebase-admin').firestore;
 /** @type {import('pino').Logger} */
 const logger = require('pino-caller')(require('../../logger'));
 
+const geolib = require('geolib');
 const {
   getIdWithDataFromDocSnap,
   getLatestStatus,
@@ -115,24 +116,20 @@ class TagResearchDataSource extends DataSource {
       query = this.fixedTagResearchCollectionRef
         .where('groupId', '==', 1)
         .orderBy('__name__');
-      console.log('group1');
     } else if (uNumber >= 25 && uNumber < 48) {
       query = this.fixedTagResearchCollectionRef
         .where('groupId', '==', 2)
         .orderBy('__name__');
-      console.log('group2');
     } else if (uNumber >= 48) {
       query = this.fixedTagResearchCollectionRef
         .where('groupId', '==', 3)
         .orderBy('__name__');
-      console.log('group3');
     }
     const { data: fixedTags, pageInfo } = await getPage(
       query,
       pageParams,
       this.fixedTagResearchCollectionRef
     );
-    console.log(fixedTags);
     return { fixedTags, ...pageInfo };
   }
 
@@ -143,15 +140,45 @@ class TagResearchDataSource extends DataSource {
     // explicitly ask query ordery by the doc id
     // the orderby usage comes from here
     // https://firebase.google.com/docs/firestore/manage-data/delete-data#collections
+    const docSnap = await this.fixedTagResearchCollectionRef
+      .doc(fixedTagId)
+      .get();
+    // const fixedTagLocation = docSnap.data().locationName;
+    const fixedTagCor = docSnap.data().coordinates;
+
     const query = this.tagResearchDataCollectionRef.where(
       'fixedTagId',
       '==',
       fixedTagId
     );
-
     const snapshot = await query.get();
-    const subTags = [];
-    snapshot.forEach(doc => subTags.push({ ...doc.data(), id: doc.id }));
+    const subTagsTmp = [];
+    snapshot.forEach(doc => {
+      const subTagData = { ...doc.data(), id: doc.id };
+      const subTagCoordinates = subTagData.coordinates;
+      const distance = geolib.getDistance(
+        {
+          latitude: parseFloat(subTagCoordinates.latitude),
+          longitude: parseFloat(subTagCoordinates.longitude),
+        },
+        {
+          latitude: parseFloat(fixedTagCor.latitude),
+          longitude: parseFloat(fixedTagCor.longitude),
+        }
+      );
+      subTagData.distance = distance;
+
+      subTagsTmp.push(subTagData);
+    });
+    // return the subTags according to the distance from fixedTag
+    subTagsTmp.sort((a, b) => a.distance - b.distance);
+    // After getting the order, remove distance from subTagsTmp
+    const subTags = subTagsTmp.map(subTagData => {
+      const updatedSubTagData = { ...subTagData };
+      delete updatedSubTagData.distance;
+      return updatedSubTagData;
+    });
+
     return subTags;
   }
 
