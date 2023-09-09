@@ -14,6 +14,8 @@ const {
   getPage,
 } = require('./firebaseUtils');
 
+const locationNameToCoordinates = require('../fixTagEntry.json');
+
 // used for type annotation
 /**
  * @typedef {import('../types').RawTagDocumentFields} RawTagDocumentFields
@@ -143,8 +145,18 @@ class TagResearchDataSource extends DataSource {
     const docSnap = await this.fixedTagResearchCollectionRef
       .doc(fixedTagId)
       .get();
-    // const fixedTagLocation = docSnap.data().locationName;
-    const fixedTagCor = docSnap.data().coordinates;
+    const fixedTagLocation = docSnap.data().locationName;
+    const matchingLocation = locationNameToCoordinates.find(
+      // location => location.locationName === fixedTagLocation
+      location => fixedTagLocation.includes(location.locationName)
+    );
+    // for the location missing
+    if (!matchingLocation) {
+      logger.error('getAllfixedTagSubTag: location missing');
+      return [];
+    }
+
+    const fixedTagCor = matchingLocation.coordinates;
 
     const query = this.tagResearchDataCollectionRef.where(
       'fixedTagId',
