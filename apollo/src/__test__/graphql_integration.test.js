@@ -568,7 +568,7 @@ describe('test graphql query', () => {
   test('test query fix tag in research version', async () => {
     // add fix tag data to firestore
     const docData = {
-      locationName: '第二餐廳',
+      locationName: '二餐&停車場',
       coordinates: {
         latitude: '24.789345225611136',
         longitude: '120.99719144686011',
@@ -720,7 +720,7 @@ describe('test graphql query', () => {
     // add fix tag data to firestore
     const docData = {
       groupId: 1,
-      locationName: '第二餐廳',
+      locationName: '活動中心&一餐',
       coordinates: {
         latitude: '24.789345225611136',
         longitude: '120.99719144686011',
@@ -804,7 +804,6 @@ describe('test graphql query', () => {
       'getUserFixedTagResearchList',
       { uNumber: 11 }
     );
-    console.log(queryResult);
     expect(queryResult.fixedTags[0]).toHaveProperty('id', docRef.id);
     expect(queryResult.fixedTags[0]).toHaveProperty(
       'locationName',
