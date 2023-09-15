@@ -113,20 +113,32 @@ class TagResearchDataSource extends DataSource {
   }
 
   async getUserFixedTags(uNumber, pageParams) {
-    let query;
-    if (uNumber < 25) {
-      query = this.fixedTagResearchCollectionRef
-        .where('groupId', '==', 1)
-        .orderBy('__name__');
-    } else if (uNumber >= 25 && uNumber < 48) {
-      query = this.fixedTagResearchCollectionRef
-        .where('groupId', '==', 2)
-        .orderBy('__name__');
-    } else if (uNumber >= 48) {
-      query = this.fixedTagResearchCollectionRef
-        .where('groupId', '==', 3)
-        .orderBy('__name__');
+    // seperate users into three groups
+    const groupIds = {
+      group1: [1, -1],
+      group2: [2, -1],
+      group3: [3, -1],
+      groupDefault: [-1],
+    };
+
+    // get groupIds by uNumber
+    let selectedGroupIds;
+
+    if (uNumber < 25 && uNumber > 0) {
+      selectedGroupIds = groupIds.group1;
+    } else if (uNumber >= 25 && uNumber < 49) {
+      selectedGroupIds = groupIds.group2;
+    } else if (uNumber >= 49 && uNumber < 73) {
+      selectedGroupIds = groupIds.group3;
+    } else {
+      selectedGroupIds = groupIds.groupDefault;
     }
+
+    // get query by groupIds
+    const query = this.fixedTagResearchCollectionRef
+      .where('groupId', 'in', selectedGroupIds)
+      .orderBy('__name__');
+
     const { data: fixedTags, pageInfo } = await getPage(
       query,
       pageParams,
@@ -146,9 +158,8 @@ class TagResearchDataSource extends DataSource {
       .doc(fixedTagId)
       .get();
     const fixedTagLocation = docSnap.data().locationName;
-    const matchingLocation = locationNameToCoordinates.find(
-      // location => location.locationName === fixedTagLocation
-      location => fixedTagLocation.includes(location.locationName)
+    const matchingLocation = locationNameToCoordinates.find(location =>
+      fixedTagLocation.includes(location.locationName)
     );
     // for the location missing
     if (!matchingLocation) {
