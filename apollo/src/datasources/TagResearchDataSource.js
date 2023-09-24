@@ -133,7 +133,7 @@ class TagResearchDataSource extends DataSource {
     } else {
       selectedGroupIds = groupIds.groupDefault;
     }
-
+    console.log(selectedGroupIds);
     // get query by groupIds
     const query = this.fixedTagResearchCollectionRef
       .where('groupId', 'in', selectedGroupIds)
@@ -148,7 +148,7 @@ class TagResearchDataSource extends DataSource {
   }
 
   // for map resolver
-  async getAllfixedTagSubTag(fixedTagId) {
+  async getAllfixedTagSubTag(fixedTagId, userId) {
     // logger.debug('getAllfixedTagSubTag');
     // logger.debug({ fixedTagId });
     // explicitly ask query ordery by the doc id
@@ -169,11 +169,10 @@ class TagResearchDataSource extends DataSource {
 
     const fixedTagCor = matchingLocation.coordinates;
 
-    const query = this.tagResearchDataCollectionRef.where(
-      'fixedTagId',
-      '==',
-      fixedTagId
-    );
+    // check createUserId only use for research1
+    const query = this.tagResearchDataCollectionRef
+      .where('fixedTagId', '==', fixedTagId)
+      .where('createUserId', 'in', ['testFakeUserdlYyNSl1lTBEwmpJ', userId]);
     const snapshot = await query.get();
     const subTags = [];
     snapshot.forEach(doc => {

@@ -403,7 +403,8 @@ const fixedTagResearchResolver = {
     tags: async (fixedTag, _, { dataSources }) => {
       logger.debug('in map_resolver fixedTagSubTags');
       return dataSources.tagResearchDataSource.getAllfixedTagSubTag(
-        fixedTag.id
+        fixedTag.id,
+        dataSources.userDataSource.context.userInfo.uid
       );
     },
   },
