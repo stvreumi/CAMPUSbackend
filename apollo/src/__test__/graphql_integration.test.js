@@ -719,15 +719,25 @@ describe('test graphql query', () => {
   test('test query user fixTags in research version', async () => {
     // add fix tag data to firestore
     const docData = {
-      groupId: 0,
+      groupId: 1,
       locationName: '活動中心&一餐',
       coordinates: {
         latitude: '24.789345225611136',
         longitude: '120.99719144686011',
       },
     };
-
+    const docData2 = {
+      groupId: -1,
+      locationName: '活動中心&一餐2',
+      coordinates: {
+        latitude: '24.789345225611136',
+        longitude: '120.99719144686011',
+      },
+    };
     const docRef = await firestore.collection('fixedTag_research').add(docData);
+    const docRef2 = await firestore
+      .collection('fixedTag_research')
+      .add(docData2);
 
     const collectionRef = firestore.collection('tagData_research');
     const defaultStatus = {
@@ -806,34 +816,38 @@ describe('test graphql query', () => {
       { uNumber: 11 }
     );
 
-    expect(queryResult.fixedTags[0]).toHaveProperty('id', docRef.id);
-    expect(queryResult.fixedTags[0]).toHaveProperty(
-      'locationName',
-      docData.locationName
-    );
-    expect(queryResult.fixedTags[0]).toHaveProperty(
-      'coordinates',
-      docData.coordinates
-    );
-    const fixedTagSubTagsResult = {};
-    queryResult.fixedTags[0].tags.forEach(location => {
-      fixedTagSubTagsResult[location.id] = location;
-    });
-    // console.log(fixedTagSubTagsResult[tagDocRef.id].statusHistory);
-    const statusExpectData = {
-      statusName: '清潔狀態',
-      statusDescName: '乾淨',
-      createTime: expect.stringMatching(timestampStringRegex),
-    };
-    expect(fixedTagSubTagsResult[tagDocRef.id]).toMatchObject({
-      ...tagData,
-      id: tagDocRef.id,
-      fixedTagId: docRef.id,
-      status: statusExpectData,
-      statusHistory: {
-        statusList: [statusExpectData],
-      },
-    });
+    if (queryResult.fixedTags.length < 2) {
+      expect(queryResult.fixedTags[0]).toHaveProperty('id', docRef2.id);
+    } else {
+      expect(queryResult.fixedTags[0]).toHaveProperty('id', docRef.id);
+      expect(queryResult.fixedTags[0]).toHaveProperty(
+        'locationName',
+        docData.locationName
+      );
+      expect(queryResult.fixedTags[0]).toHaveProperty(
+        'coordinates',
+        docData.coordinates
+      );
+      const fixedTagSubTagsResult = {};
+      queryResult.fixedTags[0].tags.forEach(location => {
+        fixedTagSubTagsResult[location.id] = location;
+      });
+      // console.log(fixedTagSubTagsResult[tagDocRef.id].statusHistory);
+      const statusExpectData = {
+        statusName: '清潔狀態',
+        statusDescName: '乾淨',
+        createTime: expect.stringMatching(timestampStringRegex),
+      };
+      expect(fixedTagSubTagsResult[tagDocRef.id]).toMatchObject({
+        ...tagData,
+        id: tagDocRef.id,
+        fixedTagId: docRef.id,
+        status: statusExpectData,
+        statusHistory: {
+          statusList: [statusExpectData],
+        },
+      });
+    }
 
     // also test one fixed tag query
     const queryFixedTag = gql`

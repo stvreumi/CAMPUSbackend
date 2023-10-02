@@ -115,9 +115,9 @@ class TagResearchDataSource extends DataSource {
   async getUserFixedTags(uNumber, pageParams) {
     // seperate users into three groups
     const groupIds = {
-      group1: [0, -1],
-      group2: [1, -1],
-      group3: [2, -1],
+      group1: [1, -1],
+      group2: [2, -1],
+      group3: [3, -1],
       groupDefault: [-1],
     };
 
