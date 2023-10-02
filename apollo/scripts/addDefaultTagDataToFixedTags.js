@@ -32,7 +32,7 @@ const oneWeek = 1000 * 60 * 60 * 24 * 7;
 
 const createUserIdAndTimestamps = () => {
   // const userId = createUserId();
-  const userId = 'JDh8VD63kVOxqOvAnfrewhFjqNt2';
+  const userId = 'testFakeUserdlYyNSl1lTBEwmpJ';
 
   const createTime = admin.firestore.Timestamp.fromMillis(
     now - Math.random() * oneWeek

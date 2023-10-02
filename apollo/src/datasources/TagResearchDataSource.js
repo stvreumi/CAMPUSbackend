@@ -133,6 +133,7 @@ class TagResearchDataSource extends DataSource {
     } else {
       selectedGroupIds = groupIds.groupDefault;
     }
+    console.log(selectedGroupIds);
     // get query by groupIds
     const query = this.fixedTagResearchCollectionRef
       .where('groupId', 'in', selectedGroupIds)
@@ -171,7 +172,7 @@ class TagResearchDataSource extends DataSource {
     // check createUserId only use for research1
     const query = this.tagResearchDataCollectionRef
       .where('fixedTagId', '==', fixedTagId)
-      .where('createUserId', 'in', ['JDh8VD63kVOxqOvAnfrewhFjqNt2', userId]);
+      .where('createUserId', 'in', ['testFakeUserdlYyNSl1lTBEwmpJ', userId]);
     const snapshot = await query.get();
     const subTags = [];
     snapshot.forEach(doc => {
