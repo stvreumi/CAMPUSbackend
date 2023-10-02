@@ -1,0 +1,32 @@
+[
+    {
+      "locationName": "圖書館",
+      "coordinates": {
+        "latitude": "24.786606833598242",
+        "longitude": "120.99820507103847"
+      },
+      "information": [
+        {
+          "tagLocationName": "testResearch",
+          "tagCoordinates": {
+            "latitude": "24.786606833598242",
+            "longitude": "120.99820507103847"
+          },
+          "floor": "2F",
+          "category": {
+            "categoryType": "物體",
+            "categoryName": "飲水機",
+            "categoryDescName": "飲水機1",
+            "locationImgUrl":["http://photo.url"]
+          },
+          "createUserId": "5k3owowCAGUXL6D2dW5faP0r4sCq",
+          "status": {
+            "statusName": "清潔狀態",
+            "statusDescName": "乾淨",
+            "createUserId": "5k3owowCAGUXL6D2dW5faP0r4sCq"
+          }
+        }
+      ]
+    }
+  ]
+  
