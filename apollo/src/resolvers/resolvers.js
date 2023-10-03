@@ -120,7 +120,8 @@ const queryResolvers = {
       { dataSources, userInfo }
     ) => {
       const data = await dataSources.tagResearchDataSource.getAllUnarchivedTags(
-        pageParams
+        pageParams,
+        userInfo.uid
       );
       // Record user activity after the above function successfully return with
       // no errors.

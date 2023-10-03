@@ -75,9 +75,10 @@ class TagResearchDataSource extends DataSource {
     this.context = config.context;
   }
 
-  async getAllUnarchivedTags(pageParams) {
+  async getAllUnarchivedTags(pageParams, userId) {
     const query = this.tagResearchDataCollectionRef
       .where('archived', '==', false)
+      .where('createUserId', 'in', ['JDh8VD63kVOxqOvAnfrewhFjqNt2', userId])
       .orderBy('lastUpdateTime', 'desc');
     const { data: tags, pageInfo } = await getPage(
       query,
