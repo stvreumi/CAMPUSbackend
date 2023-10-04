@@ -50,7 +50,7 @@ class StorageDataSource extends DataSource {
       delimiter: '/',
       prefix: path.join(tagId, '/'),
     };
-    logger.info(options);
+    // logger.info(options);
     const [files] = await this.bucket.getFiles(options);
 
     return files.map(file => file.metadata.mediaLink);
